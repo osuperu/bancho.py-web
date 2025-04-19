@@ -1,0 +1,78 @@
+{
+  "home": {
+    "welcome": "¡Bienvenido a Akatsuki! Somos un servidor privado de osu! basado principalmente en el modo relax, con envío de puntuaciones, tablas de clasificación y mucho más para relax, autopilot y osu! vanilla.",
+    "get_started": "¡Comenzar!",
+    "pp_earned": "pp ganados",
+    "scores_set": "puntuaciones establecidas",
+    "registered_users": "usuarios registrados"
+  },
+  "identity": {
+    "my_profile": "Mi perfil",
+    "friends": "Amigos",
+    "settings": "Configuraciones",
+    "logout": "Cerrar sesión"
+  },
+  "leaderboard": {
+    "title": "Tabla de Clasificación",
+    "country": "País",
+    "all": "Todos",
+    "play_count": "Jugadas",
+    "accuracy": "Precisión"
+  },
+  "profile": {
+    "activity_dates": {
+      "joined": "se unio hace",
+      "last_seen": "última vez"
+    },
+    "titles": {
+      "core_dev_team": "Equipo principal de desarrollo",
+      "nomination_quality_assurance": "Garantía de calidad de las nominaciones"
+    },
+    "stats": {
+      "ranked_score": "Puntuación clasificada",
+      "total_score": "Puntuación total",
+      "playcount": "Numero de jugadas",
+      "playtime": "Tiempo de juego",
+      "replays_watched": "Repeticiones vistas",
+      "total_hits": "Golpes totales",
+      "max_combo": "Combo máximo",
+      "never_played": "Nunca jugado"
+    },
+    "level": {
+      "to_level": "para el nivel"
+    },
+    "best_scores": "Mejores puntuaciones",
+    "recent_plays": "Jugadas recientes"
+  },
+  "beatmap": {
+    "not_diff_available": "No hay dificultad disponible para este modo",
+    "not_diffs_available": "Este mapa no tiene dificultades disponibles para este modo",
+    "converted": "Convertido",
+    "showing_diffs": "Mostrando",
+    "native_diffs": "dificultades nativas y",
+    "converted_diffs": "convertidas desde osu!standard",
+    "circles": "circulos",
+    "sliders": "deslizadores",
+    "spinners": "spinners",
+    "top_scores": "Mejores puntuaciones",
+    "show_top_20": "Mostrar Top 20",
+    "view_all_scores": "Ver todas las puntuaciones",
+    "loading_leaderboard": "Cargando tabla de clasificación...",
+    "no_scores_available": "No hay puntuaciones disponibles",
+    "beatmap_stats": "Estadísticas del mapa",
+    "beatmap_info": "Información del mapa"
+  },
+  "about": {
+    "title": "Acerca de",
+    "what_makes_us_special": "Lo que nos hace especiales",
+    "what_makes_us_special_content": "Somos un servidor privado de osu! construido desde cero con muchas características únicas que no se ven en otros lugares.",
+    "pp_for_relax": "PP para Relax y Autopilot",
+    "pp_for_relax_content": "Nuestro servidor tiene una fórmula única de pp para relax y autopilot. ¿Eres bueno moviendo el cursor o simplemente presionando teclas? Únete a {{appName}} y obtén una recompensa justa por tus habilidades!",
+    "free_osudirect": "osu!direct Gratis",
+    "free_osudirect_content": "No tendrás que pagar por osu!supporter para tener una experiencia de juego conveniente en el cliente - ¡osu!direct está disponible para todos! Ten en cuenta que apoyarnos aún otorga un gran conjunto de beneficios geniales, pero su ausencia no afecta tus sesiones de juego!",
+    "features": {
+      "pp_or_score": "Tabla de Clasificación de PP o Puntuación",
+      "beatmap_submission": "Sistema de Envío de Beatmaps"
+    }
+  }
+} 

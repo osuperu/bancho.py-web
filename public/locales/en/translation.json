@@ -1,0 +1,78 @@
+{
+  "home": {
+    "welcome": "Welcome to Akatsuki! We are an osu! private server mainly based around the relax mod - featuring score submission, leaderboards & rankings, custom pp, and much more for relax, autopilot and vanilla osu!",
+    "get_started": "Get Started!",
+    "pp_earned": "pp earned",
+    "scores_set": "scores set",
+    "registered_users": "registered users"
+  },
+  "identity": {
+    "my_profile": "My Profile",
+    "friends": "Friends",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "country": "Country",
+    "all": "All",
+    "play_count": "Play Count",
+    "accuracy": "Accuracy"
+  },
+  "profile": {
+    "activity_dates": {
+      "joined": "joined",
+      "last_seen": "last seen"
+    },
+    "titles": {
+      "core_dev_team": "Core Development Team",
+      "nomination_quality_assurance": "Nomination Quality Assurance"
+    },
+    "stats": {
+      "ranked_score": "Ranked Score",
+      "total_score": "Total Score",
+      "playcount": "Play Count",
+      "playtime": "Tiempo de juego",
+      "replays_watched": "Replays Watched",
+      "total_hits": "Total Hits",
+      "max_combo": "Max Combo",
+      "never_played": "Never played"
+    },
+    "level": {
+      "to_level": "to level"
+    },
+    "best_scores": "Best Scores",
+    "recent_plays": "Recent Plays"
+  },
+  "beatmap": {
+    "not_diff_available": "No difficulty available for this mode",
+    "not_diffs_available": "This beatmap has no difficulties available for this gamemode",
+    "converted": "Converted",
+    "showing_diffs": "Showing",
+    "native_diffs": "native difficulties and",
+    "converted_diffs": "converted from osu!standard",
+    "circles": "circles",
+    "sliders": "sliders",
+    "spinners": "spinners",
+    "top_scores": "Top Scores",
+    "show_top_20": "Show Top 20",
+    "view_all_scores": "View All Scores",
+    "loading_leaderboard": "Loading leaderboard...",
+    "no_scores_available": "No scores available",
+    "beatmap_stats": "Beatmap Stats",
+    "beatmap_info": "Beatmap Info"
+  },
+  "about": {
+    "title": "About",
+    "what_makes_us_special": "What makes us special",
+    "what_makes_us_special_content": "We are an osu! private server built from the ground up with many unique features not seen elsewhere.",
+    "pp_for_relax": "PP for Relax and Autopilot",
+    "pp_for_relax_content": "Our server has unique pp formula for relax and autopilot. Good at waving your cursor or just smashing your keyboard? Join {{appName}} and get a fair reward for your skills!",
+    "free_osudirect": "Free osu!direct",
+    "free_osudirect_content": "You won't have to pay for osu!supporter to have a convenient gameplay experience in the client - osu!direct is available for everyone! Keep in mind supporting us still grants a huge set of cool perks but absence of it doesn't affect your game sessions!",
+    "features": {
+      "pp_or_score": "PP or Score Leaderboard",
+      "beatmap_submission": "Beatmap Submission System"
+    }
+  }
+} 
