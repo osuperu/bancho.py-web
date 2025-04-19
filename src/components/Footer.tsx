@@ -48,7 +48,7 @@ export default function Footer() {
               <Box width={178} height={38}>
                 <FooterLogo />
               </Box>
-              <Stack
+              {/*<Stack
                 direction={{ xs: "column", sm: "row" }}
                 spacing={2}
                 textAlign={{ xs: "center", sm: "right" }}
@@ -105,7 +105,7 @@ export default function Footer() {
                     </Typography>
                   </Link>
                 </Stack>
-              </Stack>
+              </Stack>*/}
             </Stack>
             <Stack
               direction={{ xs: "column", sm: "row" }}
@@ -116,7 +116,7 @@ export default function Footer() {
             >
               <Stack direction="row" alignItems="center">
                 <Typography variant="h6" fontWeight="lighter">
-                  © Akatsuki 2024
+                  © {process.env.REACT_APP_APP_NAME} {new Date().getFullYear()}
                 </Typography>
               </Stack>
               <Stack direction="row" spacing={2}>

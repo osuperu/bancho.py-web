@@ -6,6 +6,12 @@
     "scores_set": "scores set",
     "registered_users": "registered users"
   },
+  "navbar": {
+    "home": "Home",
+    "leaderboards": "Leaderboards",
+    "about": "About",
+    "search": "Looking for someone?"
+  },
   "identity": {
     "my_profile": "My Profile",
     "friends": "Friends",
@@ -95,5 +101,22 @@
       "pp_or_score": "PP or Score Leaderboard",
       "beatmap_submission": "Beatmap Submission System"
     }
+  },
+  "user_settings": {
+    "title": "User Settings",
+    "change_password": "Change Password",
+    "change_password_here": "Change your password here",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "cancel": "Cancel",
+    "save": "Save",
+    "change_email_address": "Change Email Address",
+    "change_email_address_here": "Change your email address here",
+    "new_email_address": "New Email Address",
+    "supporter_only_feature": "Supporter-only feature",
+    "change_display_name": "Change Display Name",
+    "supporters_can_use_this_feature": "Supporters can use this feature to change their display names across the website and osu! server, fully self-serve as they desire.",
+    "change_display_name_here": "Change your display name here",
+    "new_display_name": "New Display Name"
   }
-} 
+}

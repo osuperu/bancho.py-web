@@ -6,9 +6,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import {
+  fetchTotalPPEarned,
+  fetchTotalScoresSet,
+} from "../adapters/bpy-api/scores"
+import { fetchTotalRegisteredUsers } from "../adapters/bpy-api/user"
 import { HomepageStatDisplay } from "../components/homepage/HomepageStatDisplay"
 import HomepageBanner from "../components/images/banners/homepage_banner.svg"
 import { HomepagePPIcon } from "../components/images/icons/HomepagePPIcon"
@@ -20,10 +26,45 @@ import { PageTitle } from "../components/PageTitle"
 export const HomePage = () => {
   const { t } = useTranslation()
 
-  // TODO: fetch these from a backend API
-  const totalPPEarned = 1_483_238
-  const totalScoresSet = 92_383_238
-  const totalUsersRegistered = 172_395
+  const [totalPPEarned, setTotalPPEarned] = useState(0)
+  const [totalScoresSet, setTotalScoresSet] = useState(0)
+  const [totalUsersRegistered, setTotalUsersRegistered] = useState(0)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const totalPPEarned = await fetchTotalPPEarned()
+        setTotalPPEarned(totalPPEarned)
+      } catch (error) {
+        console.error("Failed to fetch total PP earned:", error)
+        return
+      }
+    })()
+  }, [totalPPEarned])
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const totalScoresSet = await fetchTotalScoresSet()
+        setTotalScoresSet(totalScoresSet)
+      } catch (error) {
+        console.error("Failed to fetch total scores set:", error)
+        return
+      }
+    })()
+  }, [totalScoresSet])
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const totalUsersRegistered = await fetchTotalRegisteredUsers()
+        setTotalUsersRegistered(totalUsersRegistered)
+      } catch (error) {
+        console.error("Failed to fetch total users registered:", error)
+        return
+      }
+    })()
+  }, [totalUsersRegistered])
 
   return (
     <Box>

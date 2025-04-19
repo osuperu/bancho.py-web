@@ -6,6 +6,12 @@
     "scores_set": "puntuaciones establecidas",
     "registered_users": "usuarios registrados"
   },
+  "navbar": {
+    "home": "Inicio",
+    "leaderboards": "Clasificaciones",
+    "about": "Acerca de",
+    "search": "¿Buscando a alguien?"
+  },
   "identity": {
     "my_profile": "Mi perfil",
     "friends": "Amigos",
@@ -94,5 +100,22 @@
       "pp_or_score": "Tabla de Clasificación de PP o Puntuación",
       "beatmap_submission": "Sistema de Envío de Beatmaps"
     }
+  },
+  "user_settings": {
+    "title": "Configuraciones de usuario",
+    "change_password": "Cambiar contraseña",
+    "change_password_here": "Cambia tu contraseña aquí",
+    "current_password": "Contraseña actual",
+    "new_password": "Nueva contraseña",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "change_email_address": "Cambiar dirección de correo electrónico",
+    "change_email_address_here": "Cambia tu dirección de correo electrónico aquí",
+    "new_email_address": "Nueva dirección de correo electrónico",
+    "supporter_only_feature": "Característica solo para supporters",
+    "change_display_name": "Cambiar nombre de usuario",
+    "supporters_can_use_this_feature": "Los suporters pueden usar esta característica para cambiar sus nombres de usuario en todo el sitio web y el servidor de osu! , completamente auto-servido como lo desean.",
+    "change_display_name_here": "Cambia tu nombre de usuario aquí",
+    "new_display_name": "Nuevo nombre de usuario"
   }
-} 
+}

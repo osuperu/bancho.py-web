@@ -19,6 +19,7 @@ import {
   useTheme,
 } from "@mui/material"
 import { FormEvent, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 
 import {
@@ -45,6 +46,8 @@ const ChangeUsernameButton = ({
   setIdentity: (identity: Identity | null) => void
   isSupporter: boolean
 }) => {
+  const { t } = useTranslation()
+
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => setOpen(true)
@@ -52,14 +55,16 @@ const ChangeUsernameButton = ({
 
   return (
     <>
-      <Tooltip title="(Supporter-only feature)">
+      <Tooltip title={t("user_settings.supporter_only_feature")}>
         <Box display="flex" justifyContent="center">
           <Button
             disabled={!isSupporter}
             onClick={handleClickOpen}
             sx={{ color: "white", textTransform: "none" }}
           >
-            <Typography variant="body1">Change Display Name</Typography>
+            <Typography variant="body1">
+              {t("user_settings.change_display_name")}
+            </Typography>
           </Button>
         </Box>
       </Tooltip>
@@ -91,11 +96,10 @@ const ChangeUsernameButton = ({
           },
         }}
       >
-        <DialogTitle>Change your Display Name</DialogTitle>
+        <DialogTitle>{t("user_settings.change_display_name")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Supporters can use this feature to change their display names across
-            the website and osu! server, fully self-serve as they desire.
+            {t("user_settings.supporters_can_use_this_feature")}
           </DialogContentText>
           <TextField
             autoFocus
@@ -105,7 +109,7 @@ const ChangeUsernameButton = ({
             margin="dense"
             id="current-password"
             name="current-password"
-            label="Current Password"
+            label={t("user_settings.current_password")}
             type="password"
             variant="standard"
           />
@@ -117,14 +121,14 @@ const ChangeUsernameButton = ({
             margin="dense"
             id="new-username"
             name="new-username"
-            label="New Display Name "
+            label={t("user_settings.new_display_name")}
             type="text"
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
+          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
+          <Button type="submit">{t("user_settings.save")}</Button>
         </DialogActions>
       </Dialog>
     </>
@@ -140,6 +144,8 @@ const ChangePasswordButton = ({
   setSnackbarOpen: (open: boolean) => void
   setSnackbarMessage: (message: string) => void
 }) => {
+  const { t } = useTranslation()
+
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => setOpen(true)
@@ -151,7 +157,9 @@ const ChangePasswordButton = ({
         onClick={handleClickOpen}
         sx={{ color: "white", textTransform: "none" }}
       >
-        <Typography variant="body1">Change Password</Typography>
+        <Typography variant="body1">
+          {t("user_settings.change_password")}
+        </Typography>
       </Button>
       <Dialog
         open={open}
@@ -179,9 +187,11 @@ const ChangePasswordButton = ({
           },
         }}
       >
-        <DialogTitle>Change Password</DialogTitle>
+        <DialogTitle>{t("user_settings.change_password")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Change your password here</DialogContentText>
+          <DialogContentText>
+            {t("user_settings.change_password_here")}
+          </DialogContentText>
           <TextField
             autoFocus
             required
@@ -190,7 +200,7 @@ const ChangePasswordButton = ({
             margin="dense"
             id="current-password"
             name="current-password"
-            label="Current Password"
+            label={t("user_settings.current_password")}
             type="password"
             variant="standard"
           />
@@ -202,14 +212,14 @@ const ChangePasswordButton = ({
             margin="dense"
             id="new-password"
             name="new-password"
-            label="New Password"
+            label={t("user_settings.new_password")}
             type="password"
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
+          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
+          <Button type="submit">{t("user_settings.save")}</Button>
         </DialogActions>
       </Dialog>
     </>
@@ -225,6 +235,8 @@ const ChangeEmailAddressButton = ({
   setSnackbarOpen: (open: boolean) => void
   setSnackbarMessage: (message: string) => void
 }) => {
+  const { t } = useTranslation()
+
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => setOpen(true)
@@ -236,7 +248,9 @@ const ChangeEmailAddressButton = ({
         onClick={handleClickOpen}
         sx={{ color: "white", textTransform: "none" }}
       >
-        <Typography variant="body1">Change Email Address</Typography>
+        <Typography variant="body1">
+          {t("user_settings.change_email_address")}
+        </Typography>
       </Button>
       <Dialog
         open={open}
@@ -262,9 +276,11 @@ const ChangeEmailAddressButton = ({
           },
         }}
       >
-        <DialogTitle>Change Email Address</DialogTitle>
+        <DialogTitle>{t("user_settings.change_email_address")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Change your email address here</DialogContentText>
+          <DialogContentText>
+            {t("user_settings.change_email_address_here")}
+          </DialogContentText>
           <TextField
             autoFocus
             required
@@ -273,7 +289,7 @@ const ChangeEmailAddressButton = ({
             margin="dense"
             id="current-password"
             name="current-password"
-            label="Current Password"
+            label={t("user_settings.current_password")}
             type="password"
             variant="standard"
           />
@@ -285,14 +301,14 @@ const ChangeEmailAddressButton = ({
             margin="dense"
             id="new-email-address"
             name="new-email-address"
-            label="New Email Address"
+            label={t("user_settings.new_email_address")}
             type="email"
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
+          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
+          <Button type="submit">{t("user_settings.save")}</Button>
         </DialogActions>
       </Dialog>
     </>
@@ -309,6 +325,8 @@ const getUserIdFromQueryParams = (identifier?: string): number => {
 }
 
 export const UserSettingsPage = () => {
+  const { t } = useTranslation()
+
   const queryParams = useParams()
   const pageUserId = getUserIdFromQueryParams(queryParams["userId"])
 
@@ -347,7 +365,7 @@ export const UserSettingsPage = () => {
           >
             <Stack direction="column" alignItems="center">
               <SettingsIcon />
-              <Typography variant="h5">User Settings</Typography>
+              <Typography variant="h5">{t("user_settings.title")}</Typography>
             </Stack>
           </Box>
           <Box bgcolor="#191527">

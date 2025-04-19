@@ -1,9 +1,11 @@
 import {
   Alert,
+  Autocomplete,
   Avatar,
   Box,
   Button,
   Container,
+  debounce,
   Divider,
   Menu,
   MenuItem,
@@ -11,11 +13,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { authenticate, logout } from "../adapters/bpy-api/authentication"
+import { searchUsers, SingleUserSearchResult } from "../adapters/bpy-api/search"
 import HomepageBanner from "../components/images/banners/homepage_banner.svg"
 import { Identity, useIdentityContext } from "../context/Identity"
 import { LoginDoorIcon } from "./images/logos/icons/LoginDoorIcon"
@@ -25,6 +28,11 @@ import { UserProfileIcon } from "./images/logos/icons/UserProfileIcon"
 import { UserSettingsIcon } from "./images/logos/icons/UserSettingsIcon"
 import { OsuPeruLogo } from "./images/logos/OsuPeruLogo"
 import { LanguageSelector } from "./LanguageSelector"
+
+const PAGES_WITH_VISIBLE_OUTLINE = ["/"]
+
+const shouldUseVisibleOutline = (pagePathName: string) =>
+  PAGES_WITH_VISIBLE_OUTLINE.includes(pagePathName)
 
 export const AuthenticationSettingsMenu = ({
   identity,
@@ -375,7 +383,39 @@ export const ProfileSettingsMenu = ({
 }
 
 export default function Navbar() {
+  const { t } = useTranslation()
+
+  const navigate = useNavigate()
   const { identity, setIdentity } = useIdentityContext()
+
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQueryOptions, setSearchQueryOptions] = useState<
+    SingleUserSearchResult[] | null
+  >([])
+  const [searchQueryValue, setSearchQueryValue] =
+    useState<SingleUserSearchResult | null>(null)
+
+  const location = useLocation()
+  const useVisibleOutline = shouldUseVisibleOutline(location.pathname)
+
+  const searchForUsers = useMemo(
+    () =>
+      debounce((query: string) => {
+        searchUsers({ query }).then((response) => {
+          setSearchQueryOptions(response.users)
+        })
+      }, 400),
+    []
+  )
+
+  useEffect(() => {
+    if (!searchQuery) {
+      setSearchQueryOptions([])
+      return
+    }
+
+    searchForUsers(searchQuery)
+  }, [searchQuery, searchForUsers])
 
   return (
     <>
@@ -386,8 +426,9 @@ export default function Navbar() {
         left={0}
         zIndex={900}
         sx={{
-          background:
-            "linear-gradient(0deg, rgba(17, 14, 27, 0.6) 0%, rgba(17, 14, 27, 0.528) 100%)",
+          background: useVisibleOutline
+            ? "linear-gradient(0deg, rgba(17, 14, 27, 0.6) 0%, rgba(17, 14, 27, 0.528) 100%)"
+            : "transparent",
         }}
       >
         <Container disableGutters>
@@ -414,19 +455,45 @@ export default function Navbar() {
               <Divider flexItem orientation="vertical" />
               <Link to="/">
                 <Button sx={{ color: "white", textTransform: "none" }}>
-                  <Typography variant="body1">Home</Typography>
+                  <Typography variant="body1">{t("navbar.home")}</Typography>
                 </Button>
               </Link>
               <Link to="/leaderboard">
                 <Button sx={{ color: "white", textTransform: "none" }}>
-                  <Typography variant="body1">Leaderboards</Typography>
+                  <Typography variant="body1">
+                    {t("navbar.leaderboards")}
+                  </Typography>
                 </Button>
               </Link>
               <Link to="/about">
                 <Button sx={{ color: "white", textTransform: "none" }}>
-                  <Typography variant="body1">About</Typography>
+                  <Typography variant="body1">{t("navbar.about")}</Typography>
                 </Button>
               </Link>
+
+              <Autocomplete
+                id="user-search"
+                sx={{ width: 225 }} // TODO: does this scale?
+                filterOptions={(x) => x}
+                value={searchQueryValue}
+                options={searchQueryOptions ?? []}
+                getOptionLabel={(option) => option.username}
+                isOptionEqualToValue={(option, value) =>
+                  option.username === value.username
+                }
+                renderInput={(params) => {
+                  return <TextField {...params} label={t("navbar.search")} />
+                }}
+                onInputChange={(event, newInputValue: string) =>
+                  setSearchQuery(newInputValue)
+                }
+                onChange={(event, newValue) => {
+                  if (newValue === null) return
+                  setSearchQueryValue(newValue)
+                  setSearchQueryOptions([newValue])
+                  navigate(`/u/${newValue.id}`)
+                }}
+              />
             </Stack>
 
             {/* Right Navbar */}

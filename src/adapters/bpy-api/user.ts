@@ -204,3 +204,9 @@ export const updatePassword = async (
     throw new Error(e.response.data.error)
   }
 }
+
+export const fetchTotalRegisteredUsers = async (): Promise<number> => {
+  const registeredUsersResponse = await apiInstance.get("/v2/players")
+
+  return registeredUsersResponse.data.meta.total
+}

@@ -4,6 +4,7 @@ const apiInstance = axios.create({
   baseURL: process.env.REACT_APP_BPY_API_BASE_URL,
 })
 
+// TODO: add enum for SubmittionStatus
 interface GetScoreRequest {
   id: number
 }
@@ -121,4 +122,40 @@ export const getScore = async (
       latestUpdate: beatmapResponse.data.map.last_update,
     },
   }
+}
+
+export const fetchTotalScoresSet = async (): Promise<number> => {
+  const submittedScoresResponse = await apiInstance.get("/v2/scores", {
+    params: {
+      status: 1,
+    },
+  })
+  const bestScoresResponse = await apiInstance.get("/v2/scores", {
+    params: {
+      status: 2,
+    },
+  })
+  return (
+    submittedScoresResponse.data.meta.total + bestScoresResponse.data.meta.total
+  )
+}
+
+export const fetchTotalPPEarned = async (): Promise<number> => {
+  const earnedSubmittedPPResponse = await apiInstance.get(
+    "/v1/aggregate_pp_stats",
+    {
+      params: {
+        status: 1,
+      },
+    }
+  )
+  const earnedBestPPResponse = await apiInstance.get("/v1/aggregate_pp_stats", {
+    params: {
+      status: 2,
+    },
+  })
+  return (
+    Math.trunc(earnedSubmittedPPResponse.data.stats) +
+    Math.trunc(earnedBestPPResponse.data.stats)
+  )
 }
