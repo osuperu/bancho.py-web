@@ -1,5 +1,6 @@
 import { Box, Container, Paper, Stack, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 
 import {
@@ -12,11 +13,13 @@ import {
 import { BeatmapHeader } from "../components/beatmap/BeatmapHeader"
 import { BeatmapInfo } from "../components/beatmap/BeatmapInfo"
 import { BeatmapLeaderboard } from "../components/beatmap/BeatmapLeaderboard"
-import { BeatmapStatDisplay } from "../components/beatmap/BeatmapStatDisplay"
+import { BeatmapStat } from "../components/beatmap/BeatmapStat"
 import { GamemodeSelectionBar } from "../components/GamemodeSelectionBar"
 import { GameMode, mapToBpyMode, RelaxMode } from "../GameModes"
 
 export const BeatmapPage = () => {
+  const { t } = useTranslation()
+
   const queryParams = useParams()
   const beatmapId = Number.parseInt(queryParams["beatmapId"] || "0")
 
@@ -218,27 +221,7 @@ export const BeatmapPage = () => {
 
           <Box sx={{ width: { xs: "100%", md: "33.33%" } }}>
             <Stack spacing={3}>
-              <Paper
-                elevation={0}
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  background: "#191527",
-                }}
-              >
-                <Typography variant="h6" sx={{ pb: 1 }}>
-                  Beatmap Stats
-                </Typography>
-
-                {selectedDifficulty ? (
-                  <BeatmapStatDisplay difficulty={selectedDifficulty} />
-                ) : (
-                  <Typography color="white" fontStyle="italic">
-                    This beatmap has no difficulties available for this gamemode
-                  </Typography>
-                )}
-              </Paper>
-
+              <BeatmapStat difficulty={selectedDifficulty} />
               <BeatmapInfo beatmap={beatmap} />
             </Stack>
           </Box>

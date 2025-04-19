@@ -8,6 +8,7 @@ import {
 } from "@mui/material"
 import moment from "moment"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link, useParams } from "react-router-dom"
 
 import { getScore, GetScoreResponse } from "../adapters/bpy-api/scores"
@@ -84,6 +85,8 @@ const ScoreMetricDisplay = ({
 }*/
 
 export const ScorePage = () => {
+  const { t } = useTranslation()
+
   const [scoreData, setScoreData] = useState<GetScoreResponse | null>(null)
   const queryParams = useParams()
 
@@ -230,7 +233,7 @@ export const ScorePage = () => {
                   sx={{ width: 55, height: 55, borderRadius: 2 }}
                 />
                 <Typography variant="h6">
-                  played by {scoreData.score.user.username}
+                  {t("score.played_by")} {scoreData.score.user.username}
                 </Typography>
               </Stack>
             </Link>
@@ -270,7 +273,7 @@ export const ScorePage = () => {
               color="#9F652E"
             />
             <ScoreMetricDisplay
-              metric="miss"
+              metric={t("score.miss")}
               value={scoreData.score.countMiss}
               color="#9C4141"
             />

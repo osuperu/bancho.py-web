@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Stack from "@mui/material/Stack"
 import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import {
@@ -25,6 +26,8 @@ const DownloadReplayMenuItem = ({
   score: UserScore
   handleMenuClose: () => void
 }) => {
+  const { t } = useTranslation()
+
   const handleDownloadClick = () => {
     handleMenuClose()
   }
@@ -36,7 +39,7 @@ const DownloadReplayMenuItem = ({
       to={`${process.env.REACT_APP_BPY_API_BASE_URL}/v1/get_replay?id=${score.id}`}
       onClick={handleDownloadClick}
     >
-      <Typography color="white">Download Replay</Typography>
+      <Typography color="white">{t("leaderboard.download_replay")}</Typography>
     </MenuItem>
   )
 }
@@ -48,6 +51,8 @@ const ViewScoreMenuItem = ({
   score: UserScore
   handleMenuClose: () => void
 }) => {
+  const { t } = useTranslation()
+
   const handleViewClick = () => {
     handleMenuClose()
   }
@@ -59,7 +64,7 @@ const ViewScoreMenuItem = ({
       to={`/scores/${score.id}`}
       onClick={handleViewClick}
     >
-      <Typography color="white">View Score</Typography>
+      <Typography color="white">{t("leaderboard.view_score")}</Typography>
     </MenuItem>
   )
 }

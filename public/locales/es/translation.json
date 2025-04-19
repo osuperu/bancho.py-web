@@ -17,11 +17,13 @@
     "country": "País",
     "all": "Todos",
     "play_count": "Jugadas",
-    "accuracy": "Precisión"
+    "accuracy": "Precisión",
+    "download_replay": "Descargar repetición",
+    "view_score": "Ver puntuación"
   },
   "profile": {
     "activity_dates": {
-      "joined": "se unio hace",
+      "joined": "se unio",
       "last_seen": "última vez"
     },
     "titles": {
@@ -60,7 +62,25 @@
     "loading_leaderboard": "Cargando tabla de clasificación...",
     "no_scores_available": "No hay puntuaciones disponibles",
     "beatmap_stats": "Estadísticas del mapa",
-    "beatmap_info": "Información del mapa"
+    "beatmap_info": "Información del mapa",
+    "star_rating": "Estrellas de dificultad",
+    "bpm": "BPM",
+    "circles_capitalized": "Circulos",
+    "sliders_capitalized": "Deslizadores",
+    "spinners_capitalized": "Spinners",
+    "creator": "Creador",
+    "source": "Fuente",
+    "length": "Longitud",
+    "submitted": "Enviado",
+    "ranked": "Clasificado",
+    "favorites": "Favoritos",
+    "passes": "Superados"
+  },
+  "score": {
+    "played_by": "jugado por",
+    "accuracy": "precisión",
+    "combo": "combo",
+    "miss": "fallo(s)"
   },
   "about": {
     "title": "Acerca de",

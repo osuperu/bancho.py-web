@@ -435,7 +435,7 @@ export default function Navbar() {
               spacing={1}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              <LanguageSelector></LanguageSelector>
+              <LanguageSelector />
               {identity !== null ? (
                 <ProfileSettingsMenu
                   identity={identity}

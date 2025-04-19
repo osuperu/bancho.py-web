@@ -17,7 +17,9 @@
     "country": "Country",
     "all": "All",
     "play_count": "Play Count",
-    "accuracy": "Accuracy"
+    "accuracy": "Accuracy",
+    "download_replay": "Download Replay",
+    "view_score": "View Score"
   },
   "profile": {
     "activity_dates": {
@@ -60,7 +62,26 @@
     "loading_leaderboard": "Loading leaderboard...",
     "no_scores_available": "No scores available",
     "beatmap_stats": "Beatmap Stats",
-    "beatmap_info": "Beatmap Info"
+    "beatmap_info": "Beatmap Info",
+    "star_rating": "Star Rating",
+    "bpm": "BPM",
+    "circles_capitalized": "Circles",
+    "sliders_capitalized": "Sliders",
+    "spinners_capitalized": "Spinners",
+    "creator": "Creator",
+    "source": "Source",
+    "length": "Length",
+    "submitted": "Submitted",
+    "ranked": "Ranked",
+    "favorites": "Favorites",
+    "passes": "Passes"
+  },
+  "score": {
+    "played_by": "played by",
+    "accuracy": "accuracy",
+    "combo": "combo",
+    "miss": "miss"
+    
   },
   "about": {
     "title": "About",

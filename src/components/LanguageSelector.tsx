@@ -1,5 +1,4 @@
 import CheckIcon from "@mui/icons-material/Check"
-import LanguageIcon from "@mui/icons-material/Language"
 import {
   Box,
   Button,
@@ -8,7 +7,6 @@ import {
   Menu,
   MenuItem,
   Stack,
-  Typography,
 } from "@mui/material"
 import React from "react"
 import { useTranslation } from "react-i18next"
@@ -63,16 +61,6 @@ export const LanguageSelector = () => {
         }}
       >
         <Stack direction="row" alignItems="center" spacing={1}>
-          <LanguageIcon />
-          <Typography
-            sx={{
-              display: { xs: "none", md: "block" },
-              fontSize: "0.875rem",
-              fontWeight: 500,
-            }}
-          >
-            {currentLanguage.name}
-          </Typography>
           <Box
             component="img"
             height={20}

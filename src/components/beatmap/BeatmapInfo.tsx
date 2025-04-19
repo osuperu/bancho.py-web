@@ -1,4 +1,5 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material"
+import { useTranslation } from "react-i18next"
 
 import { BeatmapDetails, formatTime } from "../../adapters/bpy-api/beatmaps"
 
@@ -7,6 +8,7 @@ export const BeatmapInfo = ({
 }: {
   beatmap: BeatmapDetails | null
 }) => {
+  const { t } = useTranslation()
   return (
     <Paper
       elevation={0}
@@ -17,13 +19,13 @@ export const BeatmapInfo = ({
       }}
     >
       <Typography variant="h6" sx={{ pb: 1 }}>
-        Beatmap Info
+        {t("beatmap.beatmap_info")}
       </Typography>
 
       <Stack spacing={1.5}>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
-            Source:
+            {t("beatmap.source")}:
           </Typography>
           <Typography variant="body2" color="white">
             {beatmap?.source || "Original"}
@@ -31,7 +33,7 @@ export const BeatmapInfo = ({
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
-            BPM:
+            {t("beatmap.bpm")}:
           </Typography>
           <Typography variant="body2" color="white">
             {beatmap?.bpm}
@@ -39,7 +41,7 @@ export const BeatmapInfo = ({
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
-            Length:
+            {t("beatmap.length")}:
           </Typography>
           <Typography variant="body2" color="white">
             {formatTime(beatmap?.length)}
@@ -47,7 +49,7 @@ export const BeatmapInfo = ({
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
-            Submitted:
+            {t("beatmap.submitted")}:
           </Typography>
           <Typography variant="body2" color="white">
             {beatmap?.dateSubmitted || "N/A"}
@@ -55,7 +57,7 @@ export const BeatmapInfo = ({
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
-            Ranked:
+            {t("beatmap.ranked")}:
           </Typography>
           <Typography variant="body2" color="white">
             {beatmap?.dateRanked || "N/A"}
@@ -63,7 +65,7 @@ export const BeatmapInfo = ({
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
-            Favorites:
+            {t("beatmap.favorites")}:
           </Typography>
           <Typography variant="body2" color="white">
             {beatmap?.favoriteCount?.toLocaleString() || "N/A"}
@@ -71,7 +73,7 @@ export const BeatmapInfo = ({
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
-            Passes:
+            {t("beatmap.passes")}:
           </Typography>
           <Typography variant="body2" color="white">
             {beatmap?.passCount?.toLocaleString() || "N/A"}
