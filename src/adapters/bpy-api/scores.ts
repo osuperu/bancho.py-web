@@ -134,12 +134,14 @@ export const fetchRecentScores = async (): Promise<GetRecentScoresResponse> => {
     params: {
       status: 1,
       page_size: 5,
+      order: "desc",
     },
   })
   const bestScoresResponse = await apiInstance.get("/v2/scores", {
     params: {
       status: 2,
       page_size: 5,
+      order: "desc",
     },
   })
 

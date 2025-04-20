@@ -43,6 +43,7 @@ export interface LeaderboardDetails {
   pp: number
   acc: number
   maxCombo: number
+  mods: number
 }
 
 export interface GetBeatmapSetResponse {
@@ -120,9 +121,6 @@ export const getBeatmapLeaderboard = async (
     },
   })
 
-  console.log("XD")
-  console.log(response.data.scores)
-
   return {
     status: response.data.status,
     leaderboard:
@@ -135,6 +133,7 @@ export const getBeatmapLeaderboard = async (
         pp: score.pp,
         acc: score.acc,
         maxCombo: score.max_combo,
+        mods: score.mods,
       })) ?? null,
   }
 }

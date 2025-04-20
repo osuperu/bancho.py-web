@@ -16,6 +16,8 @@ import { Link } from "react-router-dom"
 
 import { LeaderboardDetails } from "../../adapters/bpy-api/beatmaps"
 import { getFlagUrl } from "../../utils/countries"
+import { getIndividualMods } from "../../utils/mods"
+import { ModIcon } from "../ModIcon"
 
 interface Difficulty {
   id: number
@@ -352,15 +354,30 @@ const LeaderboardScoreItem = ({
                 {score.pp.toFixed(2)}pp
               </Typography>
             </Box>
+            <Box sx={{ gridColumn: "1 / -1" }}>
+              <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
+                MODS
+              </Typography>
+              <Box display="flex" gap={0.5} sx={{ flexWrap: "wrap", mt: 0.5 }}>
+                {getIndividualMods(score.mods).map((mod) => (
+                  <ModIcon key={mod} variant={mod} width={35} height={24} />
+                ))}
+              </Box>
+            </Box>
           </Box>
         </Box>
 
         {/* Desktop View */}
-        <Box display={{ xs: "none", sm: "flex" }} alignItems="center" gap={2}>
+        <Box
+          display={{ xs: "none", sm: "flex" }}
+          alignItems="center"
+          gap={2}
+          width="200px"
+        >
           <Typography
             variant="body2"
             color="rgba(255, 255, 255, 0.5)"
-            width={30}
+            width={25}
           >
             #{index + 1}
           </Typography>
@@ -375,7 +392,13 @@ const LeaderboardScoreItem = ({
               mr: 1,
             }}
           />
-          <Typography variant="body1" color="white" fontWeight={300}>
+          <Typography
+            noWrap
+            variant="body1"
+            color="white"
+            fontWeight={300}
+            sx={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}
+          >
             {score.name}
           </Typography>
         </Box>
@@ -384,21 +407,56 @@ const LeaderboardScoreItem = ({
           sx={{
             display: { xs: "none", sm: "flex" },
             alignItems: "center",
-            gap: 4,
+            flex: 1,
+            gap: 2,
           }}
         >
-          <Typography variant="body2" color="white">
+          <Typography
+            variant="body2"
+            color="white"
+            width="100px"
+            textAlign="right"
+          >
             {score.tScore.toLocaleString()}
           </Typography>
-          <Typography variant="body2" color="white">
+          <Typography
+            variant="body2"
+            color="white"
+            width="70px"
+            textAlign="right"
+          >
             {score.acc.toFixed(2)}%
           </Typography>
-          <Typography variant="body2" color="white">
+          <Typography
+            variant="body2"
+            color="white"
+            width="60px"
+            textAlign="right"
+          >
             {score.maxCombo}x
           </Typography>
-          <Typography variant="body2" color="white">
+          <Typography
+            variant="body2"
+            color="white"
+            width="70px"
+            textAlign="right"
+          >
             {score.pp.toFixed(2)}pp
           </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 0.5,
+              minWidth: 120,
+              flexWrap: "wrap",
+              justifyContent: "flex-end",
+              flex: 1,
+            }}
+          >
+            {getIndividualMods(score.mods).map((mod) => (
+              <ModIcon key={mod} variant={mod} width={35} height={24} />
+            ))}
+          </Box>
           <ScoreOptionsMenu score={score} />
         </Box>
       </Box>

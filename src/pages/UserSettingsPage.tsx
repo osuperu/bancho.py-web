@@ -173,7 +173,6 @@ const ChangePasswordButton = ({
             const currentPassword = formJson["current-password"].toString()
             const newPassword = formJson["new-password"].toString()
 
-            console.log(currentPassword, newPassword)
             // TODO: potentially automatically validate debounced input
             //       is available server-side as-they-type?
             try {
