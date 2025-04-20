@@ -15,6 +15,7 @@ import {
   fetchTotalScoresSet,
 } from "../adapters/bpy-api/scores"
 import { fetchTotalRegisteredUsers } from "../adapters/bpy-api/user"
+import { HomepageScoresCarousel } from "../components/homepage/HomepageScoresCarousel"
 import { HomepageStatDisplay } from "../components/homepage/HomepageStatDisplay"
 import HomepageBanner from "../components/images/banners/homepage_banner.svg"
 import { HomepagePPIcon } from "../components/images/icons/HomepagePPIcon"
@@ -40,7 +41,7 @@ export const HomePage = () => {
         return
       }
     })()
-  }, [totalPPEarned])
+  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -52,7 +53,7 @@ export const HomePage = () => {
         return
       }
     })()
-  }, [totalScoresSet])
+  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -64,7 +65,7 @@ export const HomePage = () => {
         return
       }
     })()
-  }, [totalUsersRegistered])
+  }, [])
 
   return (
     <Box>
@@ -111,7 +112,7 @@ export const HomePage = () => {
                     <WhiteoutAkatsukiLogo />
                   </Box>
                   <Typography textAlign={{ xs: "center", sm: "right" }}>
-                    {t("home.welcome")}
+                    {process.env.REACT_APP_APP_NAME} {t("home.welcome")}
                   </Typography>
                   <Stack direction="row" spacing={2}>
                     <Link to="/register">
@@ -200,6 +201,7 @@ export const HomePage = () => {
             </GridLegacy>
           </Container>
         </Box>
+        <HomepageScoresCarousel />
       </Stack>
     </Box>
   )

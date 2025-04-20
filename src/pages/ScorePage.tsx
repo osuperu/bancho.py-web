@@ -116,7 +116,7 @@ export const ScorePage = () => {
         py={3}
         sx={{
           backgroundSize: "cover",
-          backgroundImage: `url(https://assets.ppy.sh/beatmaps/${scoreData.beatmap.beatmapsetId}/covers/cover.jpg)`,
+          backgroundImage: `url(https://assets.ppy.sh/beatmaps/${scoreData.score.beatmap.beatmapsetId}/covers/cover.jpg)`,
           backgroundPosition: "center",
           boxShadow: "inset 0px 0px 0px 2000px rgba(21, 18, 34, 0.9)",
         }}
@@ -129,7 +129,7 @@ export const ScorePage = () => {
             overflow="hidden"
             sx={{
               backgroundSize: "cover",
-              backgroundImage: `linear-gradient(90deg, rgba(15, 19, 38, 0.9) 0%, rgba(15, 19, 38, 0) 100%), url(https://assets.ppy.sh/beatmaps/${scoreData.beatmap.beatmapsetId}/covers/cover.jpg)`,
+              backgroundImage: `linear-gradient(90deg, rgba(15, 19, 38, 0.9) 0%, rgba(15, 19, 38, 0) 100%), url(https://assets.ppy.sh/beatmaps/${scoreData.score.beatmap.beatmapsetId}/covers/cover.jpg)`,
               backgroundPosition: "center",
             }}
           >
@@ -144,7 +144,8 @@ export const ScorePage = () => {
             >
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="h5">
-                  {scoreData.beatmap.artist} - {scoreData.beatmap.title}
+                  {scoreData.score.beatmap.artist} -{" "}
+                  {scoreData.score.beatmap.title}
                 </Typography>
                 {/*
                 <Stack direction={{ xs: "column", sm: "row" }}>
@@ -160,7 +161,7 @@ export const ScorePage = () => {
                     that displays the star rating of the map
                     but it is not supported by our API yet */}
                 <Typography variant="h6">
-                  {scoreData.beatmap.version}
+                  {scoreData.score.beatmap.version}
                 </Typography>
               </Stack>
             </Stack>
