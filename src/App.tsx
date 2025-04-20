@@ -30,6 +30,7 @@ import { ScorePage } from "./pages/ScorePage"
 import { SupportPage } from "./pages/SupportPage"
 import { TeamPage } from "./pages/TeamPage"
 import { TermsOfServicePage } from "./pages/TermsOfServicePage"
+import { UserFriendsPage } from "./pages/UserFriendsPage"
 import { UserSettingsPage } from "./pages/UserSettingsPage"
 
 const AppLayout = () => {
@@ -58,6 +59,7 @@ const router = createBrowserRouter(
       <Route path="/leaderboard" element={<LeaderboardPage />} />
       <Route path="/u/:userId" element={<ProfilePage />} />
       <Route path="/u/:userId/settings" element={<UserSettingsPage />} />
+      <Route path="/u/:userId/friends" element={<UserFriendsPage />} />
       <Route path="/b/:beatmapId" element={<BeatmapPage />} />
       <Route path="/scores/:scoreId" element={<ScorePage />} />
       <Route path="/support" element={<SupportPage />} />

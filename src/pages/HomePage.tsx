@@ -1,14 +1,6 @@
-import {
-  Box,
-  Button,
-  Container,
-  GridLegacy,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Box, Container, GridLegacy, Stack, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
 
 import {
   fetchTotalPPEarned,
@@ -21,7 +13,7 @@ import HomepageBanner from "../components/images/banners/homepage_banner.svg"
 import { HomepagePPIcon } from "../components/images/icons/HomepagePPIcon"
 import { HomepageScoresIcon } from "../components/images/icons/HomepageScoresIcon"
 import { HomepageUsersIcon } from "../components/images/icons/HomepageUsersIcon"
-import { WhiteoutAkatsukiLogo } from "../components/images/logos/WhiteoutAkatsukiLogo"
+import { WhiteoutOsuPeruLogo } from "../components/images/logos/WhiteoutOsuPeruLogo"
 import { PageTitle } from "../components/PageTitle"
 
 export const HomePage = () => {
@@ -109,13 +101,13 @@ export const HomePage = () => {
                   spacing={3}
                 >
                   <Box width={315} height={68}>
-                    <WhiteoutAkatsukiLogo />
+                    <WhiteoutOsuPeruLogo />
                   </Box>
                   <Typography textAlign={{ xs: "center", sm: "right" }}>
                     {process.env.REACT_APP_APP_NAME} {t("home.welcome")}
                   </Typography>
                   <Stack direction="row" spacing={2}>
-                    <Link to="/register">
+                    {/*<Link to="/register">
                       <Button
                         variant="contained"
                         sx={{
@@ -130,7 +122,7 @@ export const HomePage = () => {
                           {t("home.get_started")}
                         </Typography>
                       </Button>
-                    </Link>
+                    </Link>*/}
                     {/* TODO: hook this up to open the navbar auth menu */}
                     {/* <Link to="/register">
                       <Button

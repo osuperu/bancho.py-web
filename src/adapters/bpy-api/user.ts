@@ -5,6 +5,7 @@ import { getUserLevel } from "../../utils/level"
 
 const apiInstance = axios.create({
   baseURL: process.env.REACT_APP_BPY_API_BASE_URL,
+  withCredentials: true,
 })
 
 const modeMap: Record<number, string> = {
@@ -86,6 +87,11 @@ export interface UserGrades {
   DCount: number
 }
 
+interface UserFriendsRequest {
+  page: number
+  pageSize: number
+}
+
 export const fetchUser = async (userId: number): Promise<UserResponse> => {
   try {
     const userResponse = await apiInstance.get(`/v2/players/${userId}`)
@@ -143,6 +149,46 @@ export const fetchUser = async (userId: number): Promise<UserResponse> => {
     console.log(e)
     throw new Error(e.userResponse.data.error)
   }
+}
+
+/**
+ * 
+  /v2/players/friends
+ */
+export const fetchUsersFriends = async (
+  request: UserFriendsRequest
+): Promise<UserResponse[]> => {
+  const response = await apiInstance.get(`/v2/players/friends`, {
+    params: {
+      page: request.page,
+      page_size: request.pageSize,
+    },
+  })
+
+  return response.data.data.map((user: any) => ({
+    id: user.id,
+    username: user.name,
+    registeredOn: new Date(user.creation_time * 1000),
+    privileges: user.priv,
+    latestActivity: new Date(user.latest_activity * 1000),
+    country: user.country,
+    stats: [],
+    clan: {
+      id: 1,
+      name: "Test",
+      tag: "[Test]",
+      description: "Test",
+      icon: "",
+      owner: 3,
+      status: 0,
+    },
+    followers: 0, // TODO
+    silenceInfo: {
+      reason: "Test",
+      end: new Date(user.silence_end),
+    },
+    email: "test@test.com", // TODO
+  }))
 }
 
 export const updateUsername = async (
