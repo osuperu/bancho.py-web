@@ -192,12 +192,11 @@ export const fetchUsersFriends = async (
 }
 
 export const updateUsername = async (
-  userId: number,
   currentPassword: string,
   newUsername: string
 ): Promise<UserEmailChangedResponse> => {
   try {
-    const response = await apiInstance.put(`/v2/players/${userId}/username`, {
+    const response = await apiInstance.put(`/v2/players/username`, {
       current_password: currentPassword,
       new_username: newUsername,
     })
@@ -212,12 +211,11 @@ export const updateUsername = async (
 }
 
 export const updateEmail = async (
-  userId: number,
   currentPassword: string,
   newEmail: string
 ): Promise<UserEmailChangedResponse> => {
   try {
-    const response = await apiInstance.put(`/v2/players/${userId}/email`, {
+    const response = await apiInstance.put(`/v2/players/email`, {
       current_password: currentPassword,
       new_email: newEmail,
     })
@@ -232,12 +230,11 @@ export const updateEmail = async (
 }
 
 export const updatePassword = async (
-  userId: number,
   currentPassword: string,
   newPassword: string
 ): Promise<UserEmailChangedResponse> => {
   try {
-    const response = await apiInstance.put(`/v2/players/${userId}/password`, {
+    const response = await apiInstance.put(`/v2/players/password`, {
       current_password: currentPassword,
       new_password: newPassword,
     })

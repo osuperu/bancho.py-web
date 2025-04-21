@@ -82,7 +82,7 @@ const ChangeUsernameButton = ({
             // TODO: potentially automatically validate debounced input
             //       is available server-side as-they-type?
             try {
-              await updateUsername(userId, currentPassword, newUsername)
+              await updateUsername(currentPassword, newUsername)
             } catch (e: any) {
               setSnackbarOpen(true)
               setSnackbarMessage(e.message)
@@ -176,7 +176,7 @@ const ChangePasswordButton = ({
             // TODO: potentially automatically validate debounced input
             //       is available server-side as-they-type?
             try {
-              await updatePassword(userId, currentPassword, newPassword)
+              await updatePassword(currentPassword, newPassword)
             } catch (e: any) {
               setSnackbarOpen(true)
               setSnackbarMessage(e.message)
@@ -265,7 +265,7 @@ const ChangeEmailAddressButton = ({
             // TODO: potentially automatically validate debounced input
             //       is available server-side as-they-type?
             try {
-              await updateEmail(userId, currentPassword, newEmailAddress)
+              await updateEmail(currentPassword, newEmailAddress)
             } catch (e: any) {
               setSnackbarOpen(true)
               setSnackbarMessage(e.message)
