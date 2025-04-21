@@ -20,7 +20,6 @@ import {
 } from "@mui/material"
 import { FormEvent, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useParams } from "react-router-dom"
 
 import {
   updateAvatar,
@@ -33,14 +32,12 @@ import { type Identity, useIdentityContext } from "../context/Identity"
 import { UserPrivileges } from "../privileges"
 
 const ChangeUsernameButton = ({
-  userId,
   setSnackbarOpen,
   setSnackbarMessage,
   identity,
   setIdentity,
   isSupporter,
 }: {
-  userId: number
   setSnackbarOpen: (open: boolean) => void
   setSnackbarMessage: (message: string) => void
   identity: Identity | null
@@ -137,11 +134,9 @@ const ChangeUsernameButton = ({
 }
 
 const ChangePasswordButton = ({
-  userId,
   setSnackbarOpen,
   setSnackbarMessage,
 }: {
-  userId: number
   setSnackbarOpen: (open: boolean) => void
   setSnackbarMessage: (message: string) => void
 }) => {
@@ -227,11 +222,9 @@ const ChangePasswordButton = ({
 }
 
 const ChangeEmailAddressButton = ({
-  userId,
   setSnackbarOpen,
   setSnackbarMessage,
 }: {
-  userId: number
   setSnackbarOpen: (open: boolean) => void
   setSnackbarMessage: (message: string) => void
 }) => {
@@ -316,11 +309,9 @@ const ChangeEmailAddressButton = ({
 }
 
 const ChangeAvatarButton = ({
-  userId,
   setSnackbarOpen,
   setSnackbarMessage,
 }: {
-  userId: number
   setSnackbarOpen: (open: boolean) => void
   setSnackbarMessage: (message: string) => void
 }) => {
@@ -404,20 +395,8 @@ const ChangeAvatarButton = ({
   )
 }
 
-const getUserIdFromQueryParams = (identifier?: string): number => {
-  let userId = parseInt(identifier || "")
-  if (isNaN(userId)) {
-    // TODO: do API lookup
-    userId = 0
-  }
-  return userId
-}
-
 export const UserSettingsPage = () => {
   const { t } = useTranslation()
-
-  const queryParams = useParams()
-  const pageUserId = getUserIdFromQueryParams(queryParams["userId"])
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
@@ -460,25 +439,21 @@ export const UserSettingsPage = () => {
           <Box bgcolor="#191527">
             <Stack direction="column" spacing={2} p={2}>
               <ChangeAvatarButton
-                userId={pageUserId}
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarMessage={setSnackbarMessage}
               />
               <Divider />
               <ChangePasswordButton
-                userId={pageUserId}
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarMessage={setSnackbarMessage}
               />
               <Divider />
               <ChangeEmailAddressButton
-                userId={pageUserId}
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarMessage={setSnackbarMessage}
               />
               <Divider />
               <ChangeUsernameButton
-                userId={pageUserId}
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarMessage={setSnackbarMessage}
                 identity={identity}
