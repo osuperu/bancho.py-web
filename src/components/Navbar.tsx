@@ -283,7 +283,7 @@ export const ProfileSettingsMenu = ({
           </Typography>
           <Avatar
             alt="user-avatar"
-            src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${identity.userId}`}
+            src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${identity.userId}?t=${Date.now()}`}
             variant="rounded"
             sx={{ width: 36, height: 36, borderRadius: "16px" }}
           />
@@ -317,7 +317,7 @@ export const ProfileSettingsMenu = ({
           <Stack direction="column" alignItems="center" spacing={1}>
             <Avatar
               alt="user-avatar"
-              src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${identity.userId}`}
+              src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${identity.userId}?t=${Date.now()}`}
               variant="circular"
               sx={{ width: 84, height: 84 }}
             />

@@ -311,9 +311,13 @@ const ChangeEmailAddressButton = ({
 const ChangeAvatarButton = ({
   setSnackbarOpen,
   setSnackbarMessage,
+  identity,
+  setIdentity,
 }: {
   setSnackbarOpen: (open: boolean) => void
   setSnackbarMessage: (message: string) => void
+  identity: Identity | null
+  setIdentity: (identity: Identity | null) => void
 }) => {
   const { t } = useTranslation()
 
@@ -350,6 +354,9 @@ const ChangeAvatarButton = ({
             try {
               if (selectedFile) {
                 await updateAvatar(selectedFile)
+                if (identity !== null) {
+                  setIdentity({ ...identity })
+                }
               }
             } catch (e: any) {
               setSnackbarOpen(true)
@@ -441,6 +448,8 @@ export const UserSettingsPage = () => {
               <ChangeAvatarButton
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarMessage={setSnackbarMessage}
+                identity={identity}
+                setIdentity={setIdentity}
               />
               <Divider />
               <ChangePasswordButton
