@@ -248,6 +248,28 @@ export const updatePassword = async (
   }
 }
 
+export const updateAvatar = async (
+  avatarFile: File
+): Promise<UserEmailChangedResponse> => {
+  try {
+    const formData = new FormData()
+    formData.append("avatar", avatarFile)
+
+    const response = await apiInstance.put(`/v2/players/avatar`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+
+    return {
+      status: response.data.status,
+    }
+  } catch (e: any) {
+    console.log(e)
+    throw new Error(e.response.data.error)
+  }
+}
+
 export const fetchTotalRegisteredUsers = async (): Promise<number> => {
   const registeredUsersResponse = await apiInstance.get("/v2/players")
 

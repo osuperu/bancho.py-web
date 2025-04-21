@@ -102,20 +102,24 @@
     }
   },
   "user_settings": {
-    "title": "Configuraciones de usuario",
-    "change_password": "Cambiar contraseña",
+    "title": "Configuración de Usuario",
+    "change_password": "Cambiar Contraseña",
     "change_password_here": "Cambia tu contraseña aquí",
-    "current_password": "Contraseña actual",
-    "new_password": "Nueva contraseña",
+    "current_password": "Contraseña Actual",
+    "new_password": "Nueva Contraseña",
     "cancel": "Cancelar",
     "save": "Guardar",
-    "change_email_address": "Cambiar dirección de correo electrónico",
-    "change_email_address_here": "Cambia tu dirección de correo electrónico aquí",
-    "new_email_address": "Nueva dirección de correo electrónico",
-    "supporter_only_feature": "Característica solo para supporters",
-    "change_display_name": "Cambiar nombre de usuario",
-    "supporters_can_use_this_feature": "Los suporters pueden usar esta característica para cambiar sus nombres de usuario en todo el sitio web y el servidor de osu! , completamente auto-servido como lo desean.",
+    "change_email_address": "Cambiar Correo Electrónico",
+    "change_email_address_here": "Cambia tu correo electrónico aquí",
+    "new_email_address": "Nuevo Correo Electrónico",
+    "supporter_only_feature": "Función solo para supporters",
+    "change_display_name": "Cambiar Nombre de Usuario",
+    "supporters_can_use_this_feature": "Los supporters pueden usar esta función para cambiar sus nombres de usuario en el sitio web y el servidor osu!, completamente autoservicio como deseen.",
     "change_display_name_here": "Cambia tu nombre de usuario aquí",
-    "new_display_name": "Nuevo nombre de usuario"
+    "new_display_name": "Nuevo Nombre de Usuario",
+    "change_avatar": "Cambiar Avatar",
+    "change_avatar_here": "Cambia tu avatar aquí",
+    "select_avatar": "Seleccionar Avatar",
+    "selected_file": "Archivo seleccionado"
   }
 }

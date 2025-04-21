@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 
 import {
+  updateAvatar,
   updateEmail,
   updatePassword,
   updateUsername,
@@ -314,6 +315,95 @@ const ChangeEmailAddressButton = ({
   )
 }
 
+const ChangeAvatarButton = ({
+  userId,
+  setSnackbarOpen,
+  setSnackbarMessage,
+}: {
+  userId: number
+  setSnackbarOpen: (open: boolean) => void
+  setSnackbarMessage: (message: string) => void
+}) => {
+  const { t } = useTranslation()
+
+  const [open, setOpen] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
+  const handleClickOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedFile(event.target.files[0])
+    }
+  }
+
+  return (
+    <>
+      <Button
+        onClick={handleClickOpen}
+        sx={{ color: "white", textTransform: "none" }}
+      >
+        <Typography variant="body1">
+          {t("user_settings.change_avatar")}
+        </Typography>
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          component: "form",
+          onSubmit: async (event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault()
+
+            try {
+              if (selectedFile) {
+                await updateAvatar(selectedFile)
+              }
+            } catch (e: any) {
+              setSnackbarOpen(true)
+              setSnackbarMessage(e.message)
+              return
+            }
+            handleClose()
+          },
+        }}
+      >
+        <DialogTitle>{t("user_settings.change_avatar")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t("user_settings.change_avatar_here")}
+          </DialogContentText>
+          <Box mt={2}>
+            <input
+              accept="image/*"
+              // eslint-disable-next-line react/forbid-dom-props
+              style={{ display: "none" }}
+              id="avatar-upload"
+              type="file"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="avatar-upload">
+              <Button variant="contained" component="span">
+                {t("user_settings.select_avatar")}
+              </Button>
+            </label>
+            {selectedFile && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {t("user_settings.selected_file")}: {selectedFile.name}
+              </Typography>
+            )}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
+          <Button type="submit">{t("user_settings.save")}</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  )
+}
+
 const getUserIdFromQueryParams = (identifier?: string): number => {
   let userId = parseInt(identifier || "")
   if (isNaN(userId)) {
@@ -369,6 +459,12 @@ export const UserSettingsPage = () => {
           </Box>
           <Box bgcolor="#191527">
             <Stack direction="column" spacing={2} p={2}>
+              <ChangeAvatarButton
+                userId={pageUserId}
+                setSnackbarOpen={setSnackbarOpen}
+                setSnackbarMessage={setSnackbarMessage}
+              />
+              <Divider />
               <ChangePasswordButton
                 userId={pageUserId}
                 setSnackbarOpen={setSnackbarOpen}

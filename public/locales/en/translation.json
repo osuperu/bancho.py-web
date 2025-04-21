@@ -117,6 +117,10 @@
     "change_display_name": "Change Display Name",
     "supporters_can_use_this_feature": "Supporters can use this feature to change their display names across the website and osu! server, fully self-serve as they desire.",
     "change_display_name_here": "Change your display name here",
-    "new_display_name": "New Display Name"
+    "new_display_name": "New Display Name",
+    "change_avatar": "Change Avatar",
+    "change_avatar_here": "Change your avatar here",
+    "select_avatar": "Select Avatar",
+    "selected_file": "Selected file"
   }
 }
