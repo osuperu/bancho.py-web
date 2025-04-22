@@ -65,7 +65,7 @@ export const fetchUserScores = async (
         scope: request.scope,
         mode: request.mode,
         page: request.page,
-        iimit: request.limit,
+        limit: request.limit,
         id: request.id,
       },
     })
