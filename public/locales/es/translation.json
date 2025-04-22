@@ -87,7 +87,8 @@
     "favorites": "Favoritos",
     "passes": "Superados",
     "download": "Descargar",
-    "play": "Reproducir"
+    "play": "Reproducir",
+    "stop": "Detener"
   },
   "score": {
     "played_by": "jugado por",

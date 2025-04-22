@@ -1,4 +1,5 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material"
+import { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { BeatmapDetails, formatTime } from "../../adapters/bpy-api/beatmaps"
@@ -9,6 +10,32 @@ export const BeatmapInfo = ({
   beatmap: BeatmapDetails | null
 }) => {
   const { t } = useTranslation()
+  const [isPlaying, setIsPlaying] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  const handlePlayClick = () => {
+    if (!beatmap) return
+
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+        setIsPlaying(false)
+      } else {
+        audioRef.current.play()
+        setIsPlaying(true)
+      }
+    } else {
+      const audio = new Audio(`https://catboy.best/preview/audio/${beatmap.id}`)
+      audioRef.current = audio
+      audio.play()
+      setIsPlaying(true)
+
+      audio.onended = () => {
+        setIsPlaying(false)
+      }
+    }
+  }
+
   return (
     <Paper
       elevation={0}
@@ -101,6 +128,7 @@ export const BeatmapInfo = ({
         <Button
           fullWidth
           variant="outlined"
+          onClick={handlePlayClick}
           sx={{
             color: "white",
             borderColor: "rgba(255, 255, 255, 0.3)",
@@ -112,7 +140,7 @@ export const BeatmapInfo = ({
             },
           }}
         >
-          {t("beatmap.play")}
+          {isPlaying ? t("beatmap.stop") : t("beatmap.play")}
         </Button>
       </Stack>
     </Paper>

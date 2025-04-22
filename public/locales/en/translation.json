@@ -87,7 +87,8 @@
     "favorites": "Favorites",
     "passes": "Passes",
     "download": "Download",
-    "play": "Play"
+    "play": "Play",
+    "stop": "Stop"
   },
   "score": {
     "played_by": "played by",
