@@ -96,7 +96,7 @@ export const BeatmapInfo = ({
             },
           }}
         >
-          Download
+          {t("beatmap.download")}
         </Button>
         <Button
           fullWidth
@@ -112,7 +112,7 @@ export const BeatmapInfo = ({
             },
           }}
         >
-          Play
+          {t("beatmap.play")}
         </Button>
       </Stack>
     </Paper>

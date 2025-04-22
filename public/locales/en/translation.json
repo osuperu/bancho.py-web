@@ -25,7 +25,12 @@
     "play_count": "Play Count",
     "accuracy": "Accuracy",
     "download_replay": "Download Replay",
-    "view_score": "View Score"
+    "view_score": "View Score",
+    "score": "SCORE",
+    "accuracy_2": "ACCURACY",
+    "combo": "COMBO",
+    "pp": "PP",
+    "mods": "MODS"
   },
   "profile": {
     "activity_dates": {
@@ -80,7 +85,9 @@
     "submitted": "Submitted",
     "ranked": "Ranked",
     "favorites": "Favorites",
-    "passes": "Passes"
+    "passes": "Passes",
+    "download": "Download",
+    "play": "Play"
   },
   "score": {
     "played_by": "played by",

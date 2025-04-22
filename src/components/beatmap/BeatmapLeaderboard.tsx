@@ -242,6 +242,8 @@ const LeaderboardScoreItem = ({
   score: LeaderboardDetails
   index: number
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Link
       to={`/u/${score.playerId}`}
@@ -324,7 +326,7 @@ const LeaderboardScoreItem = ({
           >
             <Box>
               <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                PUNTUACIÓN
+                {t("leaderboard.score")}
               </Typography>
               <Typography variant="body2" color="white">
                 {score.tScore.toLocaleString()}
@@ -332,7 +334,7 @@ const LeaderboardScoreItem = ({
             </Box>
             <Box>
               <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                PRECISIÓN
+                {t("leaderboard.accuracy_2")}
               </Typography>
               <Typography variant="body2" color="white">
                 {score.acc.toFixed(2)}%
@@ -340,7 +342,7 @@ const LeaderboardScoreItem = ({
             </Box>
             <Box>
               <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                COMBO
+                {t("leaderboard.combo")}
               </Typography>
               <Typography variant="body2" color="white">
                 {score.maxCombo}x
@@ -348,7 +350,7 @@ const LeaderboardScoreItem = ({
             </Box>
             <Box>
               <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                PP
+                {t("leaderboard.pp")}
               </Typography>
               <Typography variant="body2" color="white">
                 {score.pp.toFixed(2)}pp
@@ -356,7 +358,7 @@ const LeaderboardScoreItem = ({
             </Box>
             <Box sx={{ gridColumn: "1 / -1" }}>
               <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                MODS
+                {t("leaderboard.mods")}
               </Typography>
               <Box display="flex" gap={0.5} sx={{ flexWrap: "wrap", mt: 0.5 }}>
                 {getIndividualMods(score.mods).map((mod) => (

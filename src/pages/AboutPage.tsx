@@ -93,7 +93,7 @@ export const AboutPage = () => {
         >
           <AboutFeatureCard title={t("about.features.pp_or_score")} icon="📊">
             <Box
-              pt={{ xs: 20, sm: 20 }}
+              pt={{ xs: 50, sm: 50 }}
               sx={{
                 backgroundSize: "cover",
                 backgroundImage: `url(${ScoreAndPPLeaderboard})`,

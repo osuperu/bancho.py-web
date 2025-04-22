@@ -25,7 +25,12 @@
     "play_count": "Jugadas",
     "accuracy": "Precisión",
     "download_replay": "Descargar repetición",
-    "view_score": "Ver puntuación"
+    "view_score": "Ver puntuación",
+    "score": "PUNTUACIÓN",
+    "accuracy_2": "PRECISIÓN",
+    "combo": "COMBO",
+    "pp": "PP",
+    "mods": "MODS"
   },
   "profile": {
     "activity_dates": {
@@ -80,7 +85,9 @@
     "submitted": "Enviado",
     "ranked": "Clasificado",
     "favorites": "Favoritos",
-    "passes": "Superados"
+    "passes": "Superados",
+    "download": "Descargar",
+    "play": "Reproducir"
   },
   "score": {
     "played_by": "jugado por",
