@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom"
 import { fetchUser, UserResponse, UserStats } from "../adapters/bpy-api/user"
 import { GamemodeSelectionBar } from "../components/GamemodeSelectionBar"
 import DefaultProfileBanner from "../components/images/banners/default_profile.png"
+import { PageTitle } from "../components/PageTitle"
 import { ProfileActivityDatesCard } from "../components/profile/ProfileActivityDatesCard"
 import { ProfileClanCard } from "../components/profile/ProfileClanCard"
 import { ProfileIdentityCard } from "../components/profile/ProfileIdentityCard"
@@ -138,6 +139,7 @@ export const ProfilePage = () => {
 
   return (
     <Box>
+      <PageTitle title={`osu!Peru - ${userProfile.username}`} />
       <Box
         pt={{ xs: 0, sm: 10 }}
         sx={{

@@ -28,6 +28,7 @@ import {
   updateUsername,
 } from "../adapters/bpy-api/user"
 import StaticPageBanner from "../components/images/banners/static_page_banner.svg"
+import { PageTitle } from "../components/PageTitle"
 import { type Identity, useIdentityContext } from "../context/Identity"
 import { UserPrivileges } from "../privileges"
 
@@ -419,6 +420,7 @@ export const UserSettingsPage = () => {
 
   return (
     <>
+      <PageTitle title={`osu!Peru - ${t("web_titles.settings")}`} />
       <Box
         height={{ xs: 0, sm: 340 }}
         sx={{

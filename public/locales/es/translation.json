@@ -1,4 +1,12 @@
 {
+  "web_titles": {
+    "home": "Inicio",
+    "leaderboard": "Clasificaciones",
+    "about": "Acerca de",
+    "score": "Puntuación",
+    "friends": "Amigos",
+    "settings": "Configuraciones"
+  },
   "home": {
     "welcome": "es un servidor privado que ofrece una experiencia de juego fluida y completa. Compatible con modos vanilla, autopilot, relax y muchas cosas mas.",
     "get_started": "¡Comenzar!",
@@ -102,7 +110,8 @@
     "played_by": "jugado por",
     "accuracy": "precisión",
     "combo": "combo",
-    "miss": "fallo(s)"
+    "miss": "fallo(s)",
+    "in": "en"  
   },
   "about": {
     "title": "Acerca de",

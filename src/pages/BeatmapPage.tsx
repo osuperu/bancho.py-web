@@ -1,6 +1,5 @@
-import { Box, Container, Paper, Stack, Typography } from "@mui/material"
+import { Box, Container, Stack } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
 import { useNavigate, useParams } from "react-router-dom"
 
 import {
@@ -15,6 +14,7 @@ import { BeatmapInfo } from "../components/beatmap/BeatmapInfo"
 import { BeatmapLeaderboard } from "../components/beatmap/BeatmapLeaderboard"
 import { BeatmapStat } from "../components/beatmap/BeatmapStat"
 import { GamemodeSelectionBar } from "../components/GamemodeSelectionBar"
+import { PageTitle } from "../components/PageTitle"
 import {
   GameMode,
   gameModeType,
@@ -24,7 +24,6 @@ import {
 } from "../GameModes"
 
 export const BeatmapPage = () => {
-  const { t } = useTranslation()
   const navigate = useNavigate()
   const queryParams = useParams()
   const beatmapId = Number.parseInt(queryParams["beatmapId"] || "0")
@@ -216,6 +215,9 @@ export const BeatmapPage = () => {
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "#151223" }}>
+      <PageTitle
+        title={`osu!Peru - ${beatmap?.artist} - ${beatmap?.title} - [${selectedDifficulty?.name}]`}
+      />
       {/* Beatmap Header */}
       <BeatmapHeader
         beatmap={beatmap}

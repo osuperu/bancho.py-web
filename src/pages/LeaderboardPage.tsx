@@ -266,7 +266,7 @@ export const LeaderboardPage = () => {
 
   return (
     <>
-      <PageTitle title="osu!Peru - Leaderboard" />
+      <PageTitle title={`osu!Peru - ${t("web_titles.leaderboard")}`} />
       <Box
         height={211}
         pt={{ xs: 0, sm: 10 }}

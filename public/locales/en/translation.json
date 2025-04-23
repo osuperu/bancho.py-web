@@ -1,4 +1,12 @@
 {
+  "web_titles": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "about": "About",
+    "score": "Score",
+    "friends": "Friends",
+    "settings": "Settings"
+  },
   "home": {
     "welcome": "is a private server that offers a smooth and complete osu! experience. Compatible with vanilla, autopilot, relax, and much more.",
     "get_started": "Get Started!",
@@ -102,8 +110,8 @@
     "played_by": "played by",
     "accuracy": "accuracy",
     "combo": "combo",
-    "miss": "miss"
-    
+    "miss": "miss",
+    "in": "in"
   },
   "about": {
     "title": "About",

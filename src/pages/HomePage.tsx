@@ -61,7 +61,7 @@ export const HomePage = () => {
 
   return (
     <Box>
-      <PageTitle title="osu!Peru - Inicio" />
+      <PageTitle title={`osu!Peru - ${t("web_titles.home")}`} />
       <Stack direction="column" justifyContent="space-between" spacing={2}>
         <Box
           py={{ xs: 4, sm: 22 }} /** TODO: sm default is 16 */

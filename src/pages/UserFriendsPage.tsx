@@ -11,11 +11,13 @@ import {
   useTheme,
 } from "@mui/material"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { fetchUsersFriends, UserResponse } from "../adapters/bpy-api/user"
 import StaticPageBanner from "../components/images/banners/static_page_banner.svg"
 import { UserFriendsIcon } from "../components/images/icons/UserFriendsIcon"
+import { PageTitle } from "../components/PageTitle"
 
 const PAGE_SIZE = 21
 
@@ -63,6 +65,8 @@ const UserFriendCard = ({ friend }: { friend: UserResponse }) => {
 }
 
 export const UserFriendsPage = () => {
+  const { t } = useTranslation()
+
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -87,6 +91,7 @@ export const UserFriendsPage = () => {
 
   return (
     <>
+      <PageTitle title={`osu!Peru - ${t("web_titles.friends")}`} />
       <Box
         height={{ xs: 0, sm: 340 }}
         sx={{

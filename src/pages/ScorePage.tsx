@@ -21,6 +21,7 @@ import { GradeSIcon } from "../components/images/grade-icons/GradeSIcon"
 import { GradeXHIcon } from "../components/images/grade-icons/GradeXHIcon"
 import { GradeXIcon } from "../components/images/grade-icons/GradeXIcon"
 import { ModIcon } from "../components/ModIcon"
+import { PageTitle } from "../components/PageTitle"
 // import { WatchReplayIcon } from "../components/images/icons/WatchReplayIcon"
 import { formatNumber } from "../utils/formatting"
 import { getIndividualMods } from "../utils/mods"
@@ -111,6 +112,9 @@ export const ScorePage = () => {
 
   return (
     <Box>
+      <PageTitle
+        title={`osu!Peru - ${scoreData.score.user.username} ${t("score.in")} ${scoreData.score.beatmap.artist} - ${scoreData.score.beatmap.title}`}
+      />
       <Box
         pt={{ xs: 0, sm: 10 }}
         py={3}
