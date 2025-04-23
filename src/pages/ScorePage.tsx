@@ -234,7 +234,7 @@ export const ScorePage = () => {
               <Stack direction="row" gap={1} alignItems="center">
                 <Avatar
                   alt="score-user-avatar"
-                  src={`https://a.akatsuki.gg/${scoreData.score.userId}`}
+                  src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${scoreData.score.userId}`}
                   sx={{ width: 55, height: 55, borderRadius: 2 }}
                 />
                 <Typography variant="h6">
