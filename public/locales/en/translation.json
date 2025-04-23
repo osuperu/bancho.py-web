@@ -66,8 +66,8 @@
     "recent_plays": "Recent Plays"
   },
   "beatmap": {
-    "not_diff_available": "No difficulty available for this mode",
-    "not_diffs_available": "This beatmap has no difficulties available for this gamemode",
+    "no_diff_available": "No difficulty available for this mode",
+    "no_diffs_available": "This beatmap has no difficulties available for this gamemode",
     "converted": "Converted",
     "showing_diffs": "Showing",
     "native_diffs": "native difficulties and",

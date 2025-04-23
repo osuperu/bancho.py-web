@@ -66,8 +66,8 @@
     "recent_plays": "Jugadas recientes"
   },
   "beatmap": {
-    "not_diff_available": "No hay dificultad disponible para este modo",
-    "not_diffs_available": "Este mapa no tiene dificultades disponibles para este modo",
+    "no_diff_available": "No hay dificultad disponible para este modo",
+    "no_diffs_available": "Este mapa no tiene dificultades disponibles para este modo",
     "converted": "Convertido",
     "showing_diffs": "Mostrando",
     "native_diffs": "dificultades nativas y",

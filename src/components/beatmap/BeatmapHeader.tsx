@@ -75,7 +75,7 @@ export const BeatmapHeader = ({
             </Stack>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography variant="h6">
-                {selectedDifficulty?.name || t("beatmap.not_diff_available")}
+                {selectedDifficulty?.name || t("beatmap.no_diff_available")}
               </Typography>
               {isConvertedDifficulty && (
                 <Chip
