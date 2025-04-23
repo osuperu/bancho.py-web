@@ -292,8 +292,8 @@ export const HomepageScoresCarousel = () => {
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollStart, setScrollStart] = useState(0)
-  const [recentScores, setRecentScores] =
-    useState<GetRecentScoresResponse | null>(null)
+  const [recentScores, setRecentScores] = useState<GetRecentScoresResponse | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (recentScores?.scores) {
@@ -372,14 +372,20 @@ export const HomepageScoresCarousel = () => {
   useEffect(() => {
     ;(async () => {
       try {
+        setIsLoading(true)
         const scoresResponse = await fetchRecentScores()
         setRecentScores(scoresResponse)
       } catch (error) {
         console.error("Failed to fetch recent scores:", error)
-        return
+      } finally {
+        setIsLoading(false)
       }
     })()
   }, [])
+
+  if (isLoading || !recentScores?.scores) {
+    return null
+  }
 
   return (
     <Box
