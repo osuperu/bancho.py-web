@@ -10,7 +10,15 @@
     "home": "Home",
     "leaderboards": "Leaderboards",
     "about": "About",
-    "search": "Looking for someone?"
+    "search": "Looking for someone?",
+    "login": "Login",
+    "create_account": "Create Account",
+    "reset_password": "Reset Password",
+    "register": "Register",
+    "log_in_or_register": "Login or Register",
+    "username": "Username",
+    "password": "Password",
+    "email": "Email"
   },
   "identity": {
     "my_profile": "My Profile",

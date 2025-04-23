@@ -9,5 +9,6 @@ declare namespace NodeJS {
     readonly REACT_APP_BEATMAP_MIRROR_URL: string
     readonly REACT_APP_DISCORD_INVITE_URL: string
     readonly REACT_APP_GITHUB_ORG_URL: string
+    readonly REACT_APP_HCAPTCHA_SITE_KEY: string
   }
 }

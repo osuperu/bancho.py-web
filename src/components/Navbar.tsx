@@ -1,3 +1,4 @@
+import HCaptcha from "@hcaptcha/react-hcaptcha"
 import {
   Alert,
   Autocomplete,
@@ -13,11 +14,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
-import { authenticate, logout } from "../adapters/bpy-api/authentication"
+import {
+  authenticate,
+  logout,
+  register,
+} from "../adapters/bpy-api/authentication"
 import { searchUsers, SingleUserSearchResult } from "../adapters/bpy-api/search"
 import HomepageBanner from "../components/images/banners/homepage_banner.svg"
 import { Identity, useIdentityContext } from "../context/Identity"
@@ -41,6 +46,9 @@ export const AuthenticationSettingsMenu = ({
   identity: Identity | null
   setIdentity: (identity: Identity | null) => void
 }) => {
+  const { t } = useTranslation()
+  const captchaRef = useRef<HCaptcha>(null)
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -52,15 +60,23 @@ export const AuthenticationSettingsMenu = ({
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [isRegistering, setIsRegistering] = useState(false)
+  const [hCaptchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const [loading, setLoading] = useState(false)
   const [loginError, setLoginError] = useState("")
 
   const handleLogin = async () => {
+    if (!hCaptchaToken) {
+      setLoginError("Please complete the captcha")
+      return
+    }
+
     let identity
     try {
       setLoading(true)
-      identity = await authenticate({ username, password })
+      identity = await authenticate({ username, password, hCaptchaToken })
     } catch (e: any) {
       setLoading(false)
       setLoginError(e.message)
@@ -70,6 +86,34 @@ export const AuthenticationSettingsMenu = ({
     setLoading(false)
     setLoginError("")
     setIdentity(identity)
+    captchaRef.current?.resetCaptcha()
+    setCaptchaToken(null)
+  }
+
+  const handleRegister = async () => {
+    if (!hCaptchaToken) {
+      setLoginError("Please complete the captcha")
+      return
+    }
+
+    try {
+      setLoading(true)
+      const identity = await register({
+        username,
+        password,
+        email,
+        hCaptchaToken,
+      })
+      setIdentity(identity)
+      setLoading(false)
+      setLoginError("")
+      captchaRef.current?.resetCaptcha()
+      setCaptchaToken(null)
+    } catch (e: any) {
+      setLoading(false)
+      setLoginError(e.message)
+      return
+    }
   }
 
   return (
@@ -88,7 +132,9 @@ export const AuthenticationSettingsMenu = ({
           color: "white",
         }}
       >
-        <Typography variant="body1">Log in or Register</Typography>
+        <Typography variant="body1">
+          {t("navbar.log_in_or_register")}
+        </Typography>
       </Button>
       <Menu
         id="authentication-settings-menu"
@@ -100,7 +146,20 @@ export const AuthenticationSettingsMenu = ({
             p: 1.5,
           },
         }}
-        slotProps={{ paper: { sx: { width: 326, borderRadius: 3 } } }}
+        slotProps={{
+          paper: {
+            sx: { width: 326, borderRadius: 3 },
+            component: "form",
+            onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+              event.preventDefault()
+              if (isRegistering) {
+                await handleRegister()
+              } else {
+                await handleLogin()
+              }
+            },
+          },
+        }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -113,35 +172,53 @@ export const AuthenticationSettingsMenu = ({
       >
         <TextField
           fullWidth
+          required={isRegistering}
           id="username"
-          label="Username / Email"
+          label={t("navbar.username")}
           type="text"
           autoComplete="username"
+          value={username}
           InputProps={{
             sx: { borderRadius: 3, bgcolor: "#110E1B" },
           }}
-          onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setUsername(e.target.value)
           }
-          onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === "Enter" && username && password) {
-              await handleLogin()
-            } else if (e.key === "Tab") {
-              e?.stopPropagation()
-            }
-          }}
         />
+        {isRegistering && (
+          <TextField
+            fullWidth
+            required
+            id="email"
+            label={t("navbar.email")}
+            type="email"
+            value={email}
+            autoComplete="email"
+            InputProps={{
+              sx: {
+                borderRadius: 3,
+                bgcolor: "#110E1B",
+                mt: 1,
+              },
+            }}
+            InputLabelProps={{ sx: { mt: 1 } }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
+          />
+        )}
         <TextField
           fullWidth
+          required={isRegistering}
           id="password"
-          label="Password"
+          label={t("navbar.password")}
           type="password"
-          autoComplete="current-password"
+          value={password}
+          autoComplete={isRegistering ? "new-password" : "current-password"}
           InputProps={{
             sx: {
               borderRadius: 3,
               bgcolor: "#110E1B",
-              borderColor: "red",
               mt: 1,
             },
           }}
@@ -149,15 +226,15 @@ export const AuthenticationSettingsMenu = ({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setPassword(e.target.value)
           }
-          onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === "Enter" && username && password) {
-              await handleLogin()
-            }
-            if (e.key === "Tab") {
-              e?.stopPropagation()
-            }
-          }}
         />
+        <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
+          <HCaptcha
+            ref={captchaRef}
+            sitekey={process.env.REACT_APP_HCAPTCHA_SITE_KEY}
+            onVerify={(token) => setCaptchaToken(token)}
+            onExpire={() => setCaptchaToken(null)}
+          />
+        </Box>
         {loginError && (
           <Alert sx={{ mt: 1 }} severity="error">
             {loginError}
@@ -165,18 +242,13 @@ export const AuthenticationSettingsMenu = ({
         )}
         <Button
           fullWidth
+          type="submit"
           variant="contained"
-          onClick={handleLogin}
           sx={{
             backgroundImage:
               "linear-gradient(90.09deg, #387EFC -0.08%, #C940FD 99.3%)",
             mt: 1.5,
             borderRadius: 3,
-          }}
-          onKeyDown={(e: any) => {
-            if (e.key === "Tab") {
-              e?.stopPropagation()
-            }
           }}
           disabled={loading}
         >
@@ -184,7 +256,9 @@ export const AuthenticationSettingsMenu = ({
             <Box width={24} height={24}>
               <LoginDoorIcon />
             </Box>
-            <Typography variant="body2">Log In</Typography>
+            <Typography variant="body2">
+              {isRegistering ? t("navbar.register") : t("navbar.login")}
+            </Typography>
           </Stack>
         </Button>
         <Stack direction="row" justifyContent="space-around">
@@ -209,11 +283,14 @@ export const AuthenticationSettingsMenu = ({
               }
             }}
           >
-            <Typography variant="body1">Reset Password</Typography>
+            <Typography variant="body1">
+              {t("navbar.reset_password")}
+            </Typography>
           </Button>
           <Button
             fullWidth
-            disabled
+            type="submit"
+            onClick={() => setIsRegistering(!isRegistering)}
             sx={{
               textTransform: "none",
               color: "white",
@@ -226,7 +303,9 @@ export const AuthenticationSettingsMenu = ({
               }
             }}
           >
-            <Typography variant="body1">Create Account</Typography>
+            <Typography variant="body1">
+              {isRegistering ? t("navbar.login") : t("navbar.create_account")}
+            </Typography>
           </Button>
         </Stack>
       </Menu>

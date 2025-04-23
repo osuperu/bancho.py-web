@@ -10,7 +10,15 @@
     "home": "Inicio",
     "leaderboards": "Clasificaciones",
     "about": "Acerca de",
-    "search": "¿Buscando a alguien?"
+    "search": "¿Buscando a alguien?",
+    "login": "Iniciar sesión",
+    "create_account": "Crear cuenta",
+    "reset_password": "Restablecer contraseña",
+    "register": "Registrarse",
+    "log_in_or_register": "Iniciar sesión o registrarse",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "email": "Correo electrónico"
   },
   "identity": {
     "my_profile": "Mi perfil",
