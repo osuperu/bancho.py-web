@@ -90,31 +90,23 @@ export const BeatmapPage = () => {
       try {
         const beatmapSet = await getBeatmapSet(beatmapId)
 
-        if (
-          beatmapSet.status === "success" &&
-          beatmapSet.beatmap &&
-          beatmapSet.beatmap.length > 0
-        ) {
-          const firstBeatmap = beatmapSet.beatmap[0]
+        const firstBeatmap = beatmapSet.beatmap[0]
 
-          setBeatmap(firstBeatmap)
+        setBeatmap(firstBeatmap)
 
-          const filtered = filterDifficultiesByGameMode(
-            firstBeatmap.difficulties,
-            gameMode
-          )
-          setFilteredDifficulties(filtered)
+        const filtered = filterDifficultiesByGameMode(
+          firstBeatmap.difficulties,
+          gameMode
+        )
+        setFilteredDifficulties(filtered)
 
-          const targetDifficulty = filtered.find((d) => d.id === beatmapId)
-          if (targetDifficulty) {
-            setSelectedDifficulty(targetDifficulty)
-          } else if (filtered.length > 0) {
-            setSelectedDifficulty(filtered[0])
-          } else {
-            setSelectedDifficulty(null)
-          }
+        const targetDifficulty = filtered.find((d) => d.id === beatmapId)
+        if (targetDifficulty) {
+          setSelectedDifficulty(targetDifficulty)
+        } else if (filtered.length > 0) {
+          setSelectedDifficulty(filtered[0])
         } else {
-          // TODO: Do something if the beatmap is not found
+          setSelectedDifficulty(null)
         }
       } catch (error) {
         console.error("Error fetching beatmap:", error)
