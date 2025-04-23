@@ -27,6 +27,10 @@ const ScoresCarouselItem = ({
   score: ScoreDetails
   isFeatured?: boolean
 }) => {
+  if (!score || !score.user || !score.beatmap) {
+    return null;
+  }
+
   return (
     <Box
       sx={{
@@ -292,12 +296,12 @@ export const HomepageScoresCarousel = () => {
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollStart, setScrollStart] = useState(0)
-  const [recentScores, setRecentScores] =
-    useState<GetRecentScoresResponse | null>(null)
+  const [recentScores, setRecentScores] = useState<GetRecentScoresResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (recentScores?.scores) {
+    if (recentScores?.scores?.length) {
       const middleIndex = Math.floor(recentScores.scores.length / 2)
       setActiveIndex(middleIndex)
     }
@@ -371,21 +375,58 @@ export const HomepageScoresCarousel = () => {
   }, [])
 
   useEffect(() => {
-    ;(async () => {
+    let mounted = true;
+
+    const fetchScores = async () => {
       try {
         setIsLoading(true)
+        setError(null)
         const scoresResponse = await fetchRecentScores()
+        
+        if (!mounted) return;
+        
+        if (!scoresResponse?.scores?.length) {
+          setError('No scores available')
+          return;
+        }
+        
         setRecentScores(scoresResponse)
       } catch (error) {
         console.error("Failed to fetch recent scores:", error)
+        setError('Failed to load scores')
       } finally {
-        setIsLoading(false)
+        if (mounted) {
+          setIsLoading(false)
+        }
       }
-    })()
+    }
+
+    fetchScores()
+
+    return () => {
+      mounted = false
+    }
   }, [])
 
-  if (isLoading || !recentScores?.scores) {
-    return null
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "200px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#110E1B",
+        }}
+      >
+        <Typography color="white">Loading scores...</Typography>
+      </Box>
+    )
+  }
+
+  if (error || !recentScores?.scores?.length) {
+    return null;
   }
 
   return (
