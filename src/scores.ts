@@ -52,7 +52,10 @@ export const calculateGrade = (
 
   switch (gameMode) {
     case GameMode.Standard:
+    case GameMode.StandardRelax:
+    case GameMode.StandardAutopilot:
     case GameMode.Taiko:
+    case GameMode.TaikoRelax:
       const ratio300 = num_300s / objectCount
       const ratio50 = num_50s / objectCount
 
@@ -75,6 +78,7 @@ export const calculateGrade = (
       return "D"
 
     case GameMode.Catch:
+    case GameMode.CatchRelax:
       if (acc === 100) {
         return shouldUseSilverGrades ? "XH" : "X"
       }
