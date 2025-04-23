@@ -70,6 +70,21 @@ export const gameModeType = (gameMode: GameMode): string => {
   throw new Error("Invalid game mode")
 }
 
+export const getGameModeString = (gameMode: GameMode): string => {
+  switch (gameMode) {
+    case GameMode.Standard:
+      return "osu"
+    case GameMode.Taiko:
+      return "taiko"
+    case GameMode.Catch:
+      return "catch"
+    case GameMode.Mania:
+      return "mania"
+    default:
+      return "osu"
+  }
+}
+
 // Haz un metodo que devuelve si es standard, taiko, catch, mania
 // sin importar si es relax o autopilot
 // que devuelva el enum GameMode y no string

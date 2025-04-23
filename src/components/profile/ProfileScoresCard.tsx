@@ -13,7 +13,13 @@ import {
   type UserScore,
   type UserScoresResponse,
 } from "../../adapters/bpy-api/userScores"
-import { type GameMode, mapToBpyMode, type RelaxMode } from "../../GameModes"
+import {
+  GameMode,
+  gameModeType,
+  getGameModeString,
+  mapToBpyMode,
+  type RelaxMode,
+} from "../../GameModes"
 import { calculateGrade, getGradeColor, remapSSForDisplay } from "../../scores"
 import { formatDecimal, formatNumber } from "../../utils/formatting"
 import { getIndividualMods } from "../../utils/mods"
@@ -288,10 +294,9 @@ export const ProfileScoresCard = ({
     if (!userId) return
     ;(async () => {
       try {
-        const bpyMode = mapToBpyMode(gameMode, relaxMode)
         const userScores = await fetchUserScores({
           scope: scoresType,
-          mode: bpyMode,
+          mode: mapToBpyMode(gameMode, relaxMode),
           limit: pageSize,
           page: page + 1,
           id: userId,
@@ -323,7 +328,7 @@ export const ProfileScoresCard = ({
         {userScores?.scores?.map((score: UserScore) => (
           <Box key={score.id} borderRadius="16px" overflow="hidden">
             <Link
-              to={`/b/${score.beatmap.beatmapId}`}
+              to={`/b/${score.beatmap.beatmapId}/${getGameModeString(gameMode)}/${gameModeType(mapToBpyMode(gameMode, relaxMode))}`}
               // eslint-disable-next-line react/forbid-component-props
               style={{
                 color: "#FFFFFF",
