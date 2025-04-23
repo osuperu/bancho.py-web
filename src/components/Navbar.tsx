@@ -289,8 +289,11 @@ export const AuthenticationSettingsMenu = ({
           </Button>
           <Button
             fullWidth
-            type="submit"
-            onClick={() => setIsRegistering(!isRegistering)}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              setIsRegistering(!isRegistering)
+            }}
             sx={{
               textTransform: "none",
               color: "white",
