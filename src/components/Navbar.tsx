@@ -145,6 +145,10 @@ export const AuthenticationSettingsMenu = ({
             paddingTop: 0,
             p: 1.5,
           },
+          onKeyDown: (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+          },
         }}
         slotProps={{
           paper: {
@@ -163,11 +167,6 @@ export const AuthenticationSettingsMenu = ({
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Tab") {
-            e?.stopPropagation()
-          }
-        }}
         transformOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <TextField
@@ -180,6 +179,9 @@ export const AuthenticationSettingsMenu = ({
           value={username}
           InputProps={{
             sx: { borderRadius: 3, bgcolor: "#110E1B" },
+            onKeyDown: (e) => {
+              e.stopPropagation()
+            },
           }}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setUsername(e.target.value)
@@ -199,6 +201,9 @@ export const AuthenticationSettingsMenu = ({
                 borderRadius: 3,
                 bgcolor: "#110E1B",
                 mt: 1,
+              },
+              onKeyDown: (e) => {
+                e.stopPropagation()
               },
             }}
             InputLabelProps={{ sx: { mt: 1 } }}
@@ -220,6 +225,9 @@ export const AuthenticationSettingsMenu = ({
               borderRadius: 3,
               bgcolor: "#110E1B",
               mt: 1,
+            },
+            onKeyDown: (e) => {
+              e.stopPropagation()
             },
           }}
           InputLabelProps={{ sx: { mt: 1 } }}
