@@ -255,9 +255,9 @@ const LeaderboardUserCard = ({
           {isPPLeaderboard ? (
             <Typography variant="body1">{formatNumber(user.pp)}pp</Typography>
           ) : (
-            <Tooltip title={formatNumber(user.rScore)}>
+            <Tooltip title={formatNumber(user.tScore)}>
               <Typography variant="body1">
-                {formatNumberCompact(user.rScore)}
+                {formatNumberCompact(user.tScore)}
               </Typography>
             </Tooltip>
           )}
