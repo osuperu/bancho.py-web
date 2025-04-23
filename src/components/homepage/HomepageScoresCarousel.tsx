@@ -292,7 +292,8 @@ export const HomepageScoresCarousel = () => {
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollStart, setScrollStart] = useState(0)
-  const [recentScores, setRecentScores] = useState<GetRecentScoresResponse | null>(null)
+  const [recentScores, setRecentScores] =
+    useState<GetRecentScoresResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {

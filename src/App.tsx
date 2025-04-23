@@ -32,6 +32,7 @@ import { TeamPage } from "./pages/TeamPage"
 import { TermsOfServicePage } from "./pages/TermsOfServicePage"
 import { UserFriendsPage } from "./pages/UserFriendsPage"
 import { UserSettingsPage } from "./pages/UserSettingsPage"
+import { ErrorBoundary } from "react-error-boundary"
 
 const AppLayout = () => {
   return (
@@ -71,6 +72,15 @@ const router = createBrowserRouter(
   )
 )
 
+function fallbackRender({ error }: { error: Error }) {
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre style={{ color: "red" }}>{error.message}</pre>
+    </div>
+  );
+}
+
 export default function App() {
   const theme = React.useMemo(
     () =>
@@ -99,9 +109,11 @@ export default function App() {
       <I18nextProvider i18n={_i18n}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <ErrorBoundary fallbackRender={fallbackRender}>
           <IdentityContextProvider>
             <RouterProvider router={router} />
           </IdentityContextProvider>
+          </ErrorBoundary>
         </ThemeProvider>
       </I18nextProvider>
     </React.StrictMode>
