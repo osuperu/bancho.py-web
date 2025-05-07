@@ -28,7 +28,7 @@ const ScoresCarouselItem = ({
   isFeatured?: boolean
 }) => {
   if (!score || !score.user || !score.beatmap) {
-    return null;
+    return null
   }
 
   return (
@@ -164,7 +164,7 @@ const ScoresCarouselItem = ({
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage: `url(https://assets.ppy.sh/beatmaps/${score.beatmap.beatmapsetId}/covers/cover.jpg)`,
+            backgroundImage: `url(${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${score.beatmap.beatmapsetId})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             marginTop: 5,
@@ -296,7 +296,8 @@ export const HomepageScoresCarousel = () => {
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollStart, setScrollStart] = useState(0)
-  const [recentScores, setRecentScores] = useState<GetRecentScoresResponse | null>(null)
+  const [recentScores, setRecentScores] =
+    useState<GetRecentScoresResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -375,25 +376,25 @@ export const HomepageScoresCarousel = () => {
   }, [])
 
   useEffect(() => {
-    let mounted = true;
+    let mounted = true
 
     const fetchScores = async () => {
       try {
         setIsLoading(true)
         setError(null)
         const scoresResponse = await fetchRecentScores()
-        
-        if (!mounted) return;
-        
+
+        if (!mounted) return
+
         if (!scoresResponse?.scores?.length) {
-          setError('No scores available')
-          return;
+          setError("No scores available")
+          return
         }
-        
+
         setRecentScores(scoresResponse)
       } catch (error) {
         console.error("Failed to fetch recent scores:", error)
-        setError('Failed to load scores')
+        setError("Failed to load scores")
       } finally {
         if (mounted) {
           setIsLoading(false)
@@ -426,7 +427,7 @@ export const HomepageScoresCarousel = () => {
   }
 
   if (error || !recentScores?.scores?.length) {
-    return null;
+    return null
   }
 
   return (

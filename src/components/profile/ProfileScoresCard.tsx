@@ -258,7 +258,7 @@ const ProfileScoreCard = (userScore: UserScore) => {
             backgroundImage: `
               linear-gradient(90deg, ${getGradeColor(scoreGrade, 0.2)}, ${getGradeColor(scoreGrade, 0.0)} 48.5%),
               linear-gradient(0deg, rgba(22, 19, 35, 0.9), rgba(22, 19, 35, 0.9)),
-              url(https://assets.ppy.sh/beatmaps/${userScore.beatmap.beatmapsetId}/covers/cover.jpg)
+              url(${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${userScore.beatmap.beatmapsetId})
             `,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",

@@ -120,7 +120,7 @@ export const ScorePage = () => {
         py={3}
         sx={{
           backgroundSize: "cover",
-          backgroundImage: `url(https://assets.ppy.sh/beatmaps/${scoreData.score.beatmap.beatmapsetId}/covers/cover.jpg)`,
+          backgroundImage: `url(${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${scoreData.score.beatmap.beatmapsetId}`,
           backgroundPosition: "center",
           boxShadow: "inset 0px 0px 0px 2000px rgba(21, 18, 34, 0.9)",
         }}
@@ -133,7 +133,7 @@ export const ScorePage = () => {
             overflow="hidden"
             sx={{
               backgroundSize: "cover",
-              backgroundImage: `linear-gradient(90deg, rgba(15, 19, 38, 0.9) 0%, rgba(15, 19, 38, 0) 100%), url(https://assets.ppy.sh/beatmaps/${scoreData.score.beatmap.beatmapsetId}/covers/cover.jpg)`,
+              backgroundImage: `linear-gradient(90deg, rgba(15, 19, 38, 0.9) 0%, rgba(15, 19, 38, 0) 100%), url(${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${scoreData.score.beatmap.beatmapsetId})`,
               backgroundPosition: "center",
             }}
           >

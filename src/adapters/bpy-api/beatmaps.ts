@@ -84,7 +84,7 @@ export const getBeatmapSet = async (
       title: beatmap.title,
       creator: beatmap.creator,
       source: "", // API doesn't provide this field
-      coverUrl: `https://assets.ppy.sh/beatmaps/${beatmap.set_id}/covers/cover.jpg`,
+      coverUrl: `${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${beatmap.set_id}`,
       audioUrl: "", // API doesn't provide this field
       previewTime: 0, // API doesn't provide this field
       length: beatmap.total_length,
