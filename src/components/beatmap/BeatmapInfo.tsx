@@ -25,7 +25,9 @@ export const BeatmapInfo = ({
         setIsPlaying(true)
       }
     } else {
-      const audio = new Audio(`https://catboy.best/preview/audio/${beatmap.id}`)
+      const audio = new Audio(
+        `${process.env.REACT_APP_BPY_MAPS_BASE_URL}/preview/${beatmap.setId}.mp3`
+      )
       audioRef.current = audio
       audio.play()
       setIsPlaying(true)
@@ -112,6 +114,11 @@ export const BeatmapInfo = ({
         <Button
           fullWidth
           variant="contained"
+          onClick={() => {
+            window.open(
+              `${process.env.REACT_APP_BPY_OSU_BASE_URL}/d/${beatmap?.setId}`
+            )
+          }}
           sx={{
             backgroundImage:
               "linear-gradient(90.09deg, #387EFC -0.08%, #C940FD 99.3%)",
