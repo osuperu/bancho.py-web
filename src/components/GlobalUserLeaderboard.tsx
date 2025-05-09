@@ -300,6 +300,8 @@ export const GlobalUserLeaderboard = ({
           mode: bpyMode,
           country: countryCode?.toLowerCase() ?? undefined,
           sort: sortParam,
+          page: page + 1,
+          limit: pageSize,
         })
         setLeaderboardData(leaderboardResponse)
         setLoading(false)

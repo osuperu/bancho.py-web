@@ -27,6 +27,8 @@ interface LeaderboardRequest {
   mode: number
   sort: string
   country?: string
+  page: number
+  limit: number
 }
 
 const apiInstance = axios.create({
@@ -42,6 +44,8 @@ export const fetchLeaderboard = async (
         mode: request.mode,
         sort: request.sort,
         country: request.country,
+        limit: request.limit,
+        page: request.page,
       },
     })
 
