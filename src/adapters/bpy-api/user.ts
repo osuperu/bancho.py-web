@@ -96,6 +96,12 @@ export const fetchUser = async (userId: number): Promise<UserResponse> => {
   try {
     const userResponse = await apiInstance.get(`/v2/players/${userId}`)
     const statsResponse = await apiInstance.get(`/v2/players/${userId}/stats`)
+    let clanResponse = null
+    if (Number(userResponse.data.data.clan_id) > 0) {
+      clanResponse = await apiInstance.get(
+        `/v2/clans/${userResponse.data.data.clan_id}`
+      )
+    }
 
     return {
       id: userResponse.data.data.id,
@@ -128,14 +134,13 @@ export const fetchUser = async (userId: number): Promise<UserResponse> => {
         },
       ]),
       clan: {
-        // TODO
-        id: 1,
-        name: "Test",
-        tag: "[Test]",
-        description: "Test",
-        icon: "",
-        owner: 3,
-        status: 0,
+        id: userResponse.data.data.clan_id,
+        name: clanResponse?.data.data.name,
+        tag: `[${clanResponse?.data.data.tag}]`,
+        description: "TODO",
+        icon: `https://robohash.org/${clanResponse?.data.data.tag}.png?set=set4`, // For now use robohash as a placeholder
+        owner: clanResponse?.data.data.owner,
+        status: 0, // TODO: This doesn't exist in the API response, to remove
       },
       followers: 0, // TODO
       silenceInfo: {
