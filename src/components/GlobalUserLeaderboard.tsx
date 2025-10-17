@@ -9,48 +9,49 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@mui/material"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import {
   fetchLeaderboard,
-  LeaderboardResponse,
-  LeaderboardUser,
-} from "../adapters/bpy-api/leaderboard"
-import { GameMode, mapToBpyMode, RelaxMode } from "../GameModes"
+  type LeaderboardResponse,
+  type LeaderboardUser,
+} from '../adapters/bpy-api/leaderboard';
+import { type GameMode, mapToBpyMode, type RelaxMode } from '../GameModes';
 import {
   formatDecimal,
   formatNumber,
   formatNumberCompact,
-} from "../utils/formatting"
-import { FlagIcon } from "./DestinationIcons"
+} from '../utils/formatting';
+import { FlagIcon } from './DestinationIcons';
 
-const USER_RANK_BG_COLOR = "rgba(21, 18, 35, 1)"
-const USER_INFO_BG_COLOR = "rgba(30, 27, 47, 1)"
-const SCORE_METRIC_BG_COLOR = "rgba(38, 34, 56, 1)"
+const USER_RANK_BG_COLOR = 'rgba(21, 18, 35, 1)';
+const USER_INFO_BG_COLOR = 'rgba(30, 27, 47, 1)';
+const SCORE_METRIC_BG_COLOR = 'rgba(38, 34, 56, 1)';
 
 export enum SortParam {
-  Performance = "pp",
-  Score = "tscore",
+  Performance = 'pp',
+  Score = 'tscore',
 }
 
 export interface CountrySelection {
-  countryCode: string
-  countryName: string
+  countryCode: string;
+  countryName: string;
 }
 
 const LeaderboardTableHeader = ({
   rankingStatistic,
   isMobile,
 }: {
-  rankingStatistic: string
-  isMobile: boolean
+  rankingStatistic: string;
+  isMobile: boolean;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  if (isMobile) return <></>
+  // biome-ignore lint/complexity/noUselessFragments: <Ignore>
+  if (isMobile) return <></>;
 
   return (
     <Grid display="grid" gridTemplateColumns="75px 1fr 102px 102px 102px">
@@ -66,7 +67,7 @@ const LeaderboardTableHeader = ({
           fontWeight={300}
           color="hsl(0deg 0 100% / 60%)"
         >
-          {t("leaderboard.play_count")}
+          {t('leaderboard.play_count')}
         </Typography>
       </Grid>
       <Grid p={1} display="flex" justifyContent="center">
@@ -75,7 +76,7 @@ const LeaderboardTableHeader = ({
           fontWeight={300}
           color="hsl(0deg 0 100% / 60%)"
         >
-          {t("leaderboard.accuracy")}
+          {t('leaderboard.accuracy')}
         </Typography>
       </Grid>
       <Grid p={1} display="flex" justifyContent="center">
@@ -84,21 +85,21 @@ const LeaderboardTableHeader = ({
         </Typography>
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
 const MobileLeaderboardUserCard = ({
   user,
   sortParam,
   userRank,
 }: {
-  user: LeaderboardUser
-  sortParam: SortParam
-  userRank: number
+  user: LeaderboardUser;
+  sortParam: SortParam;
+  userRank: number;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const isPPLeaderboard = sortParam === SortParam.Performance
+  const isPPLeaderboard = sortParam === SortParam.Performance;
 
   return (
     <Stack direction="column" borderRadius={4} mt={1} overflow="hidden">
@@ -123,10 +124,9 @@ const MobileLeaderboardUserCard = ({
           <FlagIcon country={user.country} height={36} width={36} />
           <Link
             to={`/u/${user.playerId}`}
-            // eslint-disable-next-line react/forbid-component-props
             style={{
-              color: "#FFFFFF",
-              textDecoration: "none",
+              color: '#FFFFFF',
+              textDecoration: 'none',
             }}
           >
             <Typography variant="body1" ml={1}>
@@ -142,7 +142,7 @@ const MobileLeaderboardUserCard = ({
       >
         <Stack direction="row" p={1}>
           <Typography fontSize={15} fontWeight={300}>
-            {t("leaderboard.accuracy")}:&nbsp;
+            {t('leaderboard.accuracy')}:&nbsp;
           </Typography>
           <Typography>{formatDecimal(user.acc)}%</Typography>
         </Stack>
@@ -159,8 +159,8 @@ const MobileLeaderboardUserCard = ({
         </Stack>
       </Stack>
     </Stack>
-  )
-}
+  );
+};
 
 const LeaderboardUserCard = ({
   user,
@@ -168,10 +168,10 @@ const LeaderboardUserCard = ({
   sortParam,
   userRank,
 }: {
-  user: LeaderboardUser
-  isMobile: boolean
-  sortParam: SortParam
-  userRank: number
+  user: LeaderboardUser;
+  isMobile: boolean;
+  sortParam: SortParam;
+  userRank: number;
 }) => {
   if (isMobile) {
     return (
@@ -180,18 +180,17 @@ const LeaderboardUserCard = ({
         sortParam={sortParam}
         userRank={userRank}
       />
-    )
+    );
   }
 
-  const isPPLeaderboard = sortParam === SortParam.Performance
+  const isPPLeaderboard = sortParam === SortParam.Performance;
 
   return (
     <Link
       to={`/u/${user.playerId}`}
-      // eslint-disable-next-line react/forbid-component-props
       style={{
-        color: "#FFFFFF",
-        textDecoration: "none",
+        color: '#FFFFFF',
+        textDecoration: 'none',
       }}
     >
       <Grid
@@ -264,8 +263,8 @@ const LeaderboardUserCard = ({
         </Box>
       </Grid>
     </Link>
-  )
-}
+  );
+};
 
 export const GlobalUserLeaderboard = ({
   gameMode,
@@ -273,45 +272,45 @@ export const GlobalUserLeaderboard = ({
   sortParam,
   countryCode,
 }: {
-  gameMode: GameMode
-  relaxMode: RelaxMode
-  sortParam: SortParam
-  countryCode: string | null
+  gameMode: GameMode;
+  relaxMode: RelaxMode;
+  sortParam: SortParam;
+  countryCode: string | null;
 }) => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [error, setError] = useState("")
+  const [error, setError] = useState('');
 
-  const [page, setPage] = useState(0)
-  const [pageSize, setPageSize] = useState(50)
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(50);
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const [leaderboardData, setLeaderboardData] =
-    useState<LeaderboardResponse | null>(null)
+    useState<LeaderboardResponse | null>(null);
 
   useEffect(() => {
-    setLoading(true)
-    ;(async () => {
+    setLoading(true);
+    (async () => {
       try {
-        const bpyMode = mapToBpyMode(gameMode, relaxMode)
+        const bpyMode = mapToBpyMode(gameMode, relaxMode);
         const leaderboardResponse = await fetchLeaderboard({
           mode: bpyMode,
           country: countryCode?.toLowerCase() ?? undefined,
           sort: sortParam,
           page: page + 1,
           limit: pageSize,
-        })
-        setLeaderboardData(leaderboardResponse)
-        setLoading(false)
-        setError("")
-      } catch (e: any) {
-        setError("Failed to fetch data from server")
-        return
+        });
+        setLeaderboardData(leaderboardResponse);
+        setLoading(false);
+        setError('');
+      } catch (_e: any) {
+        setError('Failed to fetch data from server');
+        return;
       }
-    })()
-  }, [gameMode, relaxMode, page, pageSize, countryCode, sortParam])
+    })();
+  }, [gameMode, relaxMode, page, pageSize, countryCode, sortParam]);
 
   if (loading || !leaderboardData) {
     return (
@@ -320,11 +319,11 @@ export const GlobalUserLeaderboard = ({
           <Skeleton key={index} variant="rectangular" height={75}></Skeleton>
         ))}
       </>
-    )
+    );
   }
 
   if (error) {
-    return <Alert severity="error">{error}</Alert>
+    return <Alert severity="error">{error}</Alert>;
   }
 
   return (
@@ -343,7 +342,7 @@ export const GlobalUserLeaderboard = ({
               userRank={userPageRank + page * pageSize + 1}
               sortParam={sortParam}
             />
-          )
+          ),
         ) ?? (
           <Alert severity="warning">
             <Typography variant="body1">No users found!</Typography>
@@ -352,19 +351,19 @@ export const GlobalUserLeaderboard = ({
       </Stack>
       <TablePagination
         component={Box}
-        sx={{ background: "#191527" }}
+        sx={{ background: '#191527' }}
         count={-1}
         rowsPerPage={pageSize}
         page={page}
         onPageChange={(_, newPage) => setPage(newPage)}
         onRowsPerPageChange={(event) => {
-          setPageSize(parseInt(event.target.value, 10))
-          setPage(0)
+          setPageSize(parseInt(event.target.value, 10));
+          setPage(0);
         }}
         labelDisplayedRows={({ from, to }) => {
-          return `Results ${from}-${to}`
+          return `Results ${from}-${to}`;
         }}
       />
     </>
-  )
-}
+  );
+};

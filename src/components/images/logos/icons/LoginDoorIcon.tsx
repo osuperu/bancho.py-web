@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <don't use in svg> */
 export const LoginDoorIcon = () => {
   return (
     <svg
@@ -7,6 +8,7 @@ export const LoginDoorIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Login</title>
       <g clipPath="url(#clip0_716_2846)">
         <path
           d="M2.25 21.5H21.75"
@@ -42,5 +44,5 @@ export const LoginDoorIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

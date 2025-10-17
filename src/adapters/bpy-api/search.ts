@@ -1,32 +1,32 @@
-import axios from "axios"
+import axios from 'axios';
 
 interface SearchRequest {
-  query: string
+  query: string;
 }
 
 export interface SingleUserSearchResult {
-  id: number
-  username: string
+  id: number;
+  username: string;
 }
 
 const apiInstance = axios.create({
-  baseURL: process.env.REACT_APP_BPY_API_BASE_URL,
-})
+  baseURL: process.env.PUBLIC_APP_BPY_API_BASE_URL,
+});
 
 export interface SearchResponse {
-  code: string
-  users: SingleUserSearchResult[] | null
+  code: string;
+  users: SingleUserSearchResult[] | null;
 }
 
 export const searchUsers = async (
-  request: SearchRequest
+  request: SearchRequest,
 ): Promise<SearchResponse> => {
   try {
-    const response = await apiInstance.get("/v1/search_players", {
+    const response = await apiInstance.get('/v1/search_players', {
       params: {
         q: request.query,
       },
-    })
+    });
     return {
       code: response.data.status,
       users:
@@ -34,9 +34,9 @@ export const searchUsers = async (
           id: user.id,
           username: user.name,
         })) ?? null,
-    }
+    };
   } catch (e: any) {
-    console.log(e)
-    throw new Error(e.response.data.user_feedback)
+    console.log(e);
+    throw new Error(e.response.data.user_feedback);
   }
-}
+};

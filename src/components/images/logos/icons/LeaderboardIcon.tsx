@@ -1,6 +1,8 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <don't use in svg> */
 export const LeaderboardIcon = () => {
   return (
     <svg width="100%" height="100%" viewBox="0 0 70 71" fill="none">
+      <title>Leaderboard</title>
       <g clipPath="url(#clip0_120_488)">
         <path
           d="M8.65356 57.134V29.0098C8.65356 28.4361 8.88149 27.8858 9.28721 27.4801C9.69293 27.0744 10.2432 26.8464 10.817 26.8464H23.7974"
@@ -49,5 +51,5 @@ export const LeaderboardIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

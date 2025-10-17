@@ -1,14 +1,14 @@
-import axios from "axios"
+import axios from 'axios';
 
 export const downloadReplay = async (
-  replayId: number
+  replayId: number,
 ): Promise<ArrayBuffer> => {
   const response = await axios.get<ArrayBuffer>(
-    `${process.env.REACT_APP_BPY_API_BASE_URL}/v1/get_replay?id=${replayId}`,
+    `${process.env.PUBLIC_APP_BPY_API_BASE_URL}/v1/get_replay?id=${replayId}`,
     {
-      responseType: "arraybuffer",
-    }
-  )
+      responseType: 'arraybuffer',
+    },
+  );
 
-  return response.data
-}
+  return response.data;
+};

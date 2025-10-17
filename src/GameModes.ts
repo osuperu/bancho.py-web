@@ -18,36 +18,36 @@ export enum RelaxMode {
 export const isRealGameMode = (gameMode: GameMode, relaxMode: RelaxMode) => {
   if (relaxMode === RelaxMode.Vanilla) {
     // all game modes are allowed for vanilla
-    return true
+    return true;
   } else if (relaxMode === RelaxMode.Relax) {
     // only standard, taiko, and catch are allowed for relax
     return (
       gameMode === GameMode.Standard ||
       gameMode === GameMode.Taiko ||
       gameMode === GameMode.Catch
-    )
+    );
   } else {
     // (relaxMode === RelaxMode.Autopilot) {
     // only standard is allowed for autopilot
-    return gameMode === GameMode.Standard
+    return gameMode === GameMode.Standard;
   }
-}
+};
 
 export const mapToBpyMode = (
   gameMode: GameMode,
-  relaxMode: RelaxMode
+  relaxMode: RelaxMode,
 ): number => {
   if (relaxMode === RelaxMode.Vanilla) {
-    return gameMode
+    return gameMode;
   }
   if (relaxMode === RelaxMode.Relax) {
-    if (gameMode >= 0 && gameMode <= 2) return gameMode + 4
+    if (gameMode >= 0 && gameMode <= 2) return gameMode + 4;
   }
   if (relaxMode === RelaxMode.Autopilot) {
-    if (gameMode === GameMode.Standard) return 8
+    if (gameMode === GameMode.Standard) return 8;
   }
-  throw new Error("Invalid combination of gameMode and relaxMode")
-}
+  throw new Error('Invalid combination of gameMode and relaxMode');
+};
 
 export const gameModeType = (gameMode: GameMode): string => {
   if (
@@ -56,34 +56,34 @@ export const gameModeType = (gameMode: GameMode): string => {
     gameMode === GameMode.Catch ||
     gameMode === GameMode.Mania
   )
-    return "vanilla"
+    return 'vanilla';
 
   if (
     gameMode === GameMode.StandardRelax ||
     gameMode === GameMode.TaikoRelax ||
     gameMode === GameMode.CatchRelax
   )
-    return "relax"
+    return 'relax';
 
-  if (gameMode === GameMode.StandardAutopilot) return "autopilot"
+  if (gameMode === GameMode.StandardAutopilot) return 'autopilot';
 
-  throw new Error("Invalid game mode")
-}
+  throw new Error('Invalid game mode');
+};
 
 export const getGameModeString = (gameMode: GameMode): string => {
   switch (gameMode) {
     case GameMode.Standard:
-      return "osu"
+      return 'osu';
     case GameMode.Taiko:
-      return "taiko"
+      return 'taiko';
     case GameMode.Catch:
-      return "catch"
+      return 'catch';
     case GameMode.Mania:
-      return "mania"
+      return 'mania';
     default:
-      return "osu"
+      return 'osu';
   }
-}
+};
 
 // Haz un metodo que devuelve si es standard, taiko, catch, mania
 // sin importar si es relax o autopilot
@@ -94,11 +94,11 @@ export const getOriginalGameMode = (gameMode: GameMode): GameMode => {
     gameMode === GameMode.StandardRelax ||
     gameMode === GameMode.StandardAutopilot
   )
-    return GameMode.Standard
+    return GameMode.Standard;
   if (gameMode === GameMode.Taiko || gameMode === GameMode.TaikoRelax)
-    return GameMode.Taiko
+    return GameMode.Taiko;
   if (gameMode === GameMode.Catch || gameMode === GameMode.CatchRelax)
-    return GameMode.Catch
-  if (gameMode === GameMode.Mania) return GameMode.Mania
-  throw new Error("Invalid game mode")
-}
+    return GameMode.Catch;
+  if (gameMode === GameMode.Mania) return GameMode.Mania;
+  throw new Error('Invalid game mode');
+};

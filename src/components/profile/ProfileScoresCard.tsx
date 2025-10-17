@@ -1,67 +1,68 @@
-import MoreVertIcon from "@mui/icons-material/MoreVert"
-import { IconButton, Paper, TablePagination, Typography } from "@mui/material"
-import Box from "@mui/material/Box"
-import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
-import Stack from "@mui/material/Stack"
-import React, { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton, Paper, TablePagination, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
+import type React from 'react';
+import { useEffect, useId, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import {
   fetchUserScores,
   type UserScore,
   type UserScoresResponse,
-} from "../../adapters/bpy-api/userScores"
+} from '../../adapters/bpy-api/userScores';
 import {
-  GameMode,
+  type GameMode,
   gameModeType,
   getGameModeString,
   mapToBpyMode,
   type RelaxMode,
-} from "../../GameModes"
-import { calculateGrade, getGradeColor, remapSSForDisplay } from "../../scores"
-import { formatDecimal, formatNumber } from "../../utils/formatting"
-import { getIndividualMods } from "../../utils/mods"
-import { ModIcon } from "../ModIcon"
+} from '../../GameModes';
+import { calculateGrade, getGradeColor, remapSSForDisplay } from '../../scores';
+import { formatDecimal, formatNumber } from '../../utils/formatting';
+import { getIndividualMods } from '../../utils/mods';
+import { ModIcon } from '../ModIcon';
 
 const DownloadReplayMenuItem = ({
   score,
   handleMenuClose,
 }: {
-  score: UserScore
-  handleMenuClose: () => void
+  score: UserScore;
+  handleMenuClose: () => void;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const handleDownloadClick = () => {
-    handleMenuClose()
-  }
+    handleMenuClose();
+  };
 
   return (
     <MenuItem
       key="download-replay"
       component={Link}
-      to={`${process.env.REACT_APP_BPY_API_BASE_URL}/v1/get_replay?id=${score.id}`}
+      to={`${process.env.PUBLIC_APP_BPY_API_BASE_URL}/v1/get_replay?id=${score.id}`}
       onClick={handleDownloadClick}
     >
-      <Typography color="white">{t("leaderboard.download_replay")}</Typography>
+      <Typography color="white">{t('leaderboard.download_replay')}</Typography>
     </MenuItem>
-  )
-}
+  );
+};
 
 const ViewScoreMenuItem = ({
   score,
   handleMenuClose,
 }: {
-  score: UserScore
-  handleMenuClose: () => void
+  score: UserScore;
+  handleMenuClose: () => void;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const handleViewClick = () => {
-    handleMenuClose()
-  }
+    handleMenuClose();
+  };
 
   return (
     <MenuItem
@@ -70,40 +71,40 @@ const ViewScoreMenuItem = ({
       to={`/scores/${score.id}`}
       onClick={handleViewClick}
     >
-      <Typography color="white">{t("leaderboard.view_score")}</Typography>
+      <Typography color="white">{t('leaderboard.view_score')}</Typography>
     </MenuItem>
-  )
-}
+  );
+};
 
 const ScoreOptionsMenu = ({ score }: { score: UserScore }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation()
-    event.preventDefault()
-    setAnchorEl(event.currentTarget)
-  }
+    event.stopPropagation();
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   return (
     <>
       <IconButton
         aria-label="more"
-        id="long-button"
-        aria-controls={open ? "long-menu" : undefined}
-        aria-expanded={open ? "true" : undefined}
+        id={useId()}
+        aria-controls={open ? 'long-menu' : undefined}
+        aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
         onMouseDown={(e) => e.stopPropagation()}
         sx={{
-          color: "rgba(255, 255, 255, 0.7)",
-          "&:hover": {
-            color: "white",
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
+          color: 'rgba(255, 255, 255, 0.7)',
+          '&:hover': {
+            color: 'white',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
           },
         }}
       >
@@ -111,18 +112,18 @@ const ScoreOptionsMenu = ({ score }: { score: UserScore }) => {
       </IconButton>
 
       <Menu
-        id="long-menu"
+        id={useId()}
         MenuListProps={{
-          "aria-labelledby": "long-button",
+          'aria-labelledby': 'long-button',
         }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         sx={{
           zIndex: 9999,
-          "& .MuiPaper-root": {
-            backgroundColor: "#191527",
-            color: "white",
+          '& .MuiPaper-root': {
+            backgroundColor: '#191527',
+            color: 'white',
           },
         }}
         onClick={(e) => e.stopPropagation()}
@@ -131,8 +132,8 @@ const ScoreOptionsMenu = ({ score }: { score: UserScore }) => {
         <ViewScoreMenuItem score={score} handleMenuClose={handleClose} />
       </Menu>
     </>
-  )
-}
+  );
+};
 
 const ProfileScoreCard = (userScore: UserScore) => {
   const scoreGrade =
@@ -143,17 +144,17 @@ const ProfileScoreCard = (userScore: UserScore) => {
       userScore.count300,
       userScore.count100,
       userScore.count50,
-      userScore.countMiss
-    ) ?? "F"
+      userScore.countMiss,
+    ) ?? 'F';
 
   const handleOptionsClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    e.preventDefault()
-  }
+    e.stopPropagation();
+    e.preventDefault();
+  };
 
   return (
     <Stack
-      direction={{ xs: "column", sm: "row" }}
+      direction={{ xs: 'column', sm: 'row' }}
       justifyContent="space-between"
     >
       <Box
@@ -170,8 +171,8 @@ const ProfileScoreCard = (userScore: UserScore) => {
       </Box>
       <Box position="relative" overflow="hidden" flexGrow={1}>
         <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent={{ sm: "space-between" }}
+          direction={{ xs: 'column', sm: 'row' }}
+          justifyContent={{ sm: 'space-between' }}
           position="relative"
           zIndex={1}
           p={1}
@@ -179,9 +180,9 @@ const ProfileScoreCard = (userScore: UserScore) => {
           {/* Left menu */}
           <Stack direction="column">
             <Stack
-              direction={{ xs: "column", sm: "row" }}
+              direction={{ xs: 'column', sm: 'row' }}
               spacing={{ sm: 1 }}
-              alignItems={{ xs: "flex-start", sm: "center" }}
+              alignItems={{ xs: 'flex-start', sm: 'center' }}
               // TODO: adjust this to work better on xs/sm devices
               maxWidth="15vw"
             >
@@ -205,11 +206,11 @@ const ProfileScoreCard = (userScore: UserScore) => {
             {/* TODO: Add date played/timeago */}
           </Stack>
           {/* Right menu */}
-          <Stack direction={{ xs: "column", sm: "row" }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }}>
             <Stack direction="column">
               <Box
                 display="flex"
-                justifyContent={{ xs: "flex-start", sm: "flex-end" }}
+                justifyContent={{ xs: 'flex-start', sm: 'flex-end' }}
               >
                 <Typography
                   variant="h6"
@@ -220,8 +221,8 @@ const ProfileScoreCard = (userScore: UserScore) => {
                     linear-gradient(79.96deg, #387EFC 16.72%, #C940FD 91.26%),
                     #FFFFFF
                   `,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
                   }}
                 >
                   {Math.round(userScore.pp)}pp
@@ -258,17 +259,17 @@ const ProfileScoreCard = (userScore: UserScore) => {
             backgroundImage: `
               linear-gradient(90deg, ${getGradeColor(scoreGrade, 0.2)}, ${getGradeColor(scoreGrade, 0.0)} 48.5%),
               linear-gradient(0deg, rgba(22, 19, 35, 0.9), rgba(22, 19, 35, 0.9)),
-              url(${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${userScore.beatmap.beatmapsetId})
+              url(${process.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/cover/${userScore.beatmap.beatmapsetId})
             `,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         ></Box>
       </Box>
     </Stack>
-  )
-}
+  );
+};
 
 export const ProfileScoresCard = ({
   scoresType,
@@ -277,22 +278,22 @@ export const ProfileScoresCard = ({
   relaxMode,
   title,
 }: {
-  scoresType: "best" | "recent"
-  userId: number
-  gameMode: GameMode
-  relaxMode: RelaxMode
-  title: string
+  scoresType: 'best' | 'recent';
+  userId: number;
+  gameMode: GameMode;
+  relaxMode: RelaxMode;
+  title: string;
 }) => {
-  const [userScores, setUserScores] = useState<UserScoresResponse | null>(null)
+  const [userScores, setUserScores] = useState<UserScoresResponse | null>(null);
 
-  const [page, setPage] = useState(0)
-  const [pageSize, setPageSize] = useState(10)
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
-  const [error, setError] = useState("")
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!userId) return
-    ;(async () => {
+    if (!userId) return;
+    (async () => {
       try {
         const userScores = await fetchUserScores({
           scope: scoresType,
@@ -300,18 +301,18 @@ export const ProfileScoresCard = ({
           limit: pageSize,
           page: page + 1,
           id: userId,
-        })
-        setUserScores(userScores)
-        setError("")
-      } catch (e: any) {
-        setError("Failed to fetch user scores data from server")
-        return
+        });
+        setUserScores(userScores);
+        setError('');
+      } catch (_e: any) {
+        setError('Failed to fetch user scores data from server');
+        return;
       }
-    })()
-  }, [scoresType, userId, gameMode, relaxMode, page, pageSize])
+    })();
+  }, [scoresType, userId, gameMode, relaxMode, page, pageSize]);
 
   if (error) {
-    return <Typography>{error}</Typography>
+    return <Typography>{error}</Typography>;
   }
 
   // TODO: show a friendly null state here
@@ -329,11 +330,10 @@ export const ProfileScoresCard = ({
           <Box key={score.id} borderRadius="16px" overflow="hidden">
             <Link
               to={`/b/${score.beatmap.beatmapId}/${getGameModeString(gameMode)}/${gameModeType(mapToBpyMode(gameMode, relaxMode))}`}
-              // eslint-disable-next-line react/forbid-component-props
               style={{
-                color: "#FFFFFF",
-                textDecoration: "none",
-                display: "block",
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                display: 'block',
               }}
             >
               <Paper elevation={1}>
@@ -346,19 +346,19 @@ export const ProfileScoresCard = ({
 
       <TablePagination
         component={Box}
-        sx={{ background: "#191527" }}
+        sx={{ background: '#191527' }}
         count={-1}
         rowsPerPage={pageSize}
         page={page}
         onPageChange={(_, newPage) => setPage(newPage)}
         onRowsPerPageChange={(event) => {
-          setPageSize(Number.parseInt(event.target.value, 10))
-          setPage(0)
+          setPageSize(Number.parseInt(event.target.value, 10));
+          setPage(0);
         }}
         labelDisplayedRows={({ from, to }) => {
-          return `Results ${from}-${to}`
+          return `Results ${from}-${to}`;
         }}
       />
     </Box>
-  )
-}
+  );
+};

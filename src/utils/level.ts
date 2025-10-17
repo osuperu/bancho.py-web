@@ -1,6 +1,6 @@
 export interface LevelInfo {
-  level: number
-  progress: number
+  level: number;
+  progress: number;
 }
 
 export const cachedScore = [
@@ -19,41 +19,41 @@ export const cachedScore = [
   3917612824, 4060911082, 4208669948, 4361785907, 4521840633, 4691649139,
   4876246450, 5084663609, 5333124496, 5650800094, 6090166168, 6745647103,
   7787174786, 9520594614, 12496396305, 17705429349, 26931190829,
-]
+];
 
 export const getRequiredScoreForUserLevel = (level: number): number => {
   if (level <= 0) {
-    return 0
+    return 0;
   } else if (level <= 100) {
-    return cachedScore[level - 1]
+    return cachedScore[level - 1];
   } else {
-    return cachedScore[99] + 100000000000 * (level - 100)
+    return cachedScore[99] + 100000000000 * (level - 100);
   }
-}
+};
 
 export const getUserLevel = (score: number): LevelInfo => {
   if (score >= cachedScore[99]) {
-    const level = 100 + Math.floor((score - cachedScore[99]) / 100000000000)
-    const requiredScore = getRequiredScoreForUserLevel(level)
-    const nextLevelScore = getRequiredScoreForUserLevel(level + 1)
+    const level = 100 + Math.floor((score - cachedScore[99]) / 100000000000);
+    const requiredScore = getRequiredScoreForUserLevel(level);
+    const nextLevelScore = getRequiredScoreForUserLevel(level + 1);
     return {
       level: level,
       progress: (score - requiredScore) / (nextLevelScore - requiredScore),
-    }
+    };
   } else {
     for (const id in cachedScore) {
-      const requiredScore = getRequiredScoreForUserLevel(Number(id))
-      const nextLevelScore = getRequiredScoreForUserLevel(Number(id) + 1)
+      const requiredScore = getRequiredScoreForUserLevel(Number(id));
+      const nextLevelScore = getRequiredScoreForUserLevel(Number(id) + 1);
       if (cachedScore[id] > score) {
         return {
           level: Number(id),
           progress: (score - requiredScore) / (nextLevelScore - requiredScore),
-        }
+        };
       }
     }
   }
   return {
     level: 1,
     progress: 0,
-  }
-}
+  };
+};

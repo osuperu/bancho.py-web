@@ -5,63 +5,63 @@ import {
   Stack,
   Tooltip,
   Typography,
-} from "@mui/material"
-import moment from "moment"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { Link, useParams } from "react-router-dom"
+} from '@mui/material';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useParams } from 'react-router-dom';
 
-import { getScore, GetScoreResponse } from "../adapters/bpy-api/scores"
-import { GradeAIcon } from "../components/images/grade-icons/GradeAIcon"
-import { GradeBIcon } from "../components/images/grade-icons/GradeBIcon"
-import { GradeCIcon } from "../components/images/grade-icons/GradeCIcon"
-import { GradeDIcon } from "../components/images/grade-icons/GradeDIcon"
-import { GradeSHIcon } from "../components/images/grade-icons/GradeSHIcon"
-import { GradeSIcon } from "../components/images/grade-icons/GradeSIcon"
-import { GradeXHIcon } from "../components/images/grade-icons/GradeXHIcon"
-import { GradeXIcon } from "../components/images/grade-icons/GradeXIcon"
-import { ModIcon } from "../components/ModIcon"
-import { PageTitle } from "../components/PageTitle"
+import { type GetScoreResponse, getScore } from '../adapters/bpy-api/scores';
+import { GradeAIcon } from '../components/images/grade-icons/GradeAIcon';
+import { GradeBIcon } from '../components/images/grade-icons/GradeBIcon';
+import { GradeCIcon } from '../components/images/grade-icons/GradeCIcon';
+import { GradeDIcon } from '../components/images/grade-icons/GradeDIcon';
+import { GradeSHIcon } from '../components/images/grade-icons/GradeSHIcon';
+import { GradeSIcon } from '../components/images/grade-icons/GradeSIcon';
+import { GradeXHIcon } from '../components/images/grade-icons/GradeXHIcon';
+import { GradeXIcon } from '../components/images/grade-icons/GradeXIcon';
+import { ModIcon } from '../components/ModIcon';
+import { PageTitle } from '../components/PageTitle';
 // import { WatchReplayIcon } from "../components/images/icons/WatchReplayIcon"
-import { formatNumber } from "../utils/formatting"
-import { getIndividualMods } from "../utils/mods"
+import { formatNumber } from '../utils/formatting';
+import { getIndividualMods } from '../utils/mods';
 
 const GradeIcon = ({
   variant,
 }: {
-  variant: "XH" | "X" | "SH" | "S" | "A" | "B" | "C" | "D" | "F"
+  variant: 'XH' | 'X' | 'SH' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
 }) => {
   switch (variant) {
-    case "XH":
-      return <GradeXHIcon />
-    case "X":
-      return <GradeXIcon />
-    case "SH":
-      return <GradeSHIcon />
-    case "S":
-      return <GradeSIcon />
-    case "A":
-      return <GradeAIcon />
-    case "B":
-      return <GradeBIcon />
-    case "C":
-      return <GradeCIcon />
-    case "D":
-      return <GradeDIcon />
+    case 'XH':
+      return <GradeXHIcon />;
+    case 'X':
+      return <GradeXIcon />;
+    case 'SH':
+      return <GradeSHIcon />;
+    case 'S':
+      return <GradeSIcon />;
+    case 'A':
+      return <GradeAIcon />;
+    case 'B':
+      return <GradeBIcon />;
+    case 'C':
+      return <GradeCIcon />;
+    case 'D':
+      return <GradeDIcon />;
     // TODO: we need an F rank icon
     default:
-      return <GradeDIcon />
+      return <GradeDIcon />;
   }
-}
+};
 
 const ScoreMetricDisplay = ({
   metric,
   value,
   color,
 }: {
-  metric: string
-  value: number | string
-  color: string
+  metric: string;
+  value: number | string;
+  color: string;
 }) => {
   return (
     <Stack direction="row" gap={1}>
@@ -78,51 +78,52 @@ const ScoreMetricDisplay = ({
         {value}
       </Typography>
     </Stack>
-  )
-}
+  );
+};
 
 /*const CircularDivider = () => {
   return <Box width={6} height={6} borderRadius="50%" bgcolor="white" />
 }*/
 
 export const ScorePage = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const [scoreData, setScoreData] = useState<GetScoreResponse | null>(null)
-  const queryParams = useParams()
+  const [scoreData, setScoreData] = useState<GetScoreResponse | null>(null);
+  const queryParams = useParams();
 
-  const scoreId = parseInt(queryParams["scoreId"] || "0")
+  const scoreId = parseInt(queryParams.scoreId || '0', 10);
 
   useEffect(() => {
-    ;(async () => {
-      let scoreData
+    (async () => {
+      let scoreData: GetScoreResponse;
       try {
-        scoreData = await getScore({ id: scoreId })
+        scoreData = await getScore({ id: scoreId });
       } catch (e: any) {
-        console.log(e)
-        throw new Error(e)
+        console.log(e);
+        throw new Error(e);
       }
-      setScoreData(scoreData)
-    })()
-  }, [scoreId])
+      setScoreData(scoreData);
+    })();
+  }, [scoreId]);
 
   if (scoreData === null) {
-    return <></>
+    // biome-ignore lint/complexity/noUselessFragments: <Ignore>
+    return <></>;
   }
 
   return (
     <Box>
       <PageTitle
-        title={`osu!Peru - ${scoreData.score.user.username} ${t("score.in")} ${scoreData.score.beatmap.artist} - ${scoreData.score.beatmap.title}`}
+        title={`osu!Peru - ${scoreData.score.user.username} ${t('score.in')} ${scoreData.score.beatmap.artist} - ${scoreData.score.beatmap.title}`}
       />
       <Box
         pt={{ xs: 0, sm: 10 }}
         py={3}
         sx={{
-          backgroundSize: "cover",
-          backgroundImage: `url(${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${scoreData.score.beatmap.beatmapsetId}`,
-          backgroundPosition: "center",
-          boxShadow: "inset 0px 0px 0px 2000px rgba(21, 18, 34, 0.9)",
+          backgroundSize: 'cover',
+          backgroundImage: `url(${process.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/cover/${scoreData.score.beatmap.beatmapsetId}`,
+          backgroundPosition: 'center',
+          boxShadow: 'inset 0px 0px 0px 2000px rgba(21, 18, 34, 0.9)',
         }}
       >
         <Container>
@@ -132,23 +133,23 @@ export const ScorePage = () => {
             borderRadius={4}
             overflow="hidden"
             sx={{
-              backgroundSize: "cover",
-              backgroundImage: `linear-gradient(90deg, rgba(15, 19, 38, 0.9) 0%, rgba(15, 19, 38, 0) 100%), url(${process.env.REACT_APP_BPY_MAPS_BASE_URL}/cover/${scoreData.score.beatmap.beatmapsetId})`,
-              backgroundPosition: "center",
+              backgroundSize: 'cover',
+              backgroundImage: `linear-gradient(90deg, rgba(15, 19, 38, 0.9) 0%, rgba(15, 19, 38, 0) 100%), url(${process.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/cover/${scoreData.score.beatmap.beatmapsetId})`,
+              backgroundPosition: 'center',
             }}
           >
             <Stack
               direction="column"
               p={3}
               sx={{
-                backdropFilter: "blur(4px)",
+                backdropFilter: 'blur(4px)',
                 background:
-                  "linear-gradient(270deg, rgba(21, 18, 34, 0.44375) 0%, rgba(17, 14, 27, 0.04) 36%, rgba(25, 20, 39, 0.8) 100%)",
+                  'linear-gradient(270deg, rgba(21, 18, 34, 0.44375) 0%, rgba(17, 14, 27, 0.04) 36%, rgba(25, 20, 39, 0.8) 100%)',
               }}
             >
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="h5">
-                  {scoreData.score.beatmap.artist} -{" "}
+                  {scoreData.score.beatmap.artist} -{' '}
                   {scoreData.score.beatmap.title}
                 </Typography>
                 {/*
@@ -225,24 +226,23 @@ export const ScorePage = () => {
           >
             <Link
               to={`/u/${scoreData.score.userId}`}
-              // eslint-disable-next-line react/forbid-component-props
               style={{
-                color: "#FFFFFF",
-                textDecoration: "none",
+                color: '#FFFFFF',
+                textDecoration: 'none',
               }}
             >
               <Stack direction="row" gap={1} alignItems="center">
                 <Avatar
                   alt="score-user-avatar"
-                  src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${scoreData.score.userId}`}
+                  src={`${process.env.PUBLIC_APP_BPY_AVATARS_BASE_URL}/${scoreData.score.userId}`}
                   sx={{ width: 55, height: 55, borderRadius: 2 }}
                 />
                 <Typography variant="h6">
-                  {t("score.played_by")} {scoreData.score.user.username}
+                  {t('score.played_by')} {scoreData.score.user.username}
                 </Typography>
               </Stack>
             </Link>
-            <Tooltip title={moment(scoreData.score.time).format("LLLL")}>
+            <Tooltip title={moment(scoreData.score.time).format('LLLL')}>
               <Typography variant="h6" fontWeight="lighter">
                 {moment(scoreData.score.time).fromNow()}
               </Typography>
@@ -252,14 +252,14 @@ export const ScorePage = () => {
       </Box>
       <Container>
         <Stack
-          direction={{ xs: "column", sm: "row" }}
+          direction={{ xs: 'column', sm: 'row' }}
           justifyContent="space-between"
           p={3}
           spacing={{ xs: 5, sm: 0 }}
         >
           <Stack
-            direction={{ xs: "column", sm: "row" }}
-            alignItems={{ xs: "center", sm: " flex-start" }}
+            direction={{ xs: 'column', sm: 'row' }}
+            alignItems={{ xs: 'center', sm: ' flex-start' }}
             gap={4}
           >
             <ScoreMetricDisplay
@@ -278,14 +278,14 @@ export const ScorePage = () => {
               color="#9F652E"
             />
             <ScoreMetricDisplay
-              metric={t("score.miss")}
+              metric={t('score.miss')}
               value={scoreData.score.countMiss}
               color="#9C4141"
             />
           </Stack>
           <Stack
-            direction={{ xs: "column", sm: "row" }}
-            alignItems={{ xs: "center", sm: " flex-start" }}
+            direction={{ xs: 'column', sm: 'row' }}
+            alignItems={{ xs: 'center', sm: ' flex-start' }}
             gap={4}
           >
             <ScoreMetricDisplay
@@ -302,5 +302,5 @@ export const ScorePage = () => {
         </Stack>
       </Container>
     </Box>
-  )
-}
+  );
+};

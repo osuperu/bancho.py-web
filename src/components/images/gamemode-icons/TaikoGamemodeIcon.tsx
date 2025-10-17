@@ -7,6 +7,7 @@ export const TaikoGameModeIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Taiko</title>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -20,5 +21,5 @@ export const TaikoGameModeIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};

@@ -1,22 +1,22 @@
-import { Box, Typography } from "@mui/material"
+import { Box, Typography } from '@mui/material';
 
 export const AboutFeatureCard = ({
   title,
   icon,
   children,
 }: {
-  title: string
-  icon: string
-  children?: React.ReactNode
+  title: string;
+  icon: string;
+  children?: React.ReactNode;
 }) => {
   return (
     <Box
       sx={{
-        background: "rgba(32, 28, 44, 0.95)",
+        background: 'rgba(32, 28, 44, 0.95)',
         borderRadius: 2,
         p: 3,
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <Typography gutterBottom variant="h5" color="white" fontWeight="bold">
@@ -33,5 +33,5 @@ export const AboutFeatureCard = ({
         {children}
       </Box>
     </Box>
-  )
-}
+  );
+};

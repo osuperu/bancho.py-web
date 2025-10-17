@@ -1,56 +1,51 @@
-import { ContactPage } from "@mui/icons-material"
+/// <reference types="@rsbuild/core/types" />
+
+import { ContactPage } from '@mui/icons-material';
 import {
   Box,
-  createTheme,
   CssBaseline,
+  createTheme,
   Stack,
   ThemeProvider,
-} from "@mui/material"
-import React from "react"
-import { I18nextProvider } from "react-i18next"
+} from '@mui/material';
+import React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { I18nextProvider } from 'react-i18next';
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Outlet,
   Route,
   RouterProvider,
-} from "react-router-dom"
-
-import Footer from "./components/Footer"
-import Navbar from "./components/Navbar"
-import { IdentityContextProvider } from "./context/Identity"
-import { _i18n } from "./i18n"
-import { AboutPage } from "./pages/AboutPage"
-import { BeatmapPage } from "./pages/BeatmapPage"
-import { HomePage } from "./pages/HomePage"
-import { LeaderboardPage } from "./pages/LeaderboardPage"
-import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage"
-import { ProfilePage } from "./pages/ProfilePage"
-import { ScorePage } from "./pages/ScorePage"
-import { SupportPage } from "./pages/SupportPage"
-import { TeamPage } from "./pages/TeamPage"
-import { TermsOfServicePage } from "./pages/TermsOfServicePage"
-import { UserFriendsPage } from "./pages/UserFriendsPage"
-import { UserSettingsPage } from "./pages/UserSettingsPage"
-import { ErrorBoundary } from "react-error-boundary"
+} from 'react-router-dom';
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
+import { IdentityContextProvider } from './context/Identity';
+import { _i18n } from './i18n';
+import { AboutPage } from './pages/AboutPage';
+import { BeatmapPage } from './pages/BeatmapPage';
+import { HomePage } from './pages/HomePage';
+import { LeaderboardPage } from './pages/LeaderboardPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { ScorePage } from './pages/ScorePage';
+import { SupportPage } from './pages/SupportPage';
+import { TeamPage } from './pages/TeamPage';
+import { TermsOfServicePage } from './pages/TermsOfServicePage';
+import { UserFriendsPage } from './pages/UserFriendsPage';
+import { UserSettingsPage } from './pages/UserSettingsPage';
 
 const AppLayout = () => {
   return (
-    <>
-      <Stack
-        direction="column"
-        justifyContent="space-between"
-        minHeight="100vh"
-      >
-        <Navbar />
-        <Box flexGrow={1}>
-          <Outlet />
-        </Box>
-        <Footer />
-      </Stack>
-    </>
-  )
-}
+    <Stack direction="column" justifyContent="space-between" minHeight="100vh">
+      <Navbar />
+      <Box flexGrow={1}>
+        <Outlet />
+      </Box>
+      <Footer />
+    </Stack>
+  );
+};
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,15 +63,15 @@ const router = createBrowserRouter(
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/terms-of-service" element={<TermsOfServicePage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-    </Route>
-  )
-)
+    </Route>,
+  ),
+);
 
 function fallbackRender({ error }: { error: Error }) {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
-      <pre style={{ color: "red" }}>{error.message}</pre>
+      <pre style={{ color: 'red' }}>{error.message}</pre>
     </div>
   );
 }
@@ -86,23 +81,23 @@ export default function App() {
     () =>
       createTheme({
         palette: {
-          mode: "dark",
+          mode: 'dark',
           primary: {
-            main: "#2c97fb",
+            main: '#2c97fb',
           },
           secondary: {
-            main: "#ef43fe",
+            main: '#ef43fe',
           },
           background: {
-            default: "#110E1B",
+            default: '#110E1B',
           },
         },
         typography: {
-          fontFamily: "Nunito",
+          fontFamily: 'Nunito',
         },
       }),
-    []
-  )
+    [],
+  );
 
   return (
     <React.StrictMode>
@@ -110,12 +105,12 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <ErrorBoundary fallbackRender={fallbackRender}>
-          <IdentityContextProvider>
-            <RouterProvider router={router} />
-          </IdentityContextProvider>
+            <IdentityContextProvider>
+              <RouterProvider router={router} />
+            </IdentityContextProvider>
           </ErrorBoundary>
         </ThemeProvider>
       </I18nextProvider>
     </React.StrictMode>
-  )
+  );
 }

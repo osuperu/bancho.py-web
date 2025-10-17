@@ -1,86 +1,86 @@
-import axios from "axios"
+import axios from 'axios';
 
 const apiInstance = axios.create({
-  baseURL: process.env.REACT_APP_BPY_API_BASE_URL,
-})
+  baseURL: process.env.PUBLIC_APP_BPY_API_BASE_URL,
+});
 
 // TODO: add enum for SubmittionStatus
 interface GetScoreRequest {
-  id: number
+  id: number;
 }
 
 export interface GetScoreResponse {
-  status: string
-  score: ScoreDetails
+  status: string;
+  score: ScoreDetails;
 }
 
 export interface GetRecentScoresResponse {
-  status: string
-  scores: ScoreDetails[]
+  status: string;
+  scores: ScoreDetails[];
 }
 
 export interface ScoreDetails {
-  id: number
-  beatmapMd5: string
-  score: number
-  maxCombo: number
-  fullCombo: boolean
-  mods: number
-  count300: number
-  count100: number
-  count50: number
-  countGeki: number
-  countKatu: number
-  countMiss: number
-  time: Date
-  playMode: number
-  accuracy: number
-  pp: number
-  rank: "XH" | "X" | "SH" | "S" | "A" | "B" | "C" | "D" | "F"
-  completed: number
-  userId: number
+  id: number;
+  beatmapMd5: string;
+  score: number;
+  maxCombo: number;
+  fullCombo: boolean;
+  mods: number;
+  count300: number;
+  count100: number;
+  count50: number;
+  countGeki: number;
+  countKatu: number;
+  countMiss: number;
+  time: Date;
+  playMode: number;
+  accuracy: number;
+  pp: number;
+  rank: 'XH' | 'X' | 'SH' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
+  completed: number;
+  userId: number;
   user: {
-    id: number
-    username: string
-    registeredOn: Date
-    privileges: number
-    latestActivity: Date
-    country: string
-  }
-  beatmap: BeatmapDetails
+    id: number;
+    username: string;
+    registeredOn: Date;
+    privileges: number;
+    latestActivity: Date;
+    country: string;
+  };
+  beatmap: BeatmapDetails;
 }
 
 export interface BeatmapDetails {
-  beatmapId: number
-  beatmapsetId: number
-  beatmapMd5: string
-  artist: string
-  title: string
-  version: string
-  ar: number
-  od: number
-  difficulty: number
-  maxCombo: number
-  hitLength: number
-  latestUpdate: Date
+  beatmapId: number;
+  beatmapsetId: number;
+  beatmapMd5: string;
+  artist: string;
+  title: string;
+  version: string;
+  ar: number;
+  od: number;
+  difficulty: number;
+  maxCombo: number;
+  hitLength: number;
+  latestUpdate: Date;
 }
 
 export const getScore = async (
-  request: GetScoreRequest
+  request: GetScoreRequest,
 ): Promise<GetScoreResponse> => {
   const scoreResponse = await apiInstance.get(`/v2/scores/${request.id}`, {
     params: {
       id: request.id,
     },
-  })
+  });
   const userResponse = await apiInstance.get(
-    `/v2/players/${scoreResponse.data.data.userid}`
-  )
-  const beatmapResponse = await apiInstance.get("/v1/get_map_info", {
+    `/v2/players/${scoreResponse.data.data.userid}`,
+  );
+  const beatmapResponse = await apiInstance.get('/v1/get_map_info', {
     params: {
       md5: scoreResponse.data.data.map_md5,
     },
-  })
+  });
   return {
     status: scoreResponse.data.status,
     score: {
@@ -126,72 +126,74 @@ export const getScore = async (
         latestUpdate: beatmapResponse.data.map.last_update,
       },
     },
-  }
-}
+  };
+};
 
 export const fetchRecentScores = async (): Promise<GetRecentScoresResponse> => {
-  const submittedScoresResponse = await apiInstance.get("/v2/scores", {
+  const submittedScoresResponse = await apiInstance.get('/v2/scores', {
     params: {
       status: 1,
       page_size: 5,
-      order: "desc",
+      order: 'desc',
     },
-  })
-  const bestScoresResponse = await apiInstance.get("/v2/scores", {
+  });
+  const bestScoresResponse = await apiInstance.get('/v2/scores', {
     params: {
       status: 2,
       page_size: 5,
-      order: "desc",
+      order: 'desc',
     },
-  })
+  });
 
   const sortedByDate = [
     ...submittedScoresResponse.data.data,
     ...bestScoresResponse.data.data,
   ].sort(
-    (a, b) => new Date(b.play_time).getTime() - new Date(a.play_time).getTime()
-  )
+    (a, b) => new Date(b.play_time).getTime() - new Date(a.play_time).getTime(),
+  );
 
   if (!sortedByDate.length) {
     return {
-      status: "success",
-      scores: []
-    }
+      status: 'success',
+      scores: [],
+    };
   }
 
-  const scoresResponse = new Array(sortedByDate.length).fill(null)
-  const midPoint = Math.floor(sortedByDate.length / 2)
+  const scoresResponse = new Array(sortedByDate.length).fill(null);
+  const midPoint = Math.floor(sortedByDate.length / 2);
 
-  scoresResponse[midPoint] = sortedByDate[0]
+  scoresResponse[midPoint] = sortedByDate[0];
 
-  let left = midPoint - 1
-  let right = midPoint + 1
-  let index = 1
+  let left = midPoint - 1;
+  let right = midPoint + 1;
+  let index = 1;
 
   while (index < sortedByDate.length) {
     if (left >= 0) {
-      scoresResponse[left] = sortedByDate[index]
-      left--
-      index++
+      scoresResponse[left] = sortedByDate[index];
+      left--;
+      index++;
     }
     if (right < scoresResponse.length && index < sortedByDate.length) {
-      scoresResponse[right] = sortedByDate[index]
-      right++
-      index++
+      scoresResponse[right] = sortedByDate[index];
+      right++;
+      index++;
     }
   }
 
-  const validScores = scoresResponse.filter(score => score !== null)
+  const validScores = scoresResponse.filter((score) => score !== null);
 
   const scores = await Promise.all(
     validScores.map(async (score) => {
       try {
-        const userResponse = await apiInstance.get(`/v2/players/${score.userid}`)
-        const beatmapResponse = await apiInstance.get("/v1/get_map_info", {
+        const userResponse = await apiInstance.get(
+          `/v2/players/${score.userid}`,
+        );
+        const beatmapResponse = await apiInstance.get('/v1/get_map_info', {
           params: {
             md5: score.map_md5,
           },
-        })
+        });
 
         return {
           id: score.id,
@@ -219,7 +221,7 @@ export const fetchRecentScores = async (): Promise<GetRecentScoresResponse> => {
             registeredOn: new Date(userResponse.data.data.creation_time * 1000),
             privileges: userResponse.data.data.priv,
             latestActivity: new Date(
-              userResponse.data.data.latest_activity * 1000
+              userResponse.data.data.latest_activity * 1000,
             ),
             country: userResponse.data.data.country,
           },
@@ -237,54 +239,56 @@ export const fetchRecentScores = async (): Promise<GetRecentScoresResponse> => {
             hitLength: beatmapResponse.data.map.total_length,
             latestUpdate: beatmapResponse.data.map.last_update,
           },
-        }
+        };
       } catch (error) {
-        console.error("Error fetching score details:", error)
-        return null
+        console.error('Error fetching score details:', error);
+        return null;
       }
-    })
-  )
+    }),
+  );
 
-  const validFinalScores = scores.filter((score): score is ScoreDetails => score !== null)
+  const validFinalScores = scores.filter(
+    (score): score is ScoreDetails => score !== null,
+  );
 
   return {
     status: submittedScoresResponse.data.status,
     scores: validFinalScores,
-  }
-}
+  };
+};
 
 export const fetchTotalScoresSet = async (): Promise<number> => {
-  const submittedScoresResponse = await apiInstance.get("/v2/scores", {
+  const submittedScoresResponse = await apiInstance.get('/v2/scores', {
     params: {
       status: 1,
     },
-  })
-  const bestScoresResponse = await apiInstance.get("/v2/scores", {
+  });
+  const bestScoresResponse = await apiInstance.get('/v2/scores', {
     params: {
       status: 2,
     },
-  })
+  });
   return (
     submittedScoresResponse.data.meta.total + bestScoresResponse.data.meta.total
-  )
-}
+  );
+};
 
 export const fetchTotalPPEarned = async (): Promise<number> => {
   const earnedSubmittedPPResponse = await apiInstance.get(
-    "/v1/aggregate_pp_stats",
+    '/v1/aggregate_pp_stats',
     {
       params: {
         status: 1,
       },
-    }
-  )
-  const earnedBestPPResponse = await apiInstance.get("/v1/aggregate_pp_stats", {
+    },
+  );
+  const earnedBestPPResponse = await apiInstance.get('/v1/aggregate_pp_stats', {
     params: {
       status: 2,
     },
-  })
+  });
   return (
     Math.trunc(earnedSubmittedPPResponse.data.stats) +
     Math.trunc(earnedBestPPResponse.data.stats)
-  )
-}
+  );
+};

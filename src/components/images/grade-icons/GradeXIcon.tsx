@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <don't use in svg> */
 export const GradeXIcon = () => {
   return (
     <svg
@@ -7,6 +8,7 @@ export const GradeXIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Grade X</title>
       <circle cx="121" cy="90" r="75" fill="#D9D9D9" />
       <circle cx="121" cy="90" r="75" fill="url(#paint0_linear_525_3166)" />
       <circle cx="175.5" cy="116.5" r="68.5" fill="#D9D9D9" />
@@ -101,5 +103,5 @@ export const GradeXIcon = () => {
         </linearGradient>
       </defs>
     </svg>
-  )
-}
+  );
+};

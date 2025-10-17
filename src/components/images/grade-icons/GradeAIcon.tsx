@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <don't use in svg> */
 export const GradeAIcon = () => {
   return (
     <svg
@@ -7,6 +8,7 @@ export const GradeAIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Grade A</title>
       <g clipPath="url(#clip0_525_3164)">
         <g opacity="0.25">
           <rect
@@ -168,5 +170,5 @@ export const GradeAIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

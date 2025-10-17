@@ -1,12 +1,9 @@
-import { useEffect } from "react"
-import { useLocation } from "react-router-dom"
+import { useEffect } from 'react';
 
 export const PageTitle = ({ title }: { title: string }) => {
-  const location = useLocation()
-
   useEffect(() => {
-    document.title = title
-  }, [location, title])
+    document.title = title;
+  }, [title]);
 
-  return null
-}
+  return null;
+};

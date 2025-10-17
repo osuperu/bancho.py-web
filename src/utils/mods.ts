@@ -34,51 +34,51 @@ export enum Mods {
 }
 
 enum ModAbbreviations {
-  Nomod = "" as any,
-  NoFail = "NF" as any,
-  Easy = "EZ" as any,
-  TouchScreen = "TD" as any,
-  Hidden = "HD" as any,
-  HardRock = "HR" as any,
-  SuddenDeath = "SD" as any,
-  DoubleTime = "DT" as any,
-  Relax = "RX" as any,
-  HalfTime = "HT" as any,
-  NightCore = "NC" as any,
-  Flashlight = "FL" as any,
-  AutoPlay = "AU" as any,
-  SpunOut = "SO" as any,
-  AutoPilot = "AP" as any,
-  Perfect = "PF" as any,
-  Key4 = "4K" as any,
-  Key5 = "5K" as any,
-  Key6 = "6K" as any,
-  Key7 = "7K" as any,
-  Key8 = "8K" as any,
-  FadeIn = "FI" as any,
-  Random = "RN" as any,
-  Cinema = "CN" as any,
-  Target = "TP" as any,
-  Key9 = "9K" as any,
-  KeyCoop = "DS" as any, // dual stages
-  Key1 = "1K" as any,
-  Key3 = "3K" as any,
-  Key2 = "2K" as any,
-  ScoreV2 = "V2" as any,
-  Mirror = "MR" as any,
+  Nomod = '',
+  NoFail = 'NF',
+  Easy = 'EZ',
+  TouchScreen = 'TD',
+  Hidden = 'HD',
+  HardRock = 'HR',
+  SuddenDeath = 'SD',
+  DoubleTime = 'DT',
+  Relax = 'RX',
+  HalfTime = 'HT',
+  NightCore = 'NC',
+  Flashlight = 'FL',
+  AutoPlay = 'AU',
+  SpunOut = 'SO',
+  AutoPilot = 'AP',
+  Perfect = 'PF',
+  Key4 = '4K',
+  Key5 = '5K',
+  Key6 = '6K',
+  Key7 = '7K',
+  Key8 = '8K',
+  FadeIn = 'FI',
+  Random = 'RN',
+  Cinema = 'CN',
+  Target = 'TP',
+  Key9 = '9K',
+  KeyCoop = 'DS', // dual stages
+  Key1 = '1K',
+  Key3 = '3K',
+  Key2 = '2K',
+  ScoreV2 = 'V2',
+  Mirror = 'MR',
 }
 
 export const getIndividualMods = (mods: number): Mods[] => {
   return Object.values(Mods)
-    .filter((x) => typeof x !== "string")
+    .filter((x) => typeof x !== 'string')
     .map((mod) => mod as Mods)
-    .filter((mod) => mods & mod)
-}
+    .filter((mod) => mods & mod);
+};
 
 export const formatMods = (mods: number): string => {
   const activeMods: string[] = getIndividualMods(mods).map(
-    (mod) => ModAbbreviations[Mods[mod] as any]
-  )
+    (mod) => ModAbbreviations[Mods[mod]],
+  );
 
-  return activeMods.join("")
-}
+  return activeMods.join('');
+};

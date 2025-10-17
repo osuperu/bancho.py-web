@@ -1,17 +1,17 @@
-import { GitHub } from "@mui/icons-material"
-import { Box, Container, Divider, Stack, Typography } from "@mui/material"
-import { Link } from "react-router-dom"
+import { GitHub } from '@mui/icons-material';
+import { Box, Container, Divider, Stack, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-import FooterBanner from "./images/banners/footer_banner.png"
-import { DiscordLogo } from "./images/logos/DiscordLogo"
-import { FooterLogo } from "./images/logos/FooterLogo"
+import FooterBanner from './images/banners/footer_banner.png';
+import { DiscordLogo } from './images/logos/DiscordLogo';
+import { FooterLogo } from './images/logos/FooterLogo';
 
 export default function Footer() {
   return (
     <Box mt={4}>
       <Divider
         sx={{
-          height: "4px",
+          height: '4px',
           backgroundImage: `linear-gradient(90.09deg, #387EFC -0.08%, #C940FD 99.3%)`,
         }}
       />
@@ -26,12 +26,12 @@ export default function Footer() {
           height="100%"
           sx={{
             backgroundImage: `url(${FooterBanner})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         />
 
-        <Container sx={{ height: "100%" }}>
+        <Container sx={{ height: '100%' }}>
           <Stack
             direction="column"
             justifyContent="space-between"
@@ -39,7 +39,7 @@ export default function Footer() {
             spacing={{ xs: 2, sm: 4 }}
           >
             <Stack
-              direction={{ xs: "column", sm: "row" }}
+              direction={{ xs: 'column', sm: 'row' }}
               spacing={{ xs: 2, sm: 0 }}
               justifyContent="space-between"
               alignItems="center"
@@ -56,7 +56,6 @@ export default function Footer() {
                 <Stack direction="column" spacing={2}>
                   <Link
                     to="/team"
-                    // eslint-disable-next-line react/forbid-component-props
                     style={{
                       color: "#FFFFFF",
                       textDecoration: "none",
@@ -68,7 +67,6 @@ export default function Footer() {
                   </Link>
                   <Link
                     to="/contact"
-                    // eslint-disable-next-line react/forbid-component-props
                     style={{
                       color: "#FFFFFF",
                       textDecoration: "none",
@@ -82,7 +80,6 @@ export default function Footer() {
                 <Stack direction="column" spacing={2}>
                   <Link
                     to="/privacy-policy"
-                    // eslint-disable-next-line react/forbid-component-props
                     style={{
                       color: "#FFFFFF",
                       textDecoration: "none",
@@ -94,7 +91,6 @@ export default function Footer() {
                   </Link>
                   <Link
                     to="/terms-of-service"
-                    // eslint-disable-next-line react/forbid-component-props
                     style={{
                       color: "#FFFFFF",
                       textDecoration: "none",
@@ -108,7 +104,7 @@ export default function Footer() {
               </Stack>*/}
             </Stack>
             <Stack
-              direction={{ xs: "column", sm: "row" }}
+              direction={{ xs: 'column', sm: 'row' }}
               justifyContent="space-between"
               alignItems="center"
               pb={4}
@@ -116,28 +112,26 @@ export default function Footer() {
             >
               <Stack direction="row" alignItems="center">
                 <Typography variant="h6" fontWeight="lighter">
-                  © {process.env.REACT_APP_APP_NAME} {new Date().getFullYear()}
+                  © {process.env.PUBLIC_APP_APP_NAME} {new Date().getFullYear()}
                 </Typography>
               </Stack>
               <Stack direction="row" spacing={2}>
-                <Link to={process.env.REACT_APP_DISCORD_INVITE_URL}>
+                <Link to={process.env.PUBLIC_APP_DISCORD_INVITE_URL}>
                   <Box height={36} width={36}>
                     <DiscordLogo />
                   </Box>
                 </Link>
                 <Link
-                  to={process.env.REACT_APP_GITHUB_ORG_URL}
-                  // eslint-disable-next-line react/forbid-component-props
+                  to={process.env.PUBLIC_APP_GITHUB_ORG_URL}
                   style={{
-                    color: "#FFFFFF",
-                    textDecoration: "none",
+                    color: '#FFFFFF',
+                    textDecoration: 'none',
                   }}
                 >
                   <GitHub sx={{ width: 36, height: 36 }} />
                 </Link>
                 {/*<Link
-                  to={process.env.REACT_APP_TWITTER_URL}
-                  // eslint-disable-next-line react/forbid-component-props
+                  to={process.env.PUBLIC_APP_TWITTER_URL}
                   style={{
                     color: "#FFFFFF",
                     textDecoration: "none",
@@ -151,5 +145,5 @@ export default function Footer() {
         </Container>
       </Box>
     </Box>
-  )
+  );
 }

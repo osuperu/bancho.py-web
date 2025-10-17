@@ -1,26 +1,26 @@
-import PublicIcon from "@mui/icons-material/Public"
-import { Box, Tooltip } from "@mui/material"
+import PublicIcon from '@mui/icons-material/Public';
+import { Box, Tooltip } from '@mui/material';
 
-import { getCountryName, getFlagUrl } from "../utils/countries"
+import { getCountryName, getFlagUrl } from '../utils/countries';
 
 export const GlobalIcon = ({
   width,
   height,
 }: {
-  width: number
-  height: number
+  width: number;
+  height: number;
 }) => {
-  return <PublicIcon sx={{ width, height }} />
-}
+  return <PublicIcon sx={{ width, height }} />;
+};
 
 export const FlagIcon = ({
   country,
   height,
   width,
 }: {
-  country: string
-  height: number
-  width: number
+  country: string;
+  height: number;
+  width: number;
 }) => {
   return (
     <Tooltip title={getCountryName(country.toUpperCase())} placement="top">
@@ -32,5 +32,5 @@ export const FlagIcon = ({
         src={getFlagUrl(country.toUpperCase())}
       />
     </Tooltip>
-  )
-}
+  );
+};

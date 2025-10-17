@@ -7,6 +7,7 @@ export const StandardGameModeIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Standard</title>
       <path
         d="M12.2609 4.43476C7.94092 4.43476 4.43489 7.94079 4.43489 12.2607C4.43489 16.5806 7.94092 20.0867 12.2609 20.0867C16.5808 20.0867 20.0868 16.5806 20.0868 12.2607C20.0868 7.94079 16.5808 4.43476 12.2609 4.43476Z"
         fill="currentColor"
@@ -18,5 +19,5 @@ export const StandardGameModeIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};

@@ -1,11 +1,12 @@
-import { useIdentityContext } from "../context/Identity"
+/** biome-ignore-all lint/complexity/noUselessFragments: <TODO element> */
+import { useIdentityContext } from '../context/Identity';
 
 export const SupportPage = () => {
-  const { identity } = useIdentityContext()
+  const { identity } = useIdentityContext();
 
   if (identity === null) {
-    return <>Please sign into your account first!</>
+    return <>Please sign into your account first!</>;
   }
 
-  return <></>
-}
+  return <></>;
+};

@@ -1,41 +1,41 @@
-import { Avatar, Typography } from "@mui/material"
-import Box from "@mui/material/Box"
-import Stack from "@mui/material/Stack"
-import { useTranslation } from "react-i18next"
+import { Avatar, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import { useTranslation } from 'react-i18next';
 
-import { UserResponse } from "../../adapters/bpy-api/user"
-import { UserPrivileges } from "../../privileges"
-import { FlagIcon } from "../DestinationIcons"
+import type { UserResponse } from '../../adapters/bpy-api/user';
+import { UserPrivileges } from '../../privileges';
+import { FlagIcon } from '../DestinationIcons';
 
 interface UserTitleDisplay {
-  text: string
-  color: string
+  text: string;
+  color: string;
 }
 
 const getDisplayTitle = (userPrivileges: number): UserTitleDisplay | null => {
   if (userPrivileges & UserPrivileges.ADMINISTRATOR) {
     return {
-      text: "profile.titles.core_dev_team",
-      color: "linear-gradient(90deg, #387EFC 0%, #C940FD 100%)",
-    }
+      text: 'profile.titles.core_dev_team',
+      color: 'linear-gradient(90deg, #387EFC 0%, #C940FD 100%)',
+    };
   } else if (userPrivileges & UserPrivileges.NOMINATOR) {
     return {
-      text: "profile.titles.nomination_quality_assurance",
-      color: "rgba(170, 154, 255, 1)",
-    }
+      text: 'profile.titles.nomination_quality_assurance',
+      color: 'rgba(170, 154, 255, 1)',
+    };
   }
   // TODO: the many many others. And perhaps the concept of privilege groups.
-  return null
-}
+  return null;
+};
 
 export const ProfileIdentityCard = ({
   userProfile,
 }: {
-  userProfile: UserResponse
+  userProfile: UserResponse;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const userTitleDisplay = getDisplayTitle(userProfile.privileges)
+  const userTitleDisplay = getDisplayTitle(userProfile.privileges);
 
   return (
     <Stack
@@ -51,13 +51,13 @@ export const ProfileIdentityCard = ({
     >
       <Avatar
         alt="user-avatar"
-        src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${userProfile.id}`}
+        src={`${process.env.PUBLIC_APP_BPY_AVATARS_BASE_URL}/${userProfile.id}`}
         variant="square"
-        sx={{ width: 156, height: 156, borderRadius: "16px" }}
+        sx={{ width: 156, height: 156, borderRadius: '16px' }}
       />
       <Stack direction="column" spacing={1}>
         <Stack
-          direction={{ xs: "column", sm: "row" }}
+          direction={{ xs: 'column', sm: 'row' }}
           alignItems="center"
           spacing={1}
         >
@@ -79,9 +79,9 @@ export const ProfileIdentityCard = ({
             variant="h6"
             sx={{
               background: userTitleDisplay.color,
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
             {t(userTitleDisplay.text)}
@@ -91,10 +91,10 @@ export const ProfileIdentityCard = ({
           <Typography
             variant="h6"
             sx={{
-              background: "linear-gradient(90deg, #FF5E5E 0%, #FFC530 100%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              background: 'linear-gradient(90deg, #FF5E5E 0%, #FFC530 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
             Restricted
@@ -102,5 +102,5 @@ export const ProfileIdentityCard = ({
         )}
       </Stack>
     </Stack>
-  )
-}
+  );
+};

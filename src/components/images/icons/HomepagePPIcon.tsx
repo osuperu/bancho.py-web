@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <don't use in svg> */
 export const HomepagePPIcon = () => {
   return (
     <svg
@@ -7,6 +8,7 @@ export const HomepagePPIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>PP</title>
       <g filter="url(#filter0_b_0_1)">
         <path
           d="M0 50C0 22.3858 22.3858 0 50 0H61C88.6142 0 111 22.3858 111 50V84C111 98.9117 98.9117 111 84 111H50C22.3858 111 0 88.6142 0 61V50Z"
@@ -58,5 +60,5 @@ export const HomepagePPIcon = () => {
         </filter>
       </defs>
     </svg>
-  )
-}
+  );
+};

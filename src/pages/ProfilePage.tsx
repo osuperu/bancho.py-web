@@ -4,75 +4,79 @@ import {
   Divider,
   Typography,
   useMediaQuery,
-} from "@mui/material"
-import Box from "@mui/material/Box"
-import Stack from "@mui/material/Stack"
-import { useTheme } from "@mui/material/styles"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { useParams } from "react-router-dom"
+} from '@mui/material';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
-import { fetchUser, UserResponse, UserStats } from "../adapters/bpy-api/user"
-import { GamemodeSelectionBar } from "../components/GamemodeSelectionBar"
-import DefaultProfileBanner from "../components/images/banners/default_profile.png"
-import { PageTitle } from "../components/PageTitle"
-import { ProfileActivityDatesCard } from "../components/profile/ProfileActivityDatesCard"
-import { ProfileClanCard } from "../components/profile/ProfileClanCard"
-import { ProfileIdentityCard } from "../components/profile/ProfileIdentityCard"
-import { ProfileLevelCard } from "../components/profile/ProfileLevelCard"
-import { ProfileScoresCard } from "../components/profile/ProfileScoresCard"
-import { ProfileStatsCard } from "../components/profile/ProfileStatsCard"
-import { ProfileUserpageCard } from "../components/profile/ProfileUserpageCard"
-import { GameMode, RelaxMode } from "../GameModes"
-import { modeToStatsIndex } from "../scores"
+import {
+  fetchUser,
+  type UserResponse,
+  type UserStats,
+} from '../adapters/bpy-api/user';
+import { GamemodeSelectionBar } from '../components/GamemodeSelectionBar';
+import DefaultProfileBanner from '../components/images/banners/default_profile.png';
+import { PageTitle } from '../components/PageTitle';
+import { ProfileActivityDatesCard } from '../components/profile/ProfileActivityDatesCard';
+import { ProfileClanCard } from '../components/profile/ProfileClanCard';
+import { ProfileIdentityCard } from '../components/profile/ProfileIdentityCard';
+import { ProfileLevelCard } from '../components/profile/ProfileLevelCard';
+import { ProfileScoresCard } from '../components/profile/ProfileScoresCard';
+import { ProfileStatsCard } from '../components/profile/ProfileStatsCard';
+import { ProfileUserpageCard } from '../components/profile/ProfileUserpageCard';
+import { GameMode, RelaxMode } from '../GameModes';
+import { modeToStatsIndex } from '../scores';
 
 const getUserIdFromQueryParams = (identifier?: string): number => {
-  let userId = parseInt(identifier || "")
-  if (isNaN(userId)) {
+  let userId = parseInt(identifier || '', 10);
+  if (Number.isNaN(userId)) {
     // TODO: do API lookup
-    userId = 0
+    userId = 0;
   }
-  return userId
-}
+  return userId;
+};
 
 export const ProfilePage = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const queryParams = useParams()
+  const queryParams = useParams();
   //const { identity } = useIdentityContext()
 
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.up("xs"))
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.up('xs'));
 
-  const profileUserId = getUserIdFromQueryParams(queryParams["userId"])
+  const profileUserId = getUserIdFromQueryParams(queryParams.userId);
 
-  const [error, setError] = useState("")
+  const [error, setError] = useState('');
 
-  const [userProfile, setUserProfile] = useState<UserResponse | null>(null)
+  const [userProfile, setUserProfile] = useState<UserResponse | null>(null);
   /*const [profileHistoryType, setProfileHistoryType] =
     useState<ProfileHistoryType>(ProfileHistoryType.GlobalRank)*/
   //const [relationship, setRelationship] = useState(RelationshipType.NotFriend)
 
   // const [isOnline, setIsOnline] = useState(false)
 
-  const [gameMode, setGameMode] = useState(GameMode.Standard)
-  const [relaxMode, setRelaxMode] = useState(RelaxMode.Vanilla)
+  const [gameMode, setGameMode] = useState(GameMode.Standard);
+  const [relaxMode, setRelaxMode] = useState(RelaxMode.Vanilla);
 
   useEffect(() => {
-    ;(async () => {
-      if (!profileUserId) return
+    (async () => {
+      if (!profileUserId) return;
 
       try {
-        const usersResponse = await fetchUser(profileUserId)
-        setUserProfile(usersResponse)
-        setError("")
-      } catch (e: any) {
-        console.error("Failed to fetch user profile data from server")
-        setError("Failed to fetch user profile data from server")
-        return
+        const usersResponse = await fetchUser(profileUserId);
+        setUserProfile(usersResponse);
+        setError('');
+      } catch (_e: any) {
+        console.error('Failed to fetch user profile data from server');
+        setError('Failed to fetch user profile data from server');
+        return;
       }
-    })()
-  }, [profileUserId])
+    })();
+  }, [profileUserId]);
 
   /*useEffect(() => {
     ;(async () => {
@@ -109,12 +113,10 @@ export const ProfilePage = () => {
 
   if (!profileUserId) {
     return (
-      <>
-        <Typography variant="h2">
-          Must provide an account id in the path.
-        </Typography>
-      </>
-    )
+      <Typography variant="h2">
+        Must provide an account id in the path.
+      </Typography>
+    );
   }
 
   if (error) {
@@ -122,20 +124,21 @@ export const ProfilePage = () => {
       <Alert severity="error">
         Something went wrong while loading the page {error}
       </Alert>
-    )
+    );
   }
 
   if (!userProfile) {
-    return <></>
+    // biome-ignore lint/complexity/noUselessFragments: <Ignore>
+    return <></>;
   }
 
-  type StatsKey = ReturnType<typeof modeToStatsIndex>
+  type StatsKey = ReturnType<typeof modeToStatsIndex>;
 
   const statsMap = Object.fromEntries(userProfile.stats) as Record<
     StatsKey,
     UserStats
-  >
-  const modeStats = statsMap[modeToStatsIndex(gameMode)]
+  >;
+  const modeStats = statsMap[modeToStatsIndex(gameMode)];
 
   return (
     <Box>
@@ -143,18 +146,18 @@ export const ProfilePage = () => {
       <Box
         pt={{ xs: 0, sm: 10 }}
         sx={{
-          backgroundSize: "cover",
+          backgroundSize: 'cover',
           backgroundImage: `url(${DefaultProfileBanner})`,
-          backgroundPosition: "center",
+          backgroundPosition: 'center',
           // TODO: figure out how to disable this shadow effect within UserIdentityCard
-          boxShadow: "inset 0px 0px 0px 2000px rgba(21, 18, 34, 0.9)",
+          boxShadow: 'inset 0px 0px 0px 2000px rgba(21, 18, 34, 0.9)',
         }}
       >
         <Container>
           <Stack direction="column">
             <ProfileIdentityCard userProfile={userProfile} />
             <Stack
-              direction={{ xs: "column", sm: "row" }}
+              direction={{ xs: 'column', sm: 'row' }}
               alignItems="center"
               justifyContent="space-between"
               px={3}
@@ -190,15 +193,15 @@ export const ProfilePage = () => {
           />
         </Container>
       </Box>
-      <Container disableGutters sx={{ backgroundColor: "#191527" }}>
+      <Container disableGutters sx={{ backgroundColor: '#191527' }}>
         <Stack
-          direction={{ xs: "column", sm: "row" }}
+          direction={{ xs: 'column', sm: 'row' }}
           justifyContent="space-evenly"
         >
           {/* Left Side (Stats, Clan, etc.) */}
           <Box
-            width={{ xs: "100%", sm: "33.33%" }}
-            sx={{ background: "rgba(21, 18, 35, 1)" }}
+            width={{ xs: '100%', sm: '33.33%' }}
+            sx={{ background: 'rgba(21, 18, 35, 1)' }}
           >
             <Box p={4}>
               {/*userProfile.tbadges && (
@@ -222,7 +225,7 @@ export const ProfilePage = () => {
           {!isMobile && <Divider flexItem orientation="vertical" />}
 
           {/* Right Side (Profile History, Scores, etc.) */}
-          <Box width={{ xs: "100%", sm: "66.67%" }}>
+          <Box width={{ xs: '100%', sm: '66.67%' }}>
             <ProfileUserpageCard userProfile={userProfile} />
             {/*<Box
               borderRadius={2}
@@ -244,7 +247,7 @@ export const ProfilePage = () => {
               userId={userProfile.id}
               gameMode={gameMode}
               relaxMode={relaxMode}
-              title={t("profile.best_scores")}
+              title={t('profile.best_scores')}
             />
             <Divider />
             <ProfileScoresCard
@@ -252,11 +255,11 @@ export const ProfilePage = () => {
               userId={profileUserId}
               gameMode={gameMode}
               relaxMode={relaxMode}
-              title={t("profile.recent_plays")}
+              title={t('profile.recent_plays')}
             />
           </Box>
         </Stack>
       </Container>
     </Box>
-  )
-}
+  );
+};

@@ -7,6 +7,7 @@ export const CatchGameModeIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Catch</title>
       <path
         d="M17.4073 12.2607C17.4073 13.3412 16.5314 14.2172 15.4509 14.2172C14.3703 14.2172 13.4944 13.3412 13.4944 12.2607C13.4944 11.1801 14.3703 10.3042 15.4509 10.3042C16.5314 10.3042 17.4073 11.1801 17.4073 12.2607Z"
         fill="currentColor"
@@ -26,5 +27,5 @@ export const CatchGameModeIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};

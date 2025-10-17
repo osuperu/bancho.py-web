@@ -1,68 +1,68 @@
-import React from "react"
+import React from 'react';
 
-import { UserPrivileges } from "../privileges"
+import type { UserPrivileges } from '../privileges';
 
-const IDENTITY_CACHE_KEY = "identity"
+const IDENTITY_CACHE_KEY = 'identity';
 
 export interface Identity {
-  userId: number
-  username: string
-  privileges: UserPrivileges
+  userId: number;
+  username: string;
+  privileges: UserPrivileges;
 }
 
 export type IdentityContextType = {
-  identity: Identity | null
-  setIdentity: (identity: Identity | null) => void
-}
+  identity: Identity | null;
+  setIdentity: (identity: Identity | null) => void;
+};
 
 export const IdentityContext = React.createContext<IdentityContextType | null>(
-  null
-)
+  null,
+);
 
 export const useIdentityContext = () => {
-  const identityContext = React.useContext(IdentityContext)
+  const identityContext = React.useContext(IdentityContext);
   if (identityContext === null) {
     throw new Error(
-      "useIdentityContext must be inside a IdentityContextProvider"
-    )
+      'useIdentityContext must be inside a IdentityContextProvider',
+    );
   }
-  return identityContext
-}
+  return identityContext;
+};
 
 const setIdentityInLocalStorage = (identity: Identity) => {
-  localStorage.setItem(IDENTITY_CACHE_KEY, JSON.stringify(identity))
-}
+  localStorage.setItem(IDENTITY_CACHE_KEY, JSON.stringify(identity));
+};
 
 const getIdentityFromLocalStorage = (): Identity | null => {
-  const cached = localStorage.getItem(IDENTITY_CACHE_KEY)
-  return cached ? JSON.parse(cached) : null
-}
+  const cached = localStorage.getItem(IDENTITY_CACHE_KEY);
+  return cached ? JSON.parse(cached) : null;
+};
 
 const removeIdentityFromLocalStorage = () => {
-  localStorage.removeItem(IDENTITY_CACHE_KEY)
-}
+  localStorage.removeItem(IDENTITY_CACHE_KEY);
+};
 
 export const IdentityContextProvider: React.FC<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }> = ({ children }) => {
   const [identity, setIdentity] = React.useState<Identity | null>(
-    getIdentityFromLocalStorage()
-  )
+    getIdentityFromLocalStorage(),
+  );
   return (
     <IdentityContext.Provider
       value={{
         identity,
         setIdentity: (value: React.SetStateAction<Identity | null>) => {
           if (value) {
-            setIdentityInLocalStorage(value as Identity)
+            setIdentityInLocalStorage(value as Identity);
           } else {
-            removeIdentityFromLocalStorage()
+            removeIdentityFromLocalStorage();
           }
-          setIdentity(value)
+          setIdentity(value);
         },
       }}
     >
       {children}
     </IdentityContext.Provider>
-  )
-}
+  );
+};

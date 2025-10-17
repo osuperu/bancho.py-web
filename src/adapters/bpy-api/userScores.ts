@@ -1,63 +1,63 @@
-import axios from "axios"
+import axios from 'axios';
 
 const apiInstance = axios.create({
-  baseURL: process.env.REACT_APP_BPY_API_BASE_URL,
-})
+  baseURL: process.env.PUBLIC_APP_BPY_API_BASE_URL,
+});
 
 interface UserScoresRequest {
-  scope: "best" | "recent"
-  mode: number
-  limit: number
-  page: number
-  id: number
+  scope: 'best' | 'recent';
+  mode: number;
+  limit: number;
+  page: number;
+  id: number;
 }
 
 export interface UserScoresResponse {
-  status: string
-  scores: UserScore[] | null
+  status: string;
+  scores: UserScore[] | null;
 }
 
 export interface UserScore {
-  id: string
-  beatmapMd5: string
-  score: number
-  maxCombo: number
-  fullCombo: boolean
-  mods: number
-  count300: number
-  count100: number
-  count50: number
-  countGeki: number
-  countKatu: number
-  countMiss: number
-  time: Date
-  playMode: number
-  accuracy: number
-  pp: number
-  rank: string
-  completed: number
-  pinned: boolean
-  beatmap: UserScoreBeatmap
-  userId: number
+  id: string;
+  beatmapMd5: string;
+  score: number;
+  maxCombo: number;
+  fullCombo: boolean;
+  mods: number;
+  count300: number;
+  count100: number;
+  count50: number;
+  countGeki: number;
+  countKatu: number;
+  countMiss: number;
+  time: Date;
+  playMode: number;
+  accuracy: number;
+  pp: number;
+  rank: string;
+  completed: number;
+  pinned: boolean;
+  beatmap: UserScoreBeatmap;
+  userId: number;
 }
 
 export interface UserScoreBeatmap {
-  beatmapId: number
-  beatmapsetId: number
-  beatmapMd5: string
-  artist: string
-  title: string
-  version: string
-  ar: number
-  od: number
-  difficulty: number
-  maxCombo: number
-  hitLength: number
-  latestUpdate: string
+  beatmapId: number;
+  beatmapsetId: number;
+  beatmapMd5: string;
+  artist: string;
+  title: string;
+  version: string;
+  ar: number;
+  od: number;
+  difficulty: number;
+  maxCombo: number;
+  hitLength: number;
+  latestUpdate: string;
 }
 
 export const fetchUserScores = async (
-  request: UserScoresRequest
+  request: UserScoresRequest,
 ): Promise<UserScoresResponse> => {
   try {
     const response = await apiInstance.get(`/v1/get_player_scores`, {
@@ -68,7 +68,7 @@ export const fetchUserScores = async (
         limit: request.limit,
         id: request.id,
       },
-    })
+    });
     return {
       status: response.data.status,
       scores:
@@ -107,9 +107,9 @@ export const fetchUserScores = async (
           },
           userId: response.data.id,
         })) ?? null,
-    }
+    };
   } catch (e: any) {
-    console.log(e)
-    throw new Error(e.response.data.user_feedback)
+    console.log(e);
+    throw new Error(e.response.data.user_feedback);
   }
-}
+};

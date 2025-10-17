@@ -7,6 +7,7 @@ export const FooterLogo = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Footer</title>
       <g transform="translate(0, -25) scale(0.3)">
         <path
           fill="white"
@@ -74,5 +75,5 @@ export const FooterLogo = () => {
         />
       </g>
     </svg>
-  )
-}
+  );
+};

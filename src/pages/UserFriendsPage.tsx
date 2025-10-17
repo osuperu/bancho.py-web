@@ -9,27 +9,26 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@mui/material"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
-import { fetchUsersFriends, UserResponse } from "../adapters/bpy-api/user"
-import StaticPageBanner from "../components/images/banners/static_page_banner.svg"
-import { UserFriendsIcon } from "../components/images/icons/UserFriendsIcon"
-import { PageTitle } from "../components/PageTitle"
+import { fetchUsersFriends, type UserResponse } from '../adapters/bpy-api/user';
+import StaticPageBanner from '../components/images/banners/static_page_banner.svg';
+import { UserFriendsIcon } from '../components/images/icons/UserFriendsIcon';
+import { PageTitle } from '../components/PageTitle';
 
-const PAGE_SIZE = 21
+const PAGE_SIZE = 21;
 
 const UserFriendCard = ({ friend }: { friend: UserResponse }) => {
   return (
     <GridLegacy key={friend.id} item xs={12} sm={4} p={1}>
       <Link
         to={`/u/${friend.id}`}
-        // eslint-disable-next-line react/forbid-component-props
         style={{
-          color: "#FFFFFF",
-          textDecoration: "none",
+          color: '#FFFFFF',
+          textDecoration: 'none',
         }}
       >
         <Stack
@@ -41,7 +40,7 @@ const UserFriendCard = ({ friend }: { friend: UserResponse }) => {
         >
           <Avatar
             alt="user-avatar"
-            src={`${process.env.REACT_APP_BPY_AVATARS_BASE_URL}/${friend.id}`}
+            src={`${process.env.PUBLIC_APP_BPY_AVATARS_BASE_URL}/${friend.id}`}
             variant="circular"
             sx={{ width: 36, height: 36 }}
           />
@@ -61,41 +60,41 @@ const UserFriendCard = ({ friend }: { friend: UserResponse }) => {
         </Stack>
       </Link>
     </GridLegacy>
-  )
-}
+  );
+};
 
 export const UserFriendsPage = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [page, setPage] = useState(0)
-  const [userFriends, setUserFriends] = useState<UserResponse[]>([])
+  const [page, setPage] = useState(0);
+  const [userFriends, setUserFriends] = useState<UserResponse[]>([]);
 
   useEffect(() => {
-    ;(async () => {
-      let userFriends
+    (async () => {
+      let userFriends: UserResponse[];
       try {
         userFriends = await fetchUsersFriends({
           page: page + 1,
           pageSize: PAGE_SIZE,
-        })
+        });
       } catch (e: any) {
-        console.error(e)
-        return
+        console.error(e);
+        return;
       }
-      setUserFriends(userFriends ?? [])
-    })()
-  }, [page])
+      setUserFriends(userFriends ?? []);
+    })();
+  }, [page]);
 
   return (
     <>
-      <PageTitle title={`osu!Peru - ${t("web_titles.friends")}`} />
+      <PageTitle title={`osu!Peru - ${t('web_titles.friends')}`} />
       <Box
         height={{ xs: 0, sm: 340 }}
         sx={{
-          backgroundSize: "cover",
+          backgroundSize: 'cover',
           backgroundImage: `url(${StaticPageBanner})`,
         }}
       />
@@ -106,7 +105,7 @@ export const UserFriendsPage = () => {
             justifyContent="center"
             alignItems="center"
             sx={{
-              backgroundSize: "cover",
+              backgroundSize: 'cover',
               backgroundImage: `url(${StaticPageBanner})`,
             }}
             py={5}
@@ -126,19 +125,19 @@ export const UserFriendsPage = () => {
             </Grid>
             <TablePagination
               component={Box}
-              sx={{ background: "#191527" }}
+              sx={{ background: '#191527' }}
               count={-1}
               rowsPerPage={PAGE_SIZE}
               page={page}
               onPageChange={(_, newPage) => setPage(newPage)}
               rowsPerPageOptions={[]}
               labelDisplayedRows={({ from, to }) => {
-                return `Results ${from}-${to}`
+                return `Results ${from}-${to}`;
               }}
             />
           </Box>
         </Stack>
       </Container>
     </>
-  )
-}
+  );
+};

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <don't use in svg> */
 export const HomepageScoresIcon = () => {
   return (
     <svg
@@ -7,6 +8,7 @@ export const HomepageScoresIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Scores</title>
       <g filter="url(#filter0_b_0_1)">
         <path
           d="M61 -2.18557e-06C88.6142 -9.78513e-07 111 22.3858 111 50L111 61C111 88.6142 88.6142 111 61 111L27 111C12.0883 111 -4.32357e-06 98.9117 -3.67176e-06 84L-2.18557e-06 50C-9.78513e-07 22.3858 22.3858 -3.87345e-06 50 -2.66639e-06L61 -2.18557e-06Z"
@@ -44,5 +46,5 @@ export const HomepageScoresIcon = () => {
         </filter>
       </defs>
     </svg>
-  )
-}
+  );
+};

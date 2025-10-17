@@ -1,4 +1,4 @@
-import CheckIcon from "@mui/icons-material/Check"
+import CheckIcon from '@mui/icons-material/Check';
 import {
   Box,
   Button,
@@ -7,56 +7,56 @@ import {
   Menu,
   MenuItem,
   Stack,
-} from "@mui/material"
-import React from "react"
-import { useTranslation } from "react-i18next"
+} from '@mui/material';
+import React, { useId } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { getFlagUrl } from "../utils/countries"
+import { getFlagUrl } from '../utils/countries';
 
 export interface Language {
-  code: string
-  name: string
+  code: string;
+  name: string;
 }
 
 const languages: Language[] = [
-  { code: "us", name: "English" },
-  { code: "es", name: "Español" },
-]
+  { code: 'us', name: 'English' },
+  { code: 'es', name: 'Español' },
+];
 
 export const LanguageSelector = () => {
-  const { i18n } = useTranslation()
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+  const { i18n } = useTranslation();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const currentLanguage =
-    languages.find((lang) => lang.code === i18n.language) || languages[0]
+    languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng)
-    handleClose()
-  }
+    i18n.changeLanguage(lng);
+    handleClose();
+  };
 
   return (
     <Box>
       <Button
         aria-label="language-selector-button"
-        id="language-selector-button"
-        aria-controls={open ? "language-selector-button" : undefined}
-        aria-expanded={open ? "true" : undefined}
+        id={useId()}
+        aria-controls={open ? 'language-selector-button' : undefined}
+        aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
         sx={{
-          color: "white",
-          textTransform: "none",
-          minWidth: { xs: "40px", md: "auto" },
+          color: 'white',
+          textTransform: 'none',
+          minWidth: { xs: '40px', md: 'auto' },
           px: { xs: 1, md: 2 },
         }}
       >
@@ -76,14 +76,14 @@ export const LanguageSelector = () => {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          "aria-labelledby": "language-selector-button",
+          'aria-labelledby': 'language-selector-button',
           sx: {
-            bgcolor: "#191527",
+            bgcolor: '#191527',
             paddingTop: 0,
           },
         }}
         slotProps={{ paper: { sx: { width: 242, borderRadius: 3 } } }}
-        transformOrigin={{ vertical: "top", horizontal: "center" }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         {languages.map((language) => (
           <MenuItem
@@ -91,8 +91,8 @@ export const LanguageSelector = () => {
             onClick={() => changeLanguage(language.code)}
             selected={language.code === i18n.language}
             sx={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: 1,
               p: 1.5,
             }}
@@ -106,7 +106,7 @@ export const LanguageSelector = () => {
             />
             <ListItemText primary={language.name} />
             {language.code === i18n.language && (
-              <ListItemIcon sx={{ minWidth: "auto", color: "success.main" }}>
+              <ListItemIcon sx={{ minWidth: 'auto', color: 'success.main' }}>
                 <CheckIcon fontSize="small" />
               </ListItemIcon>
             )}
@@ -114,5 +114,5 @@ export const LanguageSelector = () => {
         ))}
       </Menu>
     </Box>
-  )
-}
+  );
+};

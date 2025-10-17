@@ -7,6 +7,7 @@ export const ManiaGameModeIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Mania</title>
       <path
         d="M11.1393 18.8345C11.1393 19.5545 11.7237 20.1388 12.4437 20.1388C13.1636 20.1388 13.748 19.5545 13.748 18.8345V5.6869C13.748 4.96691 13.1636 4.38257 12.4437 4.38257C11.7237 4.38257 11.1393 4.96691 11.1393 5.6869V18.8345Z"
         fill="currentColor"
@@ -26,5 +27,5 @@ export const ManiaGameModeIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};

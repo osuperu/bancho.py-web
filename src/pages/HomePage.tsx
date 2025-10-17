@@ -1,74 +1,74 @@
-import { Box, Container, GridLegacy, Stack, Typography } from "@mui/material"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { Box, Container, GridLegacy, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   fetchTotalPPEarned,
   fetchTotalScoresSet,
-} from "../adapters/bpy-api/scores"
-import { fetchTotalRegisteredUsers } from "../adapters/bpy-api/user"
-import { HomepageScoresCarousel } from "../components/homepage/HomepageScoresCarousel"
-import { HomepageStatDisplay } from "../components/homepage/HomepageStatDisplay"
-import HomepageBanner from "../components/images/banners/homepage_banner.svg"
-import { HomepagePPIcon } from "../components/images/icons/HomepagePPIcon"
-import { HomepageScoresIcon } from "../components/images/icons/HomepageScoresIcon"
-import { HomepageUsersIcon } from "../components/images/icons/HomepageUsersIcon"
-import { WhiteoutOsuPeruLogo } from "../components/images/logos/WhiteoutOsuPeruLogo"
-import { PageTitle } from "../components/PageTitle"
+} from '../adapters/bpy-api/scores';
+import { fetchTotalRegisteredUsers } from '../adapters/bpy-api/user';
+import { HomepageScoresCarousel } from '../components/homepage/HomepageScoresCarousel';
+import { HomepageStatDisplay } from '../components/homepage/HomepageStatDisplay';
+import HomepageBanner from '../components/images/banners/homepage_banner.svg';
+import { HomepagePPIcon } from '../components/images/icons/HomepagePPIcon';
+import { HomepageScoresIcon } from '../components/images/icons/HomepageScoresIcon';
+import { HomepageUsersIcon } from '../components/images/icons/HomepageUsersIcon';
+import { WhiteoutOsuPeruLogo } from '../components/images/logos/WhiteoutOsuPeruLogo';
+import { PageTitle } from '../components/PageTitle';
 
 export const HomePage = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const [totalPPEarned, setTotalPPEarned] = useState(0)
-  const [totalScoresSet, setTotalScoresSet] = useState(0)
-  const [totalUsersRegistered, setTotalUsersRegistered] = useState(0)
-
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const totalPPEarned = await fetchTotalPPEarned()
-        setTotalPPEarned(totalPPEarned)
-      } catch (error) {
-        console.error("Failed to fetch total PP earned:", error)
-        return
-      }
-    })()
-  }, [])
+  const [totalPPEarned, setTotalPPEarned] = useState(0);
+  const [totalScoresSet, setTotalScoresSet] = useState(0);
+  const [totalUsersRegistered, setTotalUsersRegistered] = useState(0);
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       try {
-        const totalScoresSet = await fetchTotalScoresSet()
-        setTotalScoresSet(totalScoresSet)
+        const totalPPEarned = await fetchTotalPPEarned();
+        setTotalPPEarned(totalPPEarned);
       } catch (error) {
-        console.error("Failed to fetch total scores set:", error)
-        return
+        console.error('Failed to fetch total PP earned:', error);
+        return;
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       try {
-        const totalUsersRegistered = await fetchTotalRegisteredUsers()
-        setTotalUsersRegistered(totalUsersRegistered)
+        const totalScoresSet = await fetchTotalScoresSet();
+        setTotalScoresSet(totalScoresSet);
       } catch (error) {
-        console.error("Failed to fetch total users registered:", error)
-        return
+        console.error('Failed to fetch total scores set:', error);
+        return;
       }
-    })()
-  }, [])
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const totalUsersRegistered = await fetchTotalRegisteredUsers();
+        setTotalUsersRegistered(totalUsersRegistered);
+      } catch (error) {
+        console.error('Failed to fetch total users registered:', error);
+        return;
+      }
+    })();
+  }, []);
 
   return (
     <Box>
-      <PageTitle title={`osu!Peru - ${t("web_titles.home")}`} />
+      <PageTitle title={`osu!Peru - ${t('web_titles.home')}`} />
       <Stack direction="column" justifyContent="space-between" spacing={2}>
         <Box
           py={{ xs: 4, sm: 22 }} /** TODO: sm default is 16 */
           sx={{
             backgroundImage: `url(${HomepageBanner})`,
-            backgroundSize: "cover",
-            backgroundPosition: "bottom",
+            backgroundSize: 'cover',
+            backgroundPosition: 'bottom',
           }}
         >
           {/* TODO: figure out how to scale this */}
@@ -90,21 +90,21 @@ export const HomePage = () => {
           <Container>
             <GridLegacy
               container
-              direction={{ xs: "column", sm: "row-reverse" }}
+              direction={{ xs: 'column', sm: 'row-reverse' }}
               spacing={{ xs: 2, sm: 22 }} /** TODO: sm default is 16 */
               justifyContent="center"
             >
               <GridLegacy item xs={6}>
                 <Stack
                   direction="column"
-                  alignItems={{ xs: "center", sm: "flex-end" }}
+                  alignItems={{ xs: 'center', sm: 'flex-end' }}
                   spacing={3}
                 >
                   <Box width={315} height={68}>
                     <WhiteoutOsuPeruLogo />
                   </Box>
-                  <Typography textAlign={{ xs: "center", sm: "right" }}>
-                    {process.env.REACT_APP_APP_NAME} {t("home.welcome")}
+                  <Typography textAlign={{ xs: 'center', sm: 'right' }}>
+                    {process.env.PUBLIC_APP_APP_NAME} {t('home.welcome')}
                   </Typography>
                   <Stack direction="row" spacing={2}>
                     {/*<Link to="/register">
@@ -145,7 +145,7 @@ export const HomePage = () => {
                 <Stack direction="column">
                   <Stack direction="row" width="100%" spacing={2}>
                     <HomepageStatDisplay
-                      title={t("home.pp_earned")}
+                      title={t('home.pp_earned')}
                       value={totalPPEarned}
                       icon={<HomepagePPIcon />}
                       lessRoundedCorner="bottom-right"
@@ -162,7 +162,7 @@ export const HomePage = () => {
                     justifyContent="flex-start"
                   >
                     <HomepageStatDisplay
-                      title={t("home.scores_set")}
+                      title={t('home.scores_set')}
                       value={totalScoresSet}
                       icon={<HomepageScoresIcon />}
                       lessRoundedCorner="bottom-left"
@@ -179,7 +179,7 @@ export const HomePage = () => {
                     justifyContent="center"
                   >
                     <HomepageStatDisplay
-                      title={t("home.registered_users")}
+                      title={t('home.registered_users')}
                       value={totalUsersRegistered}
                       icon={<HomepageUsersIcon />}
                       lessRoundedCorner="top-right"
@@ -196,5 +196,5 @@ export const HomePage = () => {
         <HomepageScoresCarousel />
       </Stack>
     </Box>
-  )
-}
+  );
+};

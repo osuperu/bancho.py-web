@@ -1,6 +1,6 @@
-import { Box, Stack, Typography } from "@mui/material"
+import { Box, Stack, Typography } from '@mui/material';
 
-import { formatNumber } from "../../utils/formatting"
+import { formatNumber } from '../../utils/formatting';
 
 export const HomepageStatDisplay = ({
   title,
@@ -11,24 +11,24 @@ export const HomepageStatDisplay = ({
   justifyText,
   textAlign,
 }: {
-  title: string
-  value: number
-  icon: React.JSX.Element
-  lessRoundedCorner: "top-left" | "bottom-left" | "top-right" | "bottom-right"
-  shadowDirection: "top-left" | "bottom-left" | "top-right" | "bottom-right"
-  justifyText: "top" | "bottom"
-  textAlign: "left" | "right"
+  title: string;
+  value: number;
+  icon: React.JSX.Element;
+  lessRoundedCorner: 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right';
+  shadowDirection: 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right';
+  justifyText: 'top' | 'bottom';
+  textAlign: 'left' | 'right';
 }) => {
-  const CORNERS = ["top-left", "top-right", "bottom-right", "bottom-left"]
+  const CORNERS = ['top-left', 'top-right', 'bottom-right', 'bottom-left'];
   const borderRadius = CORNERS.map((corner) =>
-    corner === lessRoundedCorner ? "27px" : "50px"
-  ).join(" ")
+    corner === lessRoundedCorner ? '27px' : '50px',
+  ).join(' ');
 
-  const SHADOW_COLOR = "hsl(0deg 0% 0% / 0.2)"
-  const shadowOffsetX = shadowDirection.endsWith("left") ? -20 : 20
-  const shadowOffsetY = shadowDirection.startsWith("top") ? -20 : 20
-  const boxShadow = `${SHADOW_COLOR} ${shadowOffsetX}px ${shadowOffsetY}px`
-  const justifyContent = justifyText === "top" ? "flex-start" : "flex-end"
+  const SHADOW_COLOR = 'hsl(0deg 0% 0% / 0.2)';
+  const shadowOffsetX = shadowDirection.endsWith('left') ? -20 : 20;
+  const shadowOffsetY = shadowDirection.startsWith('top') ? -20 : 20;
+  const boxShadow = `${SHADOW_COLOR} ${shadowOffsetX}px ${shadowOffsetY}px`;
+  const justifyContent = justifyText === 'top' ? 'flex-start' : 'flex-end';
   return (
     <>
       <Box
@@ -52,5 +52,5 @@ export const HomepageStatDisplay = ({
         </Typography>
       </Stack>
     </>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import SettingsIcon from "@mui/icons-material/Settings"
+import SettingsIcon from '@mui/icons-material/Settings';
 import {
   Alert,
   Box,
@@ -17,20 +17,20 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@mui/material"
-import { FormEvent, useState } from "react"
-import { useTranslation } from "react-i18next"
+} from '@mui/material';
+import { type FormEvent, useId, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   updateAvatar,
   updateEmail,
   updatePassword,
   updateUsername,
-} from "../adapters/bpy-api/user"
-import StaticPageBanner from "../components/images/banners/static_page_banner.svg"
-import { PageTitle } from "../components/PageTitle"
-import { type Identity, useIdentityContext } from "../context/Identity"
-import { UserPrivileges } from "../privileges"
+} from '../adapters/bpy-api/user';
+import StaticPageBanner from '../components/images/banners/static_page_banner.svg';
+import { PageTitle } from '../components/PageTitle';
+import { type Identity, useIdentityContext } from '../context/Identity';
+import { UserPrivileges } from '../privileges';
 
 const ChangeUsernameButton = ({
   setSnackbarOpen,
@@ -39,30 +39,30 @@ const ChangeUsernameButton = ({
   setIdentity,
   isSupporter,
 }: {
-  setSnackbarOpen: (open: boolean) => void
-  setSnackbarMessage: (message: string) => void
-  identity: Identity | null
-  setIdentity: (identity: Identity | null) => void
-  isSupporter: boolean
+  setSnackbarOpen: (open: boolean) => void;
+  setSnackbarMessage: (message: string) => void;
+  identity: Identity | null;
+  setIdentity: (identity: Identity | null) => void;
+  isSupporter: boolean;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
-      <Tooltip title={t("user_settings.supporter_only_feature")}>
+      <Tooltip title={t('user_settings.supporter_only_feature')}>
         <Box display="flex" justifyContent="center">
           <Button
             disabled={!isSupporter}
             onClick={handleClickOpen}
-            sx={{ color: "white", textTransform: "none" }}
+            sx={{ color: 'white', textTransform: 'none' }}
           >
             <Typography variant="body1">
-              {t("user_settings.change_display_name")}
+              {t('user_settings.change_display_name')}
             </Typography>
           </Button>
         </Box>
@@ -71,34 +71,34 @@ const ChangeUsernameButton = ({
         open={open}
         onClose={handleClose}
         PaperProps={{
-          component: "form",
+          component: 'form',
           onSubmit: async (event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault()
-            const formData = new FormData(event.currentTarget)
-            const formJson = Object.fromEntries(formData.entries())
-            const currentPassword = formJson["current-password"].toString()
-            const newUsername = formJson["new-username"].toString()
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const currentPassword = formJson['current-password'].toString();
+            const newUsername = formJson['new-username'].toString();
             // TODO: potentially automatically validate debounced input
             //       is available server-side as-they-type?
             try {
-              await updateUsername(currentPassword, newUsername)
+              await updateUsername(currentPassword, newUsername);
             } catch (e: any) {
-              setSnackbarOpen(true)
-              setSnackbarMessage(e.message)
-              return
+              setSnackbarOpen(true);
+              setSnackbarMessage(e.message);
+              return;
             }
             if (identity !== null) {
-              setIdentity({ ...identity, username: newUsername })
+              setIdentity({ ...identity, username: newUsername });
             }
 
-            handleClose()
+            handleClose();
           },
         }}
       >
-        <DialogTitle>{t("user_settings.change_display_name")}</DialogTitle>
+        <DialogTitle>{t('user_settings.change_display_name')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t("user_settings.supporters_can_use_this_feature")}
+            {t('user_settings.supporters_can_use_this_feature')}
           </DialogContentText>
           <TextField
             autoFocus
@@ -106,9 +106,9 @@ const ChangeUsernameButton = ({
             fullWidth
             autoComplete="current-password"
             margin="dense"
-            id="current-password"
+            id={useId()}
             name="current-password"
-            label={t("user_settings.current_password")}
+            label={t('user_settings.current_password')}
             type="password"
             variant="standard"
           />
@@ -118,75 +118,75 @@ const ChangeUsernameButton = ({
             fullWidth
             autoComplete="username"
             margin="dense"
-            id="new-username"
+            id={useId()}
             name="new-username"
-            label={t("user_settings.new_display_name")}
+            label={t('user_settings.new_display_name')}
             type="text"
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
-          <Button type="submit">{t("user_settings.save")}</Button>
+          <Button onClick={handleClose}>{t('user_settings.cancel')}</Button>
+          <Button type="submit">{t('user_settings.save')}</Button>
         </DialogActions>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
 const ChangePasswordButton = ({
   setSnackbarOpen,
   setSnackbarMessage,
 }: {
-  setSnackbarOpen: (open: boolean) => void
-  setSnackbarMessage: (message: string) => void
+  setSnackbarOpen: (open: boolean) => void;
+  setSnackbarMessage: (message: string) => void;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
       <Button
         onClick={handleClickOpen}
-        sx={{ color: "white", textTransform: "none" }}
+        sx={{ color: 'white', textTransform: 'none' }}
       >
         <Typography variant="body1">
-          {t("user_settings.change_password")}
+          {t('user_settings.change_password')}
         </Typography>
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         PaperProps={{
-          component: "form",
+          component: 'form',
           onSubmit: async (event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault()
-            const formData = new FormData(event.currentTarget)
-            const formJson = Object.fromEntries(formData.entries())
-            const currentPassword = formJson["current-password"].toString()
-            const newPassword = formJson["new-password"].toString()
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const currentPassword = formJson['current-password'].toString();
+            const newPassword = formJson['new-password'].toString();
 
             // TODO: potentially automatically validate debounced input
             //       is available server-side as-they-type?
             try {
-              await updatePassword(currentPassword, newPassword)
+              await updatePassword(currentPassword, newPassword);
             } catch (e: any) {
-              setSnackbarOpen(true)
-              setSnackbarMessage(e.message)
-              return
+              setSnackbarOpen(true);
+              setSnackbarMessage(e.message);
+              return;
             }
-            handleClose()
+            handleClose();
           },
         }}
       >
-        <DialogTitle>{t("user_settings.change_password")}</DialogTitle>
+        <DialogTitle>{t('user_settings.change_password')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t("user_settings.change_password_here")}
+            {t('user_settings.change_password_here')}
           </DialogContentText>
           <TextField
             autoFocus
@@ -194,9 +194,9 @@ const ChangePasswordButton = ({
             fullWidth
             autoComplete="current-password"
             margin="dense"
-            id="current-password"
+            id={useId()}
             name="current-password"
-            label={t("user_settings.current_password")}
+            label={t('user_settings.current_password')}
             type="password"
             variant="standard"
           />
@@ -206,74 +206,74 @@ const ChangePasswordButton = ({
             fullWidth
             autoComplete="new-password"
             margin="dense"
-            id="new-password"
+            id={useId()}
             name="new-password"
-            label={t("user_settings.new_password")}
+            label={t('user_settings.new_password')}
             type="password"
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
-          <Button type="submit">{t("user_settings.save")}</Button>
+          <Button onClick={handleClose}>{t('user_settings.cancel')}</Button>
+          <Button type="submit">{t('user_settings.save')}</Button>
         </DialogActions>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
 const ChangeEmailAddressButton = ({
   setSnackbarOpen,
   setSnackbarMessage,
 }: {
-  setSnackbarOpen: (open: boolean) => void
-  setSnackbarMessage: (message: string) => void
+  setSnackbarOpen: (open: boolean) => void;
+  setSnackbarMessage: (message: string) => void;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
       <Button
         onClick={handleClickOpen}
-        sx={{ color: "white", textTransform: "none" }}
+        sx={{ color: 'white', textTransform: 'none' }}
       >
         <Typography variant="body1">
-          {t("user_settings.change_email_address")}
+          {t('user_settings.change_email_address')}
         </Typography>
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         PaperProps={{
-          component: "form",
+          component: 'form',
           onSubmit: async (event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault()
-            const formData = new FormData(event.currentTarget)
-            const formJson = Object.fromEntries(formData.entries())
-            const currentPassword = formJson["current-password"].toString()
-            const newEmailAddress = formJson["new-email-address"].toString()
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const currentPassword = formJson['current-password'].toString();
+            const newEmailAddress = formJson['new-email-address'].toString();
             // TODO: potentially automatically validate debounced input
             //       is available server-side as-they-type?
             try {
-              await updateEmail(currentPassword, newEmailAddress)
+              await updateEmail(currentPassword, newEmailAddress);
             } catch (e: any) {
-              setSnackbarOpen(true)
-              setSnackbarMessage(e.message)
-              return
+              setSnackbarOpen(true);
+              setSnackbarMessage(e.message);
+              return;
             }
-            handleClose()
+            handleClose();
           },
         }}
       >
-        <DialogTitle>{t("user_settings.change_email_address")}</DialogTitle>
+        <DialogTitle>{t('user_settings.change_email_address')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t("user_settings.change_email_address_here")}
+            {t('user_settings.change_email_address_here')}
           </DialogContentText>
           <TextField
             autoFocus
@@ -281,9 +281,9 @@ const ChangeEmailAddressButton = ({
             fullWidth
             autoComplete="current-password"
             margin="dense"
-            id="current-password"
+            id={useId()}
             name="current-password"
-            label={t("user_settings.current_password")}
+            label={t('user_settings.current_password')}
             type="password"
             variant="standard"
           />
@@ -293,21 +293,21 @@ const ChangeEmailAddressButton = ({
             fullWidth
             autoComplete="email"
             margin="dense"
-            id="new-email-address"
+            id={useId()}
             name="new-email-address"
-            label={t("user_settings.new_email_address")}
+            label={t('user_settings.new_email_address')}
             type="email"
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
-          <Button type="submit">{t("user_settings.save")}</Button>
+          <Button onClick={handleClose}>{t('user_settings.cancel')}</Button>
+          <Button type="submit">{t('user_settings.save')}</Button>
         </DialogActions>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
 const ChangeAvatarButton = ({
   setSnackbarOpen,
@@ -315,116 +315,115 @@ const ChangeAvatarButton = ({
   identity,
   setIdentity,
 }: {
-  setSnackbarOpen: (open: boolean) => void
-  setSnackbarMessage: (message: string) => void
-  identity: Identity | null
-  setIdentity: (identity: Identity | null) => void
+  setSnackbarOpen: (open: boolean) => void;
+  setSnackbarMessage: (message: string) => void;
+  identity: Identity | null;
+  setIdentity: (identity: Identity | null) => void;
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const [open, setOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [open, setOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleClickOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setSelectedFile(event.target.files[0])
+    if (event.target.files?.[0]) {
+      setSelectedFile(event.target.files[0]);
     }
-  }
+  };
 
   return (
     <>
       <Button
         onClick={handleClickOpen}
-        sx={{ color: "white", textTransform: "none" }}
+        sx={{ color: 'white', textTransform: 'none' }}
       >
         <Typography variant="body1">
-          {t("user_settings.change_avatar")}
+          {t('user_settings.change_avatar')}
         </Typography>
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         PaperProps={{
-          component: "form",
+          component: 'form',
           onSubmit: async (event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault()
+            event.preventDefault();
 
             try {
               if (selectedFile) {
-                await updateAvatar(selectedFile)
+                await updateAvatar(selectedFile);
                 if (identity !== null) {
-                  setIdentity({ ...identity })
+                  setIdentity({ ...identity });
                 }
               }
             } catch (e: any) {
-              setSnackbarOpen(true)
-              setSnackbarMessage(e.message)
-              return
+              setSnackbarOpen(true);
+              setSnackbarMessage(e.message);
+              return;
             }
-            handleClose()
+            handleClose();
           },
         }}
       >
-        <DialogTitle>{t("user_settings.change_avatar")}</DialogTitle>
+        <DialogTitle>{t('user_settings.change_avatar')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t("user_settings.change_avatar_here")}
+            {t('user_settings.change_avatar_here')}
           </DialogContentText>
           <Box mt={2}>
             <input
               accept="image/*"
-              // eslint-disable-next-line react/forbid-dom-props
-              style={{ display: "none" }}
-              id="avatar-upload"
+              style={{ display: 'none' }}
+              id={useId()}
               type="file"
               onChange={handleFileChange}
             />
             <label htmlFor="avatar-upload">
               <Button variant="contained" component="span">
-                {t("user_settings.select_avatar")}
+                {t('user_settings.select_avatar')}
               </Button>
             </label>
             {selectedFile && (
               <Typography variant="body2" sx={{ mt: 1 }}>
-                {t("user_settings.selected_file")}: {selectedFile.name}
+                {t('user_settings.selected_file')}: {selectedFile.name}
               </Typography>
             )}
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{t("user_settings.cancel")}</Button>
-          <Button type="submit">{t("user_settings.save")}</Button>
+          <Button onClick={handleClose}>{t('user_settings.cancel')}</Button>
+          <Button type="submit">{t('user_settings.save')}</Button>
         </DialogActions>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
 export const UserSettingsPage = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { identity, setIdentity } = useIdentityContext()
+  const { identity, setIdentity } = useIdentityContext();
 
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleSnackbarClose = () => {
-    setSnackbarOpen(false)
-  }
+    setSnackbarOpen(false);
+  };
 
   return (
     <>
-      <PageTitle title={`osu!Peru - ${t("web_titles.settings")}`} />
+      <PageTitle title={`osu!Peru - ${t('web_titles.settings')}`} />
       <Box
         height={{ xs: 0, sm: 340 }}
         sx={{
-          backgroundSize: "cover",
+          backgroundSize: 'cover',
           backgroundImage: `url(${StaticPageBanner})`,
         }}
       />
@@ -435,14 +434,14 @@ export const UserSettingsPage = () => {
             justifyContent="center"
             alignItems="center"
             sx={{
-              backgroundSize: "cover",
+              backgroundSize: 'cover',
               backgroundImage: `url(${StaticPageBanner})`,
             }}
             py={5}
           >
             <Stack direction="column" alignItems="center">
               <SettingsIcon />
-              <Typography variant="h5">{t("user_settings.title")}</Typography>
+              <Typography variant="h5">{t('user_settings.title')}</Typography>
             </Stack>
           </Box>
           <Box bgcolor="#191527">
@@ -487,5 +486,5 @@ export const UserSettingsPage = () => {
         </Alert>
       </Snackbar>
     </>
-  )
-}
+  );
+};
