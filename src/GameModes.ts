@@ -85,9 +85,6 @@ export const getGameModeString = (gameMode: GameMode): string => {
   }
 };
 
-// Haz un metodo que devuelve si es standard, taiko, catch, mania
-// sin importar si es relax o autopilot
-// que devuelva el enum GameMode y no string
 export const getOriginalGameMode = (gameMode: GameMode): GameMode => {
   if (
     gameMode === GameMode.Standard ||
