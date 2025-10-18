@@ -28,6 +28,7 @@ import { HomePage } from './pages/HomePage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ScorePage } from './pages/ScorePage';
 import { SupportPage } from './pages/SupportPage';
 import { TeamPage } from './pages/TeamPage';
@@ -63,6 +64,7 @@ const router = createBrowserRouter(
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/terms-of-service" element={<TermsOfServicePage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
     </Route>,
   ),
 );

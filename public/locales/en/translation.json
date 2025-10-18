@@ -26,7 +26,22 @@
     "log_in_or_register": "Login or Register",
     "username": "Username",
     "password": "Password",
-    "email": "Email"
+    "email": "Email",
+    "password_reset_email_sended": "A password reset email has been sent."
+  },
+  "reset_password": {
+    "password_reset": "Password Reset",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "reset_password": "Reset Password",
+    "no_reset_token": "No password reset token provided. Please check the link you received.",
+    "requirements": {
+      "title": "Your password must at least:",
+      "length": "Contain 8 characters",
+      "digit": "Contain at least one digit",
+      "uppercase": "Contain at least one uppercase letter",
+      "lowercase": "Contain at least one lowercase letter"
+    }
   },
   "identity": {
     "my_profile": "My Profile",
