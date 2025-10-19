@@ -269,6 +269,7 @@ export const fetchAllScores = async (
     params: {
       page_size: request.limit,
       page: request.page,
+      order: 'desc',
     },
   });
 
