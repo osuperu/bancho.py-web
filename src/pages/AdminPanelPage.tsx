@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/complexity/noUselessFragments: <TODO element> */
-
 import { Box, Container, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
