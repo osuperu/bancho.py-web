@@ -35,10 +35,10 @@ export interface UserResponse {
     reason?: string;
     end?: Date;
   };
-  email?: string; // TODO?
+  email: string;
 }
 
-export interface UserEmailChangedResponse {
+export interface UserUpdatedResponse {
   status: string;
 }
 
@@ -90,6 +90,11 @@ export interface UserGrades {
 interface UserFriendsRequest {
   page: number;
   pageSize: number;
+}
+
+interface UsersRequest {
+  page: number;
+  limit: number;
 }
 
 export const fetchUser = async (userId: number): Promise<UserResponse> => {
@@ -147,8 +152,7 @@ export const fetchUser = async (userId: number): Promise<UserResponse> => {
         reason: 'Test',
         end: new Date(userResponse.data.data.silence_end),
       },
-      // TODO?
-      email: 'test@test.com',
+      email: userResponse.data.data.email,
     };
   } catch (e: any) {
     console.log(e);
@@ -156,10 +160,42 @@ export const fetchUser = async (userId: number): Promise<UserResponse> => {
   }
 };
 
-/**
- * 
-  /v2/players/friends
- */
+export const fetchUsers = async (
+  request: UsersRequest,
+): Promise<UserResponse[]> => {
+  const userResponse = await apiInstance.get(`/v2/players`, {
+    params: {
+      page_size: request.limit,
+      page: request.page,
+    },
+  });
+
+  return userResponse.data.data.map((user: any) => ({
+    id: user.id,
+    username: user.name,
+    registeredOn: new Date(user.creation_time * 1000),
+    privileges: user.priv,
+    latestActivity: new Date(user.latest_activity * 1000),
+    country: user.country,
+    stats: [],
+    clan: {
+      id: 1,
+      name: 'Test',
+      tag: '[Test]',
+      description: 'Test',
+      icon: '',
+      owner: 3,
+      status: 0,
+    },
+    followers: 0, // TODO
+    silenceInfo: {
+      reason: 'Test',
+      end: new Date(user.silence_end),
+    },
+    email: user.email,
+  }));
+};
+
 export const fetchUsersFriends = async (
   request: UserFriendsRequest,
 ): Promise<UserResponse[]> => {
@@ -199,7 +235,7 @@ export const fetchUsersFriends = async (
 export const updateUsername = async (
   currentPassword: string,
   newUsername: string,
-): Promise<UserEmailChangedResponse> => {
+): Promise<UserUpdatedResponse> => {
   try {
     const response = await apiInstance.put(`/v2/players/username`, {
       current_password: currentPassword,
@@ -218,7 +254,7 @@ export const updateUsername = async (
 export const updateEmail = async (
   currentPassword: string,
   newEmail: string,
-): Promise<UserEmailChangedResponse> => {
+): Promise<UserUpdatedResponse> => {
   try {
     const response = await apiInstance.put(`/v2/players/email`, {
       current_password: currentPassword,
@@ -237,7 +273,7 @@ export const updateEmail = async (
 export const updatePassword = async (
   currentPassword: string,
   newPassword: string,
-): Promise<UserEmailChangedResponse> => {
+): Promise<UserUpdatedResponse> => {
   try {
     const response = await apiInstance.put(`/v2/players/password`, {
       current_password: currentPassword,
@@ -255,7 +291,7 @@ export const updatePassword = async (
 
 export const updateAvatar = async (
   avatarFile: File,
-): Promise<UserEmailChangedResponse> => {
+): Promise<UserUpdatedResponse> => {
   try {
     const formData = new FormData();
     formData.append('avatar', avatarFile);
@@ -279,4 +315,26 @@ export const fetchTotalRegisteredUsers = async (): Promise<number> => {
   const registeredUsersResponse = await apiInstance.get('/v2/players');
 
   return registeredUsersResponse.data.meta.total;
+};
+
+export const updateUser = async (
+  id: number,
+  username: string,
+  email: string,
+  country: string,
+  privileges: number,
+  remove_avatar: boolean,
+): Promise<UserUpdatedResponse> => {
+  const response = await apiInstance.put('/v2/players', {
+    id,
+    username,
+    email,
+    country: country.toLowerCase(),
+    priv: privileges,
+    remove_avatar,
+  });
+
+  return {
+    status: response.data.status,
+  };
 };

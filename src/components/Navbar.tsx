@@ -30,6 +30,7 @@ import {
 } from '../adapters/bpy-api/search';
 import HomepageBanner from '../components/images/banners/homepage_banner.svg';
 import { type Identity, useIdentityContext } from '../context/Identity';
+import { UserPrivileges } from '../privileges';
 import { LoginDoorIcon } from './images/logos/icons/LoginDoorIcon';
 import { UserFriendsIcon } from './images/logos/icons/UserFriendsIcon';
 import { UserLogoutIcon } from './images/logos/icons/UserLogoutIcon';
@@ -468,15 +469,18 @@ export const ProfileSettingsMenu = ({
             <Typography variant="body1">{t('identity.friends')}</Typography>
           </Stack>
         </MenuItem>
-        {/* {identity.privileges & UserPrivileges.ADMIN_ACCESS_RAP && (
-          <MenuItem
-            component={Link}
-            onClick={handleClose}
-            to={process.env.PUBLIC_APP_ADMIN_PANEL_HOME_URL}
-          >
-            <Typography variant="body1">Admin Panel</Typography>
+        {(identity.privileges & UserPrivileges.ADMINISTRATOR) !== 0 && (
+          <MenuItem component={Link} onClick={handleClose} to={'/admin-panel'}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Box width={22} height={22}>
+                <UserSettingsIcon />
+              </Box>
+              <Typography variant="body1">
+                {t('identity.admin_panel')}
+              </Typography>
+            </Stack>
           </MenuItem>
-        )} */}
+        )}
         <MenuItem
           component={Link}
           onClick={handleClose}

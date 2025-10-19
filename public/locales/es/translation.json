@@ -46,8 +46,11 @@
   "identity": {
     "my_profile": "Mi perfil",
     "friends": "Amigos",
+    "admin_panel": "Panel de administración",
     "settings": "Configuraciones",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "sign_in_required": "¡Por favor, inicia sesión en tu cuenta primero!",
+    "not_authorized": "No estás autorizado para acceder a esta página."
   },
   "leaderboard": {
     "title": "Tabla de Clasificación",
@@ -161,5 +164,37 @@
     "change_avatar_here": "Cambia tu avatar aquí",
     "select_avatar": "Seleccionar Avatar",
     "selected_file": "Archivo seleccionado"
+  },
+  "admin_panel": {
+    "menu": {
+      "users": "Usuarios",
+      "recent_plays": "Jugadas recientes"
+    },
+    "title": "Panel de administración",
+    "users": {
+      "id": "ID",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "actions": "Acciones"
+    },
+    "user_edit": {
+      "title": "Editar usuario",
+      "remove_avatar": "Eliminar avatar",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "country": "País",
+      "privileges": "Privilegios",
+      "save": "Guardar",
+      "back_to_users": "Volver a usuarios"
+    },
+    "recent_plays": {
+      "id": "ID",
+      "beatmap": "Beatmap",
+      "player": "Jugador",
+      "score": "Puntuación",
+      "accuracy": "Precisión",
+      "pp": "PP",
+      "mods": "Mods"
+    }
   }
 }

@@ -46,8 +46,11 @@
   "identity": {
     "my_profile": "My Profile",
     "friends": "Friends",
+    "admin_panel": "Admin Panel",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "sign_in_required": "Please sign into your account first!",
+    "not_authorized": "You are not authorized to access this page."
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -161,5 +164,37 @@
     "change_avatar_here": "Change your avatar here",
     "select_avatar": "Select Avatar",
     "selected_file": "Selected file"
+  },
+  "admin_panel": {
+    "menu": {
+      "users": "Users",
+      "recent_plays": "Recent Plays"
+    },
+    "title": "Admin Panel",
+    "users": {
+      "id": "ID",
+      "username": "Username",
+      "email": "Email",
+      "actions": "Actions"
+    },
+    "user_edit": {
+      "title": "Edit user",
+      "remove_avatar": "Remove avatar",
+      "username": "Username",
+      "email": "Email",
+      "country": "Country",
+      "privileges": "Privileges",
+      "save": "Save",
+      "back_to_users": "Back to users"
+    },
+    "recent_plays": {
+      "id": "ID",
+      "beatmap": "Beatmap",
+      "player": "Player",
+      "score": "Score",
+      "accuracy": "Accuracy",
+      "pp": "PP",
+      "mods": "Mods"
+    }
   }
 }

@@ -65,6 +65,11 @@ export interface BeatmapDetails {
   latestUpdate: Date;
 }
 
+interface ScoresRequest {
+  page: number;
+  limit: number;
+}
+
 export const getScore = async (
   request: GetScoreRequest,
 ): Promise<GetScoreResponse> => {
@@ -254,6 +259,90 @@ export const fetchRecentScores = async (): Promise<GetRecentScoresResponse> => {
   return {
     status: submittedScoresResponse.data.status,
     scores: validFinalScores,
+  };
+};
+
+export const fetchAllScores = async (
+  request: ScoresRequest,
+): Promise<GetRecentScoresResponse> => {
+  const response = await apiInstance.get('/v2/scores', {
+    params: {
+      page_size: request.limit,
+      page: request.page,
+    },
+  });
+
+  const scores = await Promise.all(
+    response.data.data.map(async (score: any) => {
+      try {
+        const userResponse = await apiInstance.get(
+          `/v2/players/${score.userid}`,
+        );
+        const beatmapResponse = await apiInstance.get('/v1/get_map_info', {
+          params: {
+            md5: score.map_md5,
+          },
+        });
+
+        return {
+          id: score.id,
+          beatmapMd5: score.map_md5,
+          score: score.score,
+          maxCombo: score.max_combo,
+          fullCombo: score.perfect,
+          mods: score.mods,
+          count300: score.n300,
+          count100: score.n100,
+          count50: score.n50,
+          countGeki: score.ngeki,
+          countKatu: score.nkatu,
+          countMiss: score.nmiss,
+          time: new Date(score.play_time),
+          playMode: score.mode,
+          accuracy: score.acc,
+          pp: score.pp,
+          rank: score.grade,
+          completed: score.status >= 1 ? 1 : 0,
+          userId: score.userid,
+          user: {
+            id: userResponse.data.data.id,
+            username: userResponse.data.data.name,
+            registeredOn: new Date(userResponse.data.data.creation_time * 1000),
+            privileges: userResponse.data.data.priv,
+            latestActivity: new Date(
+              userResponse.data.data.latest_activity * 1000,
+            ),
+            country: userResponse.data.data.country,
+          },
+          beatmap: {
+            beatmapId: beatmapResponse.data.map.id,
+            beatmapsetId: beatmapResponse.data.map.set_id,
+            beatmapMd5: beatmapResponse.data.map.md5,
+            artist: beatmapResponse.data.map.artist,
+            title: beatmapResponse.data.map.title,
+            version: beatmapResponse.data.map.version,
+            ar: beatmapResponse.data.map.ar,
+            od: beatmapResponse.data.map.od,
+            difficulty: beatmapResponse.data.map.diff,
+            maxCombo: beatmapResponse.data.map.max_combo,
+            hitLength: beatmapResponse.data.map.total_length,
+            latestUpdate: beatmapResponse.data.map.last_update,
+          },
+        };
+      } catch (error) {
+        console.error('Error fetching score details:', error);
+        return null;
+      }
+    }),
+  );
+
+  const validScores = scores.filter(
+    (score): score is ScoreDetails => score !== null,
+  );
+
+  return {
+    status: response.data.status,
+    scores: validScores,
   };
 };
 

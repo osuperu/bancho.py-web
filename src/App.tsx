@@ -23,6 +23,7 @@ import Navbar from './components/Navbar';
 import { IdentityContextProvider } from './context/Identity';
 import { _i18n } from './i18n';
 import { AboutPage } from './pages/AboutPage';
+import { AdminPanelPage } from './pages/AdminPanelPage';
 import { BeatmapPage } from './pages/BeatmapPage';
 import { HomePage } from './pages/HomePage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
@@ -59,6 +60,7 @@ const router = createBrowserRouter(
       <Route path="/u/:userId/friends" element={<UserFriendsPage />} />
       <Route path="/b/:beatmapId/:mode?/:type?" element={<BeatmapPage />} />
       <Route path="/scores/:scoreId" element={<ScorePage />} />
+      <Route path="/admin-panel" element={<AdminPanelPage />} />
       <Route path="/support" element={<SupportPage />} />
       <Route path="/team" element={<TeamPage />} />
       <Route path="/contact" element={<ContactPage />} />
