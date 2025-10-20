@@ -20,6 +20,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import {
   authenticate,
+  initPasswordReset,
   logout,
   register,
 } from '../adapters/bpy-api/authentication';
@@ -29,6 +30,7 @@ import {
 } from '../adapters/bpy-api/search';
 import HomepageBanner from '../components/images/banners/homepage_banner.svg';
 import { type Identity, useIdentityContext } from '../context/Identity';
+import { UserPrivileges } from '../privileges';
 import { LoginDoorIcon } from './images/logos/icons/LoginDoorIcon';
 import { UserFriendsIcon } from './images/logos/icons/UserFriendsIcon';
 import { UserLogoutIcon } from './images/logos/icons/UserLogoutIcon';
@@ -67,34 +69,55 @@ export const AuthenticationSettingsMenu = ({
   const [hCaptchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const [loginError, setLoginError] = useState('');
+  const [serverError, setServerError] = useState('');
+  const [passwordResetPending, setPasswordResetPending] = useState(false);
 
   const handleLogin = async () => {
     if (!hCaptchaToken) {
-      setLoginError('Please complete the captcha');
+      setServerError('Please complete the captcha');
       return;
     }
 
     let identity: Identity;
     try {
       setLoading(true);
-      identity = await authenticate({ username, password, hCaptchaToken });
+      identity = await authenticate(username, password, hCaptchaToken);
     } catch (e: any) {
       setLoading(false);
-      setLoginError(e.message);
+      setServerError(e.message);
       return;
     }
 
     setLoading(false);
-    setLoginError('');
+    setServerError('');
     setIdentity(identity);
     captchaRef.current?.resetCaptcha();
     setCaptchaToken(null);
   };
 
+  const handlePasswordReset = async () => {
+    if (!hCaptchaToken) {
+      setServerError('Please complete the captcha.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await initPasswordReset(username, hCaptchaToken);
+    } catch (e: any) {
+      setLoading(false);
+      setServerError(e.message);
+      return;
+    }
+
+    setPasswordResetPending(true);
+    setLoading(false);
+    setServerError('');
+  };
+
   const handleRegister = async () => {
     if (!hCaptchaToken) {
-      setLoginError('Please complete the captcha');
+      setServerError('Please complete the captcha');
       return;
     }
 
@@ -108,12 +131,12 @@ export const AuthenticationSettingsMenu = ({
       });
       setIdentity(identity);
       setLoading(false);
-      setLoginError('');
+      setServerError('');
       captchaRef.current?.resetCaptcha();
       setCaptchaToken(null);
     } catch (e: any) {
       setLoading(false);
-      setLoginError(e.message);
+      setServerError(e.message);
       return;
     }
   };
@@ -240,14 +263,19 @@ export const AuthenticationSettingsMenu = ({
         <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
           <HCaptcha
             ref={captchaRef}
-            sitekey={process.env.PUBLIC_APP_HCAPTCHA_SITE_KEY}
+            sitekey={process.env.PUBLIC_APP_HCAPTCHA_SITE_KEY || ''}
             onVerify={(token) => setCaptchaToken(token)}
             onExpire={() => setCaptchaToken(null)}
           />
         </Box>
-        {loginError && (
+        {passwordResetPending && (
+          <Alert sx={{ mt: 1 }} severity="info">
+            {t('navbar.password_reset_email_sended')}
+          </Alert>
+        )}
+        {serverError && (
           <Alert sx={{ mt: 1 }} severity="error">
-            {loginError}
+            {serverError}
           </Alert>
         )}
         <Button
@@ -279,7 +307,7 @@ export const AuthenticationSettingsMenu = ({
         <Stack direction="row" spacing={1} justifyContent="space-around">
           <Button
             fullWidth
-            disabled
+            onClick={handlePasswordReset}
             sx={{
               textTransform: 'none',
               color: 'white',
@@ -292,6 +320,7 @@ export const AuthenticationSettingsMenu = ({
                 e?.stopPropagation();
               }
             }}
+            disabled={username === '' || loading || passwordResetPending}
           >
             <Typography variant="body1">
               {t('navbar.reset_password')}
@@ -440,15 +469,18 @@ export const ProfileSettingsMenu = ({
             <Typography variant="body1">{t('identity.friends')}</Typography>
           </Stack>
         </MenuItem>
-        {/* {identity.privileges & UserPrivileges.ADMIN_ACCESS_RAP && (
-          <MenuItem
-            component={Link}
-            onClick={handleClose}
-            to={process.env.PUBLIC_APP_ADMIN_PANEL_HOME_URL}
-          >
-            <Typography variant="body1">Admin Panel</Typography>
+        {(identity.privileges & UserPrivileges.ADMINISTRATOR) !== 0 && (
+          <MenuItem component={Link} onClick={handleClose} to={'/admin-panel'}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Box width={22} height={22}>
+                <UserSettingsIcon />
+              </Box>
+              <Typography variant="body1">
+                {t('identity.admin_panel')}
+              </Typography>
+            </Stack>
           </MenuItem>
-        )} */}
+        )}
         <MenuItem
           component={Link}
           onClick={handleClose}

@@ -26,13 +26,31 @@
     "log_in_or_register": "Iniciar sesión o registrarse",
     "username": "Nombre de usuario",
     "password": "Contraseña",
-    "email": "Correo electrónico"
+    "email": "Correo electrónico",
+    "password_reset_email_sended": "Se ha enviado un correo electrónico para restablecer la contraseña."
+  },
+  "reset_password": {
+    "password_reset": "Restablecimiento de contraseña",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar contraseña",
+    "reset_password": "Restablecer contraseña",
+    "no_reset_token": "No se proporcionó un token de restablecimiento de contraseña. Por favor, verifica el enlace que recibiste.",
+    "requirements": {
+      "title": "Tu contraseña debe al menos:",
+      "length": "Contener 8 caracteres",
+      "digit": "Contener al menos un dígito",
+      "uppercase": "Contener al menos una letra mayúscula",
+      "lowercase": "Contener al menos una letra minúscula"
+    }
   },
   "identity": {
     "my_profile": "Mi perfil",
     "friends": "Amigos",
+    "admin_panel": "Panel de administración",
     "settings": "Configuraciones",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "sign_in_required": "¡Por favor, inicia sesión en tu cuenta primero!",
+    "not_authorized": "No estás autorizado para acceder a esta página."
   },
   "leaderboard": {
     "title": "Tabla de Clasificación",
@@ -146,5 +164,37 @@
     "change_avatar_here": "Cambia tu avatar aquí",
     "select_avatar": "Seleccionar Avatar",
     "selected_file": "Archivo seleccionado"
+  },
+  "admin_panel": {
+    "menu": {
+      "users": "Usuarios",
+      "recent_plays": "Jugadas recientes"
+    },
+    "title": "Panel de administración",
+    "users": {
+      "id": "ID",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "actions": "Acciones"
+    },
+    "user_edit": {
+      "title": "Editar usuario",
+      "remove_avatar": "Eliminar avatar",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "country": "País",
+      "privileges": "Privilegios",
+      "save": "Guardar",
+      "back_to_users": "Volver a usuarios"
+    },
+    "recent_plays": {
+      "id": "ID",
+      "beatmap": "Beatmap",
+      "player": "Jugador",
+      "score": "Puntuación",
+      "accuracy": "Precisión",
+      "pp": "PP",
+      "mods": "Mods"
+    }
   }
 }

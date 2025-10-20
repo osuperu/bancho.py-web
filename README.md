@@ -8,5 +8,5 @@ It's based on the new frontend developed for [akatsuki](https://github.com/osuAk
 1. install at least node 18
 2. run `bun install` to install dependencies
 3. create a config file (`cp .env.example .env` and fill in the values)
-4. run `bun run start` to start the development server
-5. it should run on `http://localhost:3000`
+4. run `bun run dev` to start the development server
+5. it should run on `http://localhost:3000` if you didn't change the port in the .env file

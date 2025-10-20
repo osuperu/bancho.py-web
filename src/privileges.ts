@@ -13,3 +13,11 @@ export enum UserPrivileges {
   DONATOR = SUPPORTER | PREMIUM,
   STAFF = MODERATOR | ADMINISTRATOR | DEVELOPER,
 }
+
+export function formatPrivilegeName(key: string) {
+  const formatted = key
+    .toLowerCase()
+    .replace(/_/g, ' ')
+    .replace(/^\w/, (c) => c.toUpperCase());
+  return formatted;
+}

@@ -26,13 +26,31 @@
     "log_in_or_register": "Login or Register",
     "username": "Username",
     "password": "Password",
-    "email": "Email"
+    "email": "Email",
+    "password_reset_email_sended": "A password reset email has been sent."
+  },
+  "reset_password": {
+    "password_reset": "Password Reset",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "reset_password": "Reset Password",
+    "no_reset_token": "No password reset token provided. Please check the link you received.",
+    "requirements": {
+      "title": "Your password must at least:",
+      "length": "Contain 8 characters",
+      "digit": "Contain at least one digit",
+      "uppercase": "Contain at least one uppercase letter",
+      "lowercase": "Contain at least one lowercase letter"
+    }
   },
   "identity": {
     "my_profile": "My Profile",
     "friends": "Friends",
+    "admin_panel": "Admin Panel",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "sign_in_required": "Please sign into your account first!",
+    "not_authorized": "You are not authorized to access this page."
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -146,5 +164,37 @@
     "change_avatar_here": "Change your avatar here",
     "select_avatar": "Select Avatar",
     "selected_file": "Selected file"
+  },
+  "admin_panel": {
+    "menu": {
+      "users": "Users",
+      "recent_plays": "Recent Plays"
+    },
+    "title": "Admin Panel",
+    "users": {
+      "id": "ID",
+      "username": "Username",
+      "email": "Email",
+      "actions": "Actions"
+    },
+    "user_edit": {
+      "title": "Edit user",
+      "remove_avatar": "Remove avatar",
+      "username": "Username",
+      "email": "Email",
+      "country": "Country",
+      "privileges": "Privileges",
+      "save": "Save",
+      "back_to_users": "Back to users"
+    },
+    "recent_plays": {
+      "id": "ID",
+      "beatmap": "Beatmap",
+      "player": "Player",
+      "score": "Score",
+      "accuracy": "Accuracy",
+      "pp": "PP",
+      "mods": "Mods"
+    }
   }
 }
