@@ -207,7 +207,7 @@ export const getBeatmapSet = async (
         creator: diff.creator,
         bpm: diff.bpm,
         cs: diff.cs,
-        ar: diff.ar,Beatmap search web
+        ar: diff.ar,
         od: diff.od,
         hp: diff.hp,
         circleCount: 0,
