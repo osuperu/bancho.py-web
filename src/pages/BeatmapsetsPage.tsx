@@ -564,85 +564,75 @@ const useBeatmapSearch = (
   const [hasMore, setHasMore] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
 
-  const loadBeatmaps = useCallback(
-    async (page: number, append: boolean = false) => {
-      // Verificar privilegios antes de realizar cualquier búsqueda
-      if (!hasPrivileges) {
-        if (!append) {
-          setSearchResults([]);
-          setShowResults(false);
-        }
-        return;
+  const loadBeatmaps = async (page: number = 1, append: boolean = false) => {
+    // Verificar privilegios antes de realizar cualquier búsqueda
+    if (!hasPrivileges) {
+      if (!append) {
+        setSearchResults([]);
+        setShowResults(false);
+      }
+      return;
+    }
+
+    if (beatmapId === 0) {
+      if (!append) {
+        setSearchResults([]);
+        setShowResults(false);
       }
 
-      if (beatmapId === 0) {
+      const loading = page > 1 ? setLoadingMore : setIsSearching;
+      loading(true);
+
+      try {
+        const hasQuery = searchQuery.trim().length > 0;
+        const hasStatusFilter = selectedStatus !== MapStatus.ALL;
+        const hasServerFilter = selectedServer !== 'private';
+
+        const shouldSearch = hasQuery || hasStatusFilter || hasServerFilter;
+
+        let result: SearchResult;
+
+        if (shouldSearch) {
+          result = await searchBeatmapsets(
+            searchQuery,
+            gameMode,
+            selectedStatus === MapStatus.ALL ? undefined : selectedStatus,
+            selectedServer,
+            page,
+            BEATMAPS_PER_PAGE,
+          );
+        } else {
+          result = await getLocalBeatmapsets(
+            gameMode,
+            page,
+            BEATMAPS_PER_PAGE,
+            undefined,
+            'private',
+          );
+        }
+
+        if (append) {
+          setSearchResults((prev) => [...prev, ...result.results]);
+        } else {
+          setSearchResults(result.results);
+        }
+
+        setCurrentUrls(result.usedUrls);
+        setShowResults(true);
+        setHasMore(result.hasMore);
+        setTotalResults(result.total);
+        setCurrentPage(page);
+      } catch (error) {
+        console.error('Error loading beatmaps:', error);
         if (!append) {
           setSearchResults([]);
-          setShowResults(false);
+          setCurrentUrls([]);
         }
-
-        const loading = page > 1 ? setLoadingMore : setIsSearching;
-        loading(true);
-
-        try {
-          const hasQuery = searchQuery.trim().length > 0;
-          const hasStatusFilter = selectedStatus !== MapStatus.ALL;
-          const hasServerFilter = selectedServer !== 'private';
-
-          const shouldSearch = hasQuery || hasStatusFilter || hasServerFilter;
-
-          let result: SearchResult;
-
-          if (shouldSearch) {
-            result = await searchBeatmapsets(
-              searchQuery,
-              gameMode,
-              selectedStatus === MapStatus.ALL ? undefined : selectedStatus,
-              selectedServer,
-              page,
-              BEATMAPS_PER_PAGE,
-            );
-          } else {
-            result = await getLocalBeatmapsets(
-              gameMode,
-              page,
-              BEATMAPS_PER_PAGE,
-              undefined,
-              'private',
-            );
-          }
-
-          if (append) {
-            setSearchResults((prev) => [...prev, ...result.results]);
-          } else {
-            setSearchResults(result.results);
-          }
-
-          setCurrentUrls(result.usedUrls);
-          setShowResults(true);
-          setHasMore(result.hasMore);
-          setTotalResults(result.total);
-          setCurrentPage(page);
-        } catch (error) {
-          console.error('Error loading beatmaps:', error);
-          if (!append) {
-            setSearchResults([]);
-            setCurrentUrls([]);
-          }
-        } finally {
-          loading(false);
-        }
+      } finally {
+        loading(false);
       }
-    },
-    [
-      hasPrivileges,
-      beatmapId,
-      searchQuery,
-      selectedStatus,
-      selectedServer,
-      gameMode,
-    ],
-  );
+    }
+  };
 
   const loadMore = useCallback(() => {
     if (hasMore && !isSearching && !loadingMore && hasPrivileges) {
@@ -657,7 +647,7 @@ const useBeatmapSearch = (
     loadBeatmaps,
   ]);
 
-  const resetSearch = useCallback(() => {
+  const resetSearch = () => {
     if (!hasPrivileges) return;
 
     setSearchResults([]);
@@ -666,15 +656,15 @@ const useBeatmapSearch = (
     setTotalResults(0);
     setLoadingMore(false);
     setShowResults(false);
-  }, [hasPrivileges]);
+  };
 
-  const clearResults = useCallback(() => {
+  const clearResults = () => {
     setSearchResults([]);
     setShowResults(false);
     setCurrentPage(1);
     setHasMore(false);
     setTotalResults(0);
-  }, []);
+  };
 
   return {
     searchQuery,
@@ -710,25 +700,23 @@ const useBeatmapData = (
     Difficulty[]
   >([]);
 
-  const filterDifficultiesByGameMode = useCallback(
-    (difficulties: Difficulty[], mode: GameMode): Difficulty[] => {
-      if (mode === GameMode.Standard) {
-        return difficulties.filter(
-          (diff) => diff.gameMode === GameMode.Standard,
-        );
-      }
+  const filterDifficultiesByGameMode = (
+    difficulties: Difficulty[],
+    mode: GameMode,
+  ): Difficulty[] => {
+    if (mode === GameMode.Standard) {
+      return difficulties.filter((diff) => diff.gameMode === GameMode.Standard);
+    }
 
-      const nativeDifficulties = difficulties.filter(
-        (diff) => diff.gameMode === mode,
-      );
-      const convertedDifficulties = difficulties.filter(
-        (diff) => diff.gameMode === GameMode.Standard,
-      );
+    const nativeDifficulties = difficulties.filter(
+      (diff) => diff.gameMode === mode,
+    );
+    const convertedDifficulties = difficulties.filter(
+      (diff) => diff.gameMode === GameMode.Standard,
+    );
 
-      return [...nativeDifficulties, ...convertedDifficulties];
-    },
-    [],
-  );
+    return [...nativeDifficulties, ...convertedDifficulties];
+  };
 
   useEffect(() => {
     const fetchBeatmap = async () => {
@@ -818,15 +806,14 @@ export const BeatmapsetsPage = () => {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [search, hasPrivileges]);
+  }, [search.searchQuery, hasPrivileges]);
 
   useEffect(() => {
     if (!hasPrivileges) return;
 
     search.clearResults();
     search.loadBeatmaps(1, false);
-  }, [search, hasPrivileges]);
-
+  }, [search.selectedStatus, search.selectedServer, hasPrivileges]);
   // biome-ignore lint/correctness/useExhaustiveDependencies: search methods are stable
   useEffect(() => {
     if (!hasPrivileges) return;
