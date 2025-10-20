@@ -7,13 +7,13 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type {
   BeatmapDetails,
   Difficulty,
 } from '../../adapters/bpy-api/beatmaps';
 import { formatTime } from '../../adapters/bpy-api/beatmaps';
+import { useAudio } from '../../context/AudioContext';
 import { GameMode } from '../../GameModes';
 import { getRankedStatusString, type RankedStatus } from '../../RankedStatus';
 import { BPMIcon } from '../images/beatmap/BPMIcon';
@@ -32,6 +32,8 @@ interface BeatmapHeaderProps {
   selectedDifficulty: Difficulty | null;
   setSelectedDifficulty: (diff: Difficulty) => void;
   gameMode: GameMode;
+  onPlayPause?: () => void;
+  isPlaying?: boolean;
 }
 
 export const BeatmapHeader = ({
@@ -40,29 +42,29 @@ export const BeatmapHeader = ({
   selectedDifficulty,
   setSelectedDifficulty,
   gameMode,
+  onPlayPause,
 }: BeatmapHeaderProps) => {
   const { t } = useTranslation();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // ✅ Usar el hook de audio global
+  const { playAudio, pauseAudio, isPlaying: isGlobalPlaying } = useAudio();
 
   const handlePlayClick = () => {
     if (!beatmap) return;
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
+
+    // ✅ Usar el contexto global de audio
+    const beatmapSetId = beatmap.setId;
+    const isCurrentlyPlaying = isGlobalPlaying(beatmapSetId);
+
+    if (isCurrentlyPlaying) {
+      pauseAudio();
     } else {
-      const audio = new Audio(
-        `${process.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/preview/${beatmap.setId}.mp3`,
-      );
-      audioRef.current = audio;
-      audio.play();
-      setIsPlaying(true);
-      audio.onended = () => setIsPlaying(false);
+      const audioUrl = `${import.meta.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/preview/${beatmapSetId}.mp3`;
+      playAudio(beatmapSetId, audioUrl);
+    }
+
+    // ✅ Llamar al callback del padre si existe
+    if (onPlayPause) {
+      onPlayPause();
     }
   };
 
@@ -141,6 +143,9 @@ export const BeatmapHeader = ({
     selectedDifficulty?.gameMode === GameMode.Standard &&
     gameMode !== GameMode.Standard;
 
+  // ✅ Determinar si este beatmap está reproduciéndose
+  const isThisBeatmapPlaying = beatmap ? isGlobalPlaying(beatmap.setId) : false;
+
   return (
     <Container sx={{ px: { xs: 0, sm: 2 } }}>
       <Box
@@ -210,7 +215,9 @@ export const BeatmapHeader = ({
               height: '100%',
               minWidth: 0,
               borderRadius: 2,
-              background: 'rgba(21,18,35,0.45)',
+              background: isThisBeatmapPlaying
+                ? 'rgba(56,126,252,0.8)'
+                : 'rgba(21,18,35,0.45)',
               color: 'white',
               boxShadow: 'none',
               p: 0,
@@ -220,9 +227,10 @@ export const BeatmapHeader = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              transition: 'background-color 0.2s ease-in-out',
             }}
           >
-            {isPlaying ? <PlayIcon /> : <StopIcon />}
+            {isThisBeatmapPlaying ? <StopIcon /> : <PlayIcon />}
           </Button>
         </Box>
 
@@ -261,7 +269,9 @@ export const BeatmapHeader = ({
                 height: '100%',
                 minWidth: 0,
                 borderRadius: 2,
-                background: 'rgba(21,18,35,0.45)',
+                background: isThisBeatmapPlaying
+                  ? 'rgba(56,126,252,0.8)'
+                  : 'rgba(21,18,35,0.45)',
                 color: 'white',
                 boxShadow: 'none',
                 p: 0,
@@ -271,9 +281,10 @@ export const BeatmapHeader = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                transition: 'background-color 0.2s ease-in-out',
               }}
             >
-              {isPlaying ? <PlayIcon /> : <StopIcon />}
+              {isThisBeatmapPlaying ? <StopIcon /> : <PlayIcon />}
             </Button>
           </Box>
           <Stack spacing={0.5}>
@@ -526,7 +537,7 @@ export const BeatmapHeader = ({
             size="small"
             onClick={() =>
               window.open(
-                `${process.env.PUBLIC_APP_BPY_OSU_BASE_URL}/d/${beatmap?.setId}`,
+                `${import.meta.env.PUBLIC_APP_BPY_OSU_BASE_URL}/d/${beatmap?.setId}`,
               )
             }
             sx={{

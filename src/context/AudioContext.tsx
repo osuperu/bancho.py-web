@@ -1,10 +1,15 @@
-// context/AudioContext.tsx
 import type React from 'react';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 interface AudioContextType {
   currentPlaying: number | null;
-  playAudio: (setId: number, audioUrl: string) => void;
+  currentBeatmapInfo: { artist: string; title: string } | null; // ✅ Nueva propiedad
+  playAudio: (
+    setId: number,
+    audioUrl: string,
+    beatmapInfo?: { artist: string; title: string },
+  ) => void; // ✅ Actualizada
+  pauseAudio: () => void;
   stopAudio: () => void;
   closePlayer: () => void;
   isPlaying: (setId: number) => boolean;
@@ -14,7 +19,8 @@ interface AudioContextType {
   duration: number;
   seekTo: (time: number) => void;
   playerVisible: boolean;
-  playbackState: 'playing' | 'paused' | 'stopped'; // ✅ Nuevo estado de reproducción
+  playbackState: 'playing' | 'paused' | 'stopped';
+  currentAudioUrl: string | null;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -23,87 +29,116 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentPlaying, setCurrentPlaying] = useState<number | null>(null);
+  const [currentBeatmapInfo, setCurrentBeatmapInfo] = useState<{
+    artist: string;
+    title: string;
+  } | null>(null); // ✅ Nuevo estado
+  const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
   const [volume, setVolumeState] = useState<number>(0.5);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [playerVisible, setPlayerVisible] = useState<boolean>(false);
   const [playbackState, setPlaybackState] = useState<
     'playing' | 'paused' | 'stopped'
-  >('stopped'); // ✅ Nuevo estado
+  >('stopped');
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Actualizar volumen cuando cambie
   useEffect(() => {
-    if (audioRef.current) {
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
       audioRef.current.volume = volume;
     }
-  }, [volume]);
 
-  // Actualizar tiempo actual
-  useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
+    const handleEnded = () => {
+      setPlaybackState('stopped');
+      setCurrentTime(0);
+    };
+    const handlePause = () => {
+      if (playbackState === 'playing' && !audio.ended) {
+        setPlaybackState('paused');
+      }
+    };
+    const handlePlay = () => {
+      setPlaybackState('playing');
+    };
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('play', handlePlay);
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
       audio.removeEventListener('loadedmetadata', updateDuration);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('play', handlePlay);
     };
-  }, []);
+  }, [playbackState, volume]);
 
   const setVolume = (newVolume: number) => {
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
     setVolumeState(clampedVolume);
   };
 
-  const playAudio = (setId: number, audioUrl: string) => {
-    // Si ya está reproduciendo este mismo, pausarlo
-    if (currentPlaying === setId && audioRef.current) {
+  const playAudio = async (
+    setId: number,
+    audioUrl: string,
+    beatmapInfo?: { artist: string; title: string },
+  ) => {
+    // ✅ Actualizada
+    if (!audioRef.current) return;
+
+    if (currentPlaying === setId && currentAudioUrl === audioUrl) {
       if (playbackState === 'playing') {
-        audioRef.current.pause();
-        setPlaybackState('paused');
+        pauseAudio();
       } else {
-        audioRef.current.play();
+        await audioRef.current.play();
         setPlaybackState('playing');
       }
       return;
     }
 
-    // Pausar audio actual si hay uno reproduciéndose
-    if (audioRef.current) {
+    if (audioRef.current.src && currentAudioUrl !== audioUrl) {
       audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
 
-    // Reproducir nuevo audio
-    audioRef.current = new Audio(audioUrl);
+    audioRef.current.src = audioUrl;
     audioRef.current.volume = volume;
+
     setCurrentPlaying(setId);
+    setCurrentAudioUrl(audioUrl);
+    setCurrentBeatmapInfo(beatmapInfo || null);
     setPlayerVisible(true);
-    setPlaybackState('playing'); // ✅ Estado a playing
+    setCurrentTime(0);
 
-    audioRef.current.play();
+    try {
+      await audioRef.current.play();
+      setPlaybackState('playing');
+    } catch (error) {
+      console.error('Error playing audio:', error);
+      setPlaybackState('paused');
+    }
+  };
 
-    audioRef.current.onended = () => {
-      setPlaybackState('stopped'); // ✅ Estado a stopped cuando termina
-      setCurrentTime(0);
-    };
-
-    audioRef.current.onpause = () => {
-      if (currentPlaying === setId) {
-        setPlaybackState('paused'); // ✅ Estado a paused cuando se pausa
-      }
-    };
+  const pauseAudio = () => {
+    if (audioRef.current && playbackState === 'playing') {
+      audioRef.current.pause();
+      setPlaybackState('paused');
+    }
   };
 
   const stopAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
-      setPlaybackState('stopped'); // ✅ Estado a stopped
+      audioRef.current.currentTime = 0;
+      setPlaybackState('stopped');
       setCurrentTime(0);
     }
   };
@@ -118,13 +153,16 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
   const closePlayer = () => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current = null;
+      audioRef.current.currentTime = 0;
+      audioRef.current.src = '';
     }
     setCurrentPlaying(null);
+    setCurrentBeatmapInfo(null);
+    setCurrentAudioUrl(null);
     setCurrentTime(0);
     setDuration(0);
     setPlayerVisible(false);
-    setPlaybackState('stopped'); // ✅ Resetear estado
+    setPlaybackState('stopped');
   };
 
   const isPlaying = (setId: number) =>
@@ -134,7 +172,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
     <AudioContext.Provider
       value={{
         currentPlaying,
+        currentBeatmapInfo,
+        currentAudioUrl,
         playAudio,
+        pauseAudio,
         stopAudio,
         closePlayer,
         isPlaying,
@@ -144,10 +185,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
         duration,
         seekTo,
         playerVisible,
-        playbackState, // ✅ Exportar el estado de reproducción
+        playbackState,
       }}
     >
       {children}
+      <audio ref={audioRef} style={{ display: 'none' }} muted />
     </AudioContext.Provider>
   );
 };

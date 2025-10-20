@@ -21,7 +21,7 @@ export const GlobalAudioPlayer = () => {
     playerVisible,
     playbackState,
     playAudio,
-    stopAudio,
+    pauseAudio,
     closePlayer,
     volume,
     setVolume,
@@ -30,10 +30,10 @@ export const GlobalAudioPlayer = () => {
     seekTo,
   } = useAudio();
 
-  if (!playerVisible) return null;
+  if (!playerVisible || currentPlaying === null) return null;
 
   const formatTime = (seconds: number) => {
-    if (Number.isNaN(seconds)) return '0:00';
+    if (Number.isNaN(seconds) || !Number.isFinite(seconds)) return '0:00';
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -50,15 +50,13 @@ export const GlobalAudioPlayer = () => {
   const handleTogglePlay = () => {
     if (currentPlaying) {
       if (playbackState === 'playing') {
-        stopAudio();
+        pauseAudio();
       } else {
         const audioUrl = `${import.meta.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/preview/${currentPlaying}.mp3`;
         playAudio(currentPlaying, audioUrl);
       }
     }
   };
-
-  const canPlay = currentPlaying !== null;
 
   return (
     <Paper
@@ -68,8 +66,9 @@ export const GlobalAudioPlayer = () => {
         bottom: 16,
         right: 16,
         width: '90%',
-        maxWidth: 400,
+        maxWidth: 300,
         p: 2,
+        pl: 1,
         backgroundColor: 'background.paper',
         zIndex: 1000,
         border: '1px solid',
@@ -77,35 +76,63 @@ export const GlobalAudioPlayer = () => {
       }}
     >
       <Stack spacing={2}>
-        {/* progress bar */}
-        {duration > 0 && (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ minWidth: 40 }}
-            >
-              {formatTime(currentTime)}
-            </Typography>
-            <Slider
-              size="small"
-              value={currentTime}
-              max={duration || 0}
-              onChange={handleSeekChange}
-              sx={{ flex: 1 }}
-            />
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ minWidth: 40 }}
-            >
-              {formatTime(duration)}
-            </Typography>
-            {/* volume bar */}
-            <Box sx={{ display: 'flex', alignItems: 'center', width: 120 }}>
-              <VolumeDown
-                sx={{ color: 'text.secondary', mr: 1, fontSize: 20 }}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton
+            size="small"
+            onClick={closePlayer}
+            sx={{
+              color: 'text.secondary',
+              '&:hover': {
+                color: 'text.primary',
+                backgroundColor: 'action.hover',
+              },
+            }}
+          >
+            <Close fontSize="small" />
+          </IconButton>
+          <IconButton
+            size="medium"
+            onClick={handleTogglePlay}
+            color="primary"
+            sx={{
+              backgroundColor: 'primary.main',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'primary.dark',
+              },
+            }}
+          >
+            {playbackState === 'playing' ? <Pause /> : <PlayArrow />}
+          </IconButton>
+
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ minWidth: 25 }}
+              >
+                {formatTime(currentTime)}
+              </Typography>
+              <Slider
+                size="small"
+                value={currentTime}
+                max={duration || 0}
+                onChange={handleSeekChange}
+                sx={{ flex: 1 }}
+                disabled={!duration}
               />
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ minWidth: 25 }}
+              >
+                {formatTime(duration)}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <VolumeDown sx={{ color: 'text.secondary', fontSize: 20 }} />
               <Slider
                 size="small"
                 value={volume}
@@ -114,53 +141,10 @@ export const GlobalAudioPlayer = () => {
                 onChange={handleVolumeChange}
                 sx={{ flex: 1 }}
               />
-              <VolumeUp sx={{ color: 'text.secondary', ml: 1, fontSize: 20 }} />
-            </Box>
-            {/* buttons */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <IconButton
-                size="medium"
-                onClick={handleTogglePlay}
-                color={playbackState === 'playing' ? 'primary' : 'default'}
-                disabled={!canPlay} // ✅ Solo deshabilitar si no hay canción cargada
-                sx={{
-                  backgroundColor:
-                    playbackState === 'playing'
-                      ? 'primary.main'
-                      : 'action.selected',
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor:
-                      playbackState === 'playing'
-                        ? 'primary.dark'
-                        : 'action.hover',
-                  },
-                  '&.Mui-disabled': {
-                    backgroundColor: 'action.disabledBackground',
-                    color: 'action.disabled',
-                  },
-                }}
-              >
-                {playbackState === 'playing' ? <Pause /> : <PlayArrow />}
-              </IconButton>
-            </Box>
-            <Box>
-              <IconButton
-                size="small"
-                onClick={closePlayer}
-                sx={{
-                  color: 'text.secondary',
-                  '&:hover': {
-                    color: 'text.primary',
-                    backgroundColor: 'action.hover',
-                  },
-                }}
-              >
-                <Close fontSize="small" />
-              </IconButton>
+              <VolumeUp sx={{ color: 'text.secondary', fontSize: 20 }} />
             </Box>
           </Box>
-        )}
+        </Box>
       </Stack>
     </Paper>
   );
