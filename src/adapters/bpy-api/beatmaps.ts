@@ -8,6 +8,10 @@ export interface Difficulty {
   stars: number;
   creator: string;
   bpm: number;
+  cs: number;
+  ar: number;
+  od: number;
+  hp: number;
   circleCount: number;
   sliderCount: number;
   spinnerCount: number;
@@ -16,6 +20,8 @@ export interface Difficulty {
 
 export interface BeatmapDetails {
   id: number;
+  server: string;
+  status: number;
   setId: number;
   artist: string;
   title: string;
@@ -25,7 +31,6 @@ export interface BeatmapDetails {
   audioUrl: string;
   previewTime: number;
   length: number;
-  bpm: number;
   playCount: number;
   favoriteCount: number;
   passCount: number;
@@ -79,6 +84,8 @@ export const getBeatmapSet = async (
     status: beatmapSetResponse.data.status,
     beatmap: beatmapSetResponse.data.data?.map((beatmap: any) => ({
       id: beatmap.id,
+      server: beatmap.server,
+      status: beatmap.status,
       setId: beatmap.set_id,
       artist: beatmap.artist,
       title: beatmap.title,
@@ -88,7 +95,6 @@ export const getBeatmapSet = async (
       audioUrl: '', // API doesn't provide this field
       previewTime: 0, // API doesn't provide this field
       length: beatmap.total_length,
-      bpm: beatmap.bpm,
       playCount: beatmap.plays,
       favoriteCount: 0, // API doesn't provide this field
       passCount: beatmap.passes,
@@ -100,6 +106,10 @@ export const getBeatmapSet = async (
         stars: diff.diff,
         creator: diff.creator,
         bpm: diff.bpm,
+        cs: diff.cs,
+        ar: diff.ar,
+        od: diff.od,
+        hp: diff.hp,
         circleCount: 0, // API doesn't provide this field
         sliderCount: 0, // API doesn't provide this field
         spinnerCount: 0, // API doesn't provide this field

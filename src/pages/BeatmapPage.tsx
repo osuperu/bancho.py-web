@@ -10,9 +10,7 @@ import {
   type LeaderboardDetails,
 } from '../adapters/bpy-api/beatmaps';
 import { BeatmapHeader } from '../components/beatmap/BeatmapHeader';
-import { BeatmapInfo } from '../components/beatmap/BeatmapInfo';
 import { BeatmapLeaderboard } from '../components/beatmap/BeatmapLeaderboard';
-import { BeatmapStat } from '../components/beatmap/BeatmapStat';
 import { GamemodeSelectionBar } from '../components/GamemodeSelectionBar';
 import { PageTitle } from '../components/PageTitle';
 import {
@@ -259,7 +257,7 @@ export const BeatmapPage = () => {
           spacing={3}
           sx={{ width: '100%', mt: 3 }}
         >
-          <Box sx={{ width: { xs: '100%', md: '66.67%' } }}>
+          <Box sx={{ width: '100%' }}>
             <BeatmapLeaderboard
               leaderboard={leaderboard}
               isLoadingLeaderboard={isLoadingLeaderboard}
@@ -268,13 +266,6 @@ export const BeatmapPage = () => {
               showAllScores={showAllScores}
               toggleScoresView={toggleScoresView}
             />
-          </Box>
-
-          <Box sx={{ width: { xs: '100%', md: '33.33%' } }}>
-            <Stack spacing={3}>
-              <BeatmapStat difficulty={selectedDifficulty} />
-              <BeatmapInfo beatmap={beatmap} />
-            </Stack>
           </Box>
         </Stack>
       </Container>
