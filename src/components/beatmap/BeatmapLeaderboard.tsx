@@ -1,14 +1,16 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
-  Alert,
   Box,
   Button,
+  GridLegacy,
   IconButton,
   Menu,
   MenuItem,
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import type React from 'react';
 import { useId, useState } from 'react';
@@ -135,6 +137,9 @@ const ScoreOptionsMenu = ({ score }: { score: LeaderboardDetails }) => {
   );
 };
 
+const USER_RANK_BG_COLOR = 'rgba(21, 18, 35, 1)';
+const USER_INFO_BG_COLOR = 'rgba(30, 27, 47, 1)';
+
 export const BeatmapLeaderboard = ({
   leaderboard,
   isLoadingLeaderboard,
@@ -151,6 +156,8 @@ export const BeatmapLeaderboard = ({
   toggleScoresView: () => void;
 }) => {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const displayedScores = leaderboard
     ? showAllScores
@@ -162,7 +169,7 @@ export const BeatmapLeaderboard = ({
     <Paper
       elevation={0}
       sx={{
-        p: 2,
+        p: 0,
         borderRadius: 2,
         background: '#191527',
         maxHeight: '800px',
@@ -170,8 +177,14 @@ export const BeatmapLeaderboard = ({
         flexDirection: 'column',
       }}
     >
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h6" sx={{ pb: 1 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        px={3}
+        pt={2}
+      >
+        <Typography variant="h6">
           {t('beatmap.top_scores')}{' '}
           {leaderboard
             ? `(${showAllScores ? leaderboard.length : Math.min(20, leaderboard.length)})`
@@ -197,271 +210,358 @@ export const BeatmapLeaderboard = ({
           </Button>
         )}
       </Stack>
-
-      <Box sx={{ overflowY: 'auto', flex: 1 }}>
-        {!selectedDifficulty ? (
-          <Alert
-            severity="info"
-            sx={{ bgcolor: 'rgba(13, 59, 102, 0.5)', color: 'white' }}
-          >
-            {t('beatmap.no_diffs_available')}
-          </Alert>
-        ) : isLoadingLeaderboard ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-            <Typography color="white">
-              {t('beatmap.loading_leaderboard')}
-            </Typography>
-          </Box>
-        ) : leaderboardError ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-            <Typography color="error">{leaderboardError}</Typography>
-          </Box>
-        ) : displayedScores.length === 0 ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-            <Typography color="white">
-              {t('beatmap.no_scores_available')}
-            </Typography>
-          </Box>
-        ) : (
-          displayedScores.map((score, index) => (
-            <LeaderboardScoreItem
-              key={`${score.playerId}-${index}`}
-              score={score}
-              index={index}
-            />
-          ))
-        )}
+      <Box
+        sx={{
+          overflowY: 'auto',
+          overflowX: 'auto',
+          flex: 1,
+          px: { xs: 1, sm: 3 },
+          pb: 2,
+        }}
+      >
+        <Box sx={!isMobile ? { width: '100%' } : {}}>
+          {!isMobile && <LeaderboardTableHeader t={t} />}
+          {!selectedDifficulty ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+              <Typography color="white">
+                {t('beatmap.no_diffs_available')}
+              </Typography>
+            </Box>
+          ) : isLoadingLeaderboard ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+              <Typography color="white">
+                {t('beatmap.loading_leaderboard')}
+              </Typography>
+            </Box>
+          ) : leaderboardError ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+              <Typography color="error">{leaderboardError}</Typography>
+            </Box>
+          ) : displayedScores.length === 0 ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+              <Typography color="white">
+                {t('beatmap.no_scores_available')}
+              </Typography>
+            </Box>
+          ) : (
+            <Stack spacing={isMobile ? 2 : 1}>
+              {displayedScores.map((score, index) => (
+                <LeaderboardScoreItem
+                  key={`${score.playerId}-${index}`}
+                  score={score}
+                  index={index}
+                  isMobile={isMobile}
+                />
+              ))}
+            </Stack>
+          )}
+        </Box>
       </Box>
     </Paper>
   );
 };
 
+const GRID_COLUMNS = '75px 2fr 1fr 1fr 1fr 1fr 2fr 48px';
+
+const LeaderboardTableHeader = ({ t }: { t: any }) => (
+  <GridLegacy
+    display="grid"
+    gridTemplateColumns={GRID_COLUMNS}
+    alignItems="center"
+    px={0}
+    py={1}
+    sx={{
+      background: '#191527',
+      borderRadius: 2,
+      mb: 1,
+    }}
+  >
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      minWidth="75px"
+    >
+      <Typography fontSize={15} fontWeight={300} color="hsl(0deg 0 100% / 60%)">
+        #
+      </Typography>
+    </Box>
+    <Box display="flex" alignItems="center" pl={2} minWidth="150px">
+      <Typography fontSize={15} fontWeight={300} color="hsl(0deg 0 100% / 60%)">
+        {t('leaderboard.player')}
+      </Typography>
+    </Box>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-end"
+      pr={2}
+      minWidth="100px"
+    >
+      <Typography fontSize={15} fontWeight={300} color="hsl(0deg 0 100% / 60%)">
+        {t('leaderboard.score')}
+      </Typography>
+    </Box>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-end"
+      pr={2}
+      minWidth="80px"
+    >
+      <Typography fontSize={15} fontWeight={300} color="hsl(0deg 0 100% / 60%)">
+        {t('leaderboard.accuracy_2')}
+      </Typography>
+    </Box>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-end"
+      pr={2}
+      minWidth="80px"
+    >
+      <Typography fontSize={15} fontWeight={300} color="hsl(0deg 0 100% / 60%)">
+        {t('leaderboard.combo')}
+      </Typography>
+    </Box>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-end"
+      pr={2}
+      minWidth="90px"
+    >
+      <Typography fontSize={15} fontWeight={300} color="hsl(0deg 0 100% / 60%)">
+        {t('leaderboard.pp')}
+      </Typography>
+    </Box>
+    <Box display="flex" alignItems="center" pl={1} minWidth="140px">
+      <Typography fontSize={15} fontWeight={300} color="hsl(0deg 0 100% / 60%)">
+        {t('leaderboard.mods')}
+      </Typography>
+    </Box>
+    <Box minWidth="48px" />
+  </GridLegacy>
+);
+
 const LeaderboardScoreItem = ({
   score,
   index,
+  isMobile,
 }: {
   score: LeaderboardDetails;
   index: number;
+  isMobile: boolean;
 }) => {
   const { t } = useTranslation();
 
-  return (
-    <Link
-      to={`/u/${score.playerId}`}
-      style={{
-        color: '#FFFFFF',
-        textDecoration: 'none',
-        display: 'block',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          justifyContent: 'space-between',
-          p: 1.5,
-          borderBottom: '1px solid rgba(255,255,255,0.05)',
-          '&:last-child': { borderBottom: 'none' },
-          '&:hover': {
-            backgroundColor: 'rgba(255,255,255,0.05)',
-            cursor: 'pointer',
-          },
-          transition: 'background-color 0.2s ease',
-        }}
-      >
-        {/* Mobile View */}
-        <Box
-          sx={{
-            display: { xs: 'flex', sm: 'none' },
-            flexDirection: 'column',
-            width: '100%',
-          }}
-        >
-          {/* Top row with rank, flag, player name and options menu */}
+  if (isMobile) {
+    return (
+      <Stack direction="column" borderRadius={4} mt={1} overflow="hidden">
+        <Stack direction="row" bgcolor={USER_INFO_BG_COLOR}>
           <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mb: 1,
-            }}
+            minWidth={75}
+            p={1}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bgcolor={USER_RANK_BG_COLOR}
           >
-            <Box display="flex" alignItems="center">
-              <Typography
-                variant="body2"
-                color="rgba(255, 255, 255, 0.5)"
-                sx={{
-                  width: 30,
-                  mr: 1,
-                }}
-              >
-                #{index + 1}
-              </Typography>
-              <Box
-                component="img"
-                src={getFlagUrl(score.country.toUpperCase())}
-                sx={{
-                  width: 20,
-                  height: 15,
-                  objectFit: 'cover',
-                  borderRadius: 0.5,
-                  mr: 1,
-                }}
-              />
-              <Typography variant="body1" color="white" fontWeight={300}>
-                {score.name}
-              </Typography>
-            </Box>
+            <Typography variant="body1">#{index + 1}</Typography>
+          </Box>
+          <Box display="flex" alignItems="center" p={1}>
+            <Box
+              component="img"
+              src={getFlagUrl(score.country.toUpperCase())}
+              sx={{
+                width: 24,
+                height: 18,
+                objectFit: 'cover',
+                borderRadius: 0.5,
+                mr: 1,
+              }}
+            />
+            <Link
+              to={`/u/${score.playerId}`}
+              style={{
+                color: '#FFFFFF',
+                textDecoration: 'none',
+              }}
+            >
+              <Typography variant="body1">{score.name}</Typography>
+            </Link>
+          </Box>
+          <Box ml="auto" mr={1}>
             <ScoreOptionsMenu score={score} />
           </Box>
-
-          {/* Bottom row with score details in a nice grid */}
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: 1,
-              ml: 4, // Indent to align with player name
-            }}
-          >
-            <Box>
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                {t('leaderboard.score')}
-              </Typography>
-              <Typography variant="body2" color="white">
-                {score.tScore.toLocaleString()}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                {t('leaderboard.accuracy_2')}
-              </Typography>
-              <Typography variant="body2" color="white">
-                {score.acc.toFixed(2)}%
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                {t('leaderboard.combo')}
-              </Typography>
-              <Typography variant="body2" color="white">
-                {score.maxCombo}x
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                {t('leaderboard.pp')}
-              </Typography>
-              <Typography variant="body2" color="white">
-                {score.pp.toFixed(2)}pp
-              </Typography>
-            </Box>
-            <Box sx={{ gridColumn: '1 / -1' }}>
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                {t('leaderboard.mods')}
-              </Typography>
-              <Box display="flex" gap={0.5} sx={{ flexWrap: 'wrap', mt: 0.5 }}>
-                {getIndividualMods(score.mods).map((mod) => (
-                  <ModIcon key={mod} variant={mod} width={35} height={24} />
-                ))}
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-
-        {/* Desktop View */}
-        <Box
-          display={{ xs: 'none', sm: 'flex' }}
+        </Stack>
+        <Stack
+          direction="row"
+          justifyContent="space-around"
+          bgcolor={USER_RANK_BG_COLOR}
+        >
+          <Stack direction="row" p={1}>
+            <Typography fontSize={15} fontWeight={300}>
+              {t('leaderboard.score')}:&nbsp;
+            </Typography>
+            <Typography>{score.tScore.toLocaleString()}</Typography>
+          </Stack>
+          <Stack direction="row" p={1}>
+            <Typography fontSize={15} fontWeight={300}>
+              {t('leaderboard.accuracy_2')}:&nbsp;
+            </Typography>
+            <Typography>{score.acc.toFixed(2)}%</Typography>
+          </Stack>
+        </Stack>
+        <Stack
+          direction="row"
+          justifyContent="space-around"
+          bgcolor={USER_RANK_BG_COLOR}
+        >
+          <Stack direction="row" p={1}>
+            <Typography fontSize={15} fontWeight={300}>
+              {t('leaderboard.combo')}:&nbsp;
+            </Typography>
+            <Typography>{score.maxCombo}x</Typography>
+          </Stack>
+          <Stack direction="row" p={1}>
+            <Typography fontSize={15} fontWeight={300}>
+              {t('leaderboard.pp')}:&nbsp;
+            </Typography>
+            <Typography>{score.pp.toFixed(2)}pp</Typography>
+          </Stack>
+        </Stack>
+        <Stack
+          direction="row"
           alignItems="center"
-          gap={2}
-          width="200px"
+          p={1}
+          bgcolor={USER_RANK_BG_COLOR}
         >
-          <Typography
-            variant="body2"
-            color="rgba(255, 255, 255, 0.5)"
-            width={25}
-          >
-            #{index + 1}
+          <Typography fontSize={15} fontWeight={300} mr={1}>
+            {t('leaderboard.mods')}:
           </Typography>
-          <Box
-            component="img"
-            src={getFlagUrl(score.country.toUpperCase())}
-            sx={{
-              width: 20,
-              height: 15,
-              objectFit: 'cover',
-              borderRadius: 0.5,
-              mr: 1,
-            }}
-          />
-          <Typography
-            noWrap
-            variant="body1"
-            color="white"
-            fontWeight={300}
-            sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}
-          >
-            {score.name}
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: { xs: 'none', sm: 'flex' },
-            alignItems: 'center',
-            flex: 1,
-            gap: 2,
-          }}
-        >
-          <Typography
-            variant="body2"
-            color="white"
-            width="100px"
-            textAlign="right"
-          >
-            {score.tScore.toLocaleString()}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="white"
-            width="70px"
-            textAlign="right"
-          >
-            {score.acc.toFixed(2)}%
-          </Typography>
-          <Typography
-            variant="body2"
-            color="white"
-            width="60px"
-            textAlign="right"
-          >
-            {score.maxCombo}x
-          </Typography>
-          <Typography
-            variant="body2"
-            color="white"
-            width="70px"
-            textAlign="right"
-          >
-            {score.pp.toFixed(2)}pp
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 0.5,
-              minWidth: 120,
-              flexWrap: 'wrap',
-              justifyContent: 'flex-end',
-              flex: 1,
-            }}
-          >
+          <Box display="flex" gap={0.5} sx={{ flexWrap: 'wrap' }}>
             {getIndividualMods(score.mods).map((mod) => (
               <ModIcon key={mod} variant={mod} width={35} height={24} />
             ))}
           </Box>
-          <ScoreOptionsMenu score={score} />
-        </Box>
+        </Stack>
+      </Stack>
+    );
+  }
+
+  return (
+    <GridLegacy
+      display="grid"
+      mb={1}
+      gridTemplateColumns={GRID_COLUMNS}
+      borderRadius={2}
+      overflow="hidden"
+      sx={{
+        background: USER_INFO_BG_COLOR,
+        '&:hover': {
+          backgroundColor: 'rgba(255,255,255,0.05)',
+          cursor: 'pointer',
+        },
+        transition: 'background-color 0.2s ease',
+      }}
+    >
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        bgcolor={USER_RANK_BG_COLOR}
+        height="100%"
+        minWidth="75px"
+      >
+        <Typography variant="body1">#{index + 1}</Typography>
       </Box>
-    </Link>
+      <Box display="flex" alignItems="center" pl={2} minWidth="0">
+        <Box
+          component="img"
+          src={getFlagUrl(score.country.toUpperCase())}
+          sx={{
+            width: 24,
+            height: 18,
+            objectFit: 'cover',
+            borderRadius: 0.5,
+            mr: 1,
+          }}
+        />
+        <Link
+          to={`/u/${score.playerId}`}
+          style={{
+            color: '#FFFFFF',
+            textDecoration: 'none',
+            fontWeight: 300,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <Typography variant="body1">{score.name}</Typography>
+        </Link>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+        pr={2}
+        minWidth="100px"
+      >
+        <Typography variant="body2" color="white">
+          {score.tScore.toLocaleString()}
+        </Typography>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+        pr={2}
+        minWidth="80px"
+      >
+        <Typography variant="body2" color="white">
+          {score.acc.toFixed(2)}%
+        </Typography>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+        pr={2}
+        minWidth="80px"
+      >
+        <Typography variant="body2" color="white">
+          {score.maxCombo}x
+        </Typography>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+        pr={2}
+        minWidth="90px"
+      >
+        <Typography variant="body2" color="white">
+          {score.pp.toFixed(2)}pp
+        </Typography>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        pl={1}
+        sx={{
+          flexWrap: 'wrap',
+          gap: 0.5,
+        }}
+      >
+        {getIndividualMods(score.mods).map((mod) => (
+          <ModIcon key={mod} variant={mod} width={35} height={24} />
+        ))}
+      </Box>
+      <Box display="flex" justifyContent="center" minWidth="48px">
+        <ScoreOptionsMenu score={score} />
+      </Box>
+    </GridLegacy>
   );
 };

@@ -70,11 +70,12 @@
     "accuracy": "Precisión",
     "download_replay": "Descargar repetición",
     "view_score": "Ver puntuación",
-    "score": "PUNTUACIÓN",
-    "accuracy_2": "PRECISIÓN",
-    "combo": "COMBO",
+    "player": "Jugador",
+    "score": "Puntuación",
+    "accuracy_2": "Precisión",
+    "combo": "Combo",
     "pp": "PP",
-    "mods": "MODS"
+    "mods": "Mods"
   },
   "profile": {
     "activity_dates": {
@@ -120,6 +121,10 @@
     "beatmap_info": "Información del mapa",
     "star_rating": "Estrellas de dificultad",
     "bpm": "BPM",
+    "ar": "Tasa de aproximación",
+    "od": "Precisión",
+    "hp": "Drenaje de HP",
+    "cs": "Tamaño del círculo",
     "circles_capitalized": "Circulos",
     "sliders_capitalized": "Deslizadores",
     "spinners_capitalized": "Spinners",

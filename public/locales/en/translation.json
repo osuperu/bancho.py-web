@@ -70,11 +70,12 @@
     "accuracy": "Accuracy",
     "download_replay": "Download Replay",
     "view_score": "View Score",
-    "score": "SCORE",
-    "accuracy_2": "ACCURACY",
-    "combo": "COMBO",
+    "player": "Player",
+    "score": "Score",
+    "accuracy_2": "Accuracy",
+    "combo": "Combo",
     "pp": "PP",
-    "mods": "MODS"
+    "mods": "Mods"
   },
   "profile": {
     "activity_dates": {
@@ -120,6 +121,10 @@
     "beatmap_info": "Beatmap Info",
     "star_rating": "Star Rating",
     "bpm": "BPM",
+    "ar": "Approach Rate",
+    "od": "Overall Difficulty",
+    "hp": "HP Drain",
+    "cs": "Circle Size",
     "circles_capitalized": "Circles",
     "sliders_capitalized": "Sliders",
     "spinners_capitalized": "Spinners",
