@@ -1,11 +1,10 @@
 import { Box, Button, Paper, Stack, Typography } from '@mui/material';
-import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import {
   type BeatmapDetails,
   formatTime,
 } from '../../adapters/bpy-api/beatmaps';
+import { useAudio } from '../../context/AudioContext';
 
 export const BeatmapInfo = ({
   beatmap,
@@ -13,33 +12,16 @@ export const BeatmapInfo = ({
   beatmap: BeatmapDetails | null;
 }) => {
   const { t } = useTranslation();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { playAudio, isPlaying } = useAudio();
 
   const handlePlayClick = () => {
     if (!beatmap) return;
-
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    } else {
-      const audio = new Audio(
-        `${process.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/preview/${beatmap.setId}.mp3`,
-      );
-      audioRef.current = audio;
-      audio.play();
-      setIsPlaying(true);
-
-      audio.onended = () => {
-        setIsPlaying(false);
-      };
-    }
+    const audioUrl = `${import.meta.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/preview/${beatmap.setId}.mp3`;
+    playAudio(beatmap.setId, audioUrl);
   };
+
+  // ✅ CORREGIDO: isPlaying es una función, necesitas pasarle el setId
+  const isThisBeatmapPlaying = beatmap ? isPlaying(beatmap.setId) : false;
 
   return (
     <Paper
@@ -119,7 +101,7 @@ export const BeatmapInfo = ({
           variant="contained"
           onClick={() => {
             window.open(
-              `${process.env.PUBLIC_APP_BPY_OSU_BASE_URL}/d/${beatmap?.setId}`,
+              `${import.meta.env.PUBLIC_APP_BPY_OSU_BASE_URL}/d/${beatmap?.setId}`,
             );
           }}
           sx={{
@@ -141,16 +123,18 @@ export const BeatmapInfo = ({
           onClick={handlePlayClick}
           sx={{
             color: 'white',
-            borderColor: 'rgba(255, 255, 255, 0.3)',
+            borderColor: isThisBeatmapPlaying
+              ? '#FFBD3B'
+              : 'rgba(255, 255, 255, 0.3)',
             textTransform: 'none',
             borderRadius: 3,
             '&:hover': {
-              borderColor: 'white',
+              borderColor: isThisBeatmapPlaying ? '#FFBD3B' : 'white',
               bgcolor: 'rgba(255, 255, 255, 0.05)',
             },
           }}
         >
-          {isPlaying ? t('beatmap.stop') : t('beatmap.play')}
+          {isThisBeatmapPlaying ? t('beatmap.stop') : t('beatmap.play')}
         </Button>
       </Stack>
     </Paper>

@@ -16,6 +16,7 @@
   },
   "navbar": {
     "home": "Inicio",
+    "beatmapsets": "Mapas",
     "leaderboards": "Clasificaciones",
     "about": "Acerca de",
     "search": "¿Buscando a alguien?",
@@ -51,6 +52,15 @@
     "logout": "Cerrar sesión",
     "sign_in_required": "¡Por favor, inicia sesión en tu cuenta primero!",
     "not_authorized": "No estás autorizado para acceder a esta página."
+  },
+  "beatmapset": {
+    "title": "Mapas",
+    "search_placeholder": "Busca mapas por artista, título o creador...",
+    "mapped_by": "Mapeado por",
+    "loading_beatmapsets": "Cargando mapas...",
+    "no_beatmapsets_found": "No se encontraron mapas",
+    "try_adjusting_search": "Intenta ajustar tu búsqueda o filtros para encontrar lo que buscas.",
+    "login_required": "Debes iniciar sesión para ver esta sección."
   },
   "leaderboard": {
     "title": "Tabla de Clasificación",
