@@ -45,13 +45,11 @@ export const BeatmapHeader = ({
   onPlayPause,
 }: BeatmapHeaderProps) => {
   const { t } = useTranslation();
-  // ✅ Usar el hook de audio global
   const { playAudio, pauseAudio, isPlaying: isGlobalPlaying } = useAudio();
 
   const handlePlayClick = () => {
     if (!beatmap) return;
 
-    // ✅ Usar el contexto global de audio
     const beatmapSetId = beatmap.setId;
     const isCurrentlyPlaying = isGlobalPlaying(beatmapSetId);
 
@@ -62,7 +60,6 @@ export const BeatmapHeader = ({
       playAudio(beatmapSetId, audioUrl);
     }
 
-    // ✅ Llamar al callback del padre si existe
     if (onPlayPause) {
       onPlayPause();
     }
@@ -143,7 +140,6 @@ export const BeatmapHeader = ({
     selectedDifficulty?.gameMode === GameMode.Standard &&
     gameMode !== GameMode.Standard;
 
-  // ✅ Determinar si este beatmap está reproduciéndose
   const isThisBeatmapPlaying = beatmap ? isGlobalPlaying(beatmap.setId) : false;
 
   return (
