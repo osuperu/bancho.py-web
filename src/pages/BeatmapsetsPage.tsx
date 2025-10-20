@@ -30,14 +30,12 @@ import {
   searchBeatmapsets,
 } from '../adapters/bpy-api/beatmaps';
 import { BeatmapHeader } from '../components/beatmap/BeatmapHeader';
-import { BeatmapInfo } from '../components/beatmap/BeatmapInfo';
-import { BeatmapStat } from '../components/beatmap/BeatmapStat';
 import { BeatmapsetCard } from '../components/beatmap/BeatmapsetCard';
 import LeaderboardBanner from '../components/images/banners/leaderboard_banner.svg';
-import BeatmapsetIcon from '../components/images/logos/icons/BeatmapsetIcon.png';
 import { PageTitle } from '../components/PageTitle';
 import { useIdentityContext } from '../context/Identity';
 import { GameMode, gameModeType, getGameModeString } from '../GameModes';
+import { BeatmapPage } from '../pages/BeatmapPage';
 
 const SearchHeader = () => {
   const { t } = useTranslation();
@@ -65,7 +63,6 @@ const SearchHeader = () => {
           <Stack direction="row" alignItems="center" gap={3}>
             <Box width={70} height={70}>
               <img
-                src={BeatmapsetIcon}
                 alt="Beatmapset Icon"
                 style={{ width: '100%', height: '100%' }}
               />
@@ -535,8 +532,7 @@ const BeatmapDetailView = ({
 
           <Box sx={{ width: { xs: '100%', md: '33.33%' } }}>
             <Stack spacing={3}>
-              <BeatmapStat difficulty={selectedDifficulty} />
-              <BeatmapInfo beatmap={beatmap} />
+              <BeatmapPage beatmap={beatmap} />
             </Stack>
           </Box>
         </Stack>
@@ -803,7 +799,7 @@ export const BeatmapsetsPage = () => {
     const timeoutId = setTimeout(() => {
       search.resetSearch();
       search.loadBeatmaps(1, false);
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timeoutId);
   }, [search.searchQuery, hasPrivileges]);
