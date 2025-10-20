@@ -1,26 +1,86 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Tooltip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { BeatmapDetails } from '../../adapters/bpy-api/beatmaps';
 import { useAudio } from '../../context/AudioContext';
+import { GameMode } from '../../GameModes';
+import { CatchGameModeIcon } from '../images/gamemode-icons/CatchGamemodeIcon';
+import { ManiaGameModeIcon } from '../images/gamemode-icons/ManiaGamemodeIcon';
+import { StandardGameModeIcon } from '../images/gamemode-icons/StandardGamemodeIcon';
+import { TaikoGameModeIcon } from '../images/gamemode-icons/TaikoGamemodeIcon';
 
 interface BeatmapsetCardProps {
   beatmapset: BeatmapDetails;
   onSelect: (beatmapset: BeatmapDetails) => void;
 }
 
-const getDifficultyImage = (starRating: number): string => {
-  if (starRating <= 1.99)
-    return 'https://i.ppy.sh/e4046437c0d195a3f2bed4b4140a41d696bdf7f0/68747470733a2f2f6f73752e7070792e73682f77696b692f696d616765732f7368617265642f646966662f656173792d6f2e706e673f3230323131323135';
-  if (starRating <= 2.69)
-    return 'https://i.ppy.sh/20d7052354c61f8faf3a4828d9ff7751bb6776b1/68747470733a2f2f6f73752e7070792e73682f77696b692f696d616765732f7368617265642f646966662f6e6f726d616c2d6f2e706e673f3230323131323135';
-  if (starRating <= 3.99)
-    return 'https://i.ppy.sh/f6eabcfbacdfe85e520106702ec3a382a0430d40/68747470733a2f2f6f73752e7070792e73682f77696b692f696d616765732f7368617265642f646966662f696e73616e652d6f2e706e673f3230323131323135';
-  if (starRating <= 5.29)
-    return 'https://i.ppy.sh/f6eabcfbacdfe85e520106702ec3a382a0430d40/68747470733a2f2f6f73752e7070792e73682f77696b692f696d616765732f7368617265642f646966662f696e73616e652d6f2e706e673f3230323131323135';
-  if (starRating <= 6.49)
-    return 'https://i.ppy.sh/cd145e0f3cf7039d72cb7cfe58f3931585f8e7a7/68747470733a2f2f6f73752e7070792e73682f77696b692f696d616765732f7368617265642f646966662f6578706572742d6f2e706e673f3230323131323135';
-  return 'https://i.ppy.sh/3b561ef8a73118940b59e79f3433bfa98c26cbf1/68747470733a2f2f6f73752e7070792e73682f77696b692f696d616765732f7368617265642f646966662f657870657274706c75732d6f2e706e673f3230323131323135';
+const getDifficultyColor = (stars: number): string => {
+  const domain = [0.1, 1.25, 2, 2.5, 3.3, 4.2, 4.9, 5.8, 6.7, 7.7, 9];
+  const range = [
+    '#4290FB',
+    '#4FC0FF',
+    '#4FFFD5',
+    '#7CFF4F',
+    '#F6F05C',
+    '#FF8068',
+    '#FF4E6F',
+    '#C645B8',
+    '#6563DE',
+    '#18158E',
+    '#000000',
+  ];
+
+  if (stars > 9) {
+    return '#000000';
+  }
+
+  let index = 0;
+  while (index < domain.length - 1 && stars >= domain[index]) {
+    index++;
+  }
+
+  if (index === 0) {
+    return range[0];
+  } else if (index === domain.length) {
+    return range[range.length - 1];
+  } else {
+    const prevValue = domain[index - 1];
+    const nextValue = domain[index];
+    const prevColor = range[index - 1];
+    const nextColor = range[index];
+    const proportion = (stars - prevValue) / (nextValue - prevValue);
+
+    const prevRed = Number.parseInt(prevColor.substring(1, 3), 16);
+    const prevGreen = Number.parseInt(prevColor.substring(3, 5), 16);
+    const prevBlue = Number.parseInt(prevColor.substring(5, 7), 16);
+
+    const nextRed = Number.parseInt(nextColor.substring(1, 3), 16);
+    const nextGreen = Number.parseInt(nextColor.substring(3, 5), 16);
+    const nextBlue = Number.parseInt(nextColor.substring(5, 7), 16);
+
+    const red = Math.round(prevRed + (nextRed - prevRed) * proportion);
+    const green = Math.round(prevGreen + (nextGreen - prevGreen) * proportion);
+    const blue = Math.round(prevBlue + (nextBlue - prevBlue) * proportion);
+
+    return `#${red.toString(16).padStart(2, '0')}${green
+      .toString(16)
+      .padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
+  }
+};
+
+const getGameModeIcon = (mode: GameMode) => {
+  switch (mode) {
+    case GameMode.Standard:
+      return <StandardGameModeIcon />;
+    case GameMode.Taiko:
+      return <TaikoGameModeIcon />;
+    case GameMode.Catch:
+      return <CatchGameModeIcon />;
+    case GameMode.Mania:
+      return <ManiaGameModeIcon />;
+    default:
+      return null;
+  }
 };
 
 export const BeatmapsetCard = ({ beatmapset }: BeatmapsetCardProps) => {
@@ -33,7 +93,10 @@ export const BeatmapsetCard = ({ beatmapset }: BeatmapsetCardProps) => {
   const handlePlayClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const audioUrl = `${import.meta.env.PUBLIC_APP_BPY_MAPS_BASE_URL}/preview/${beatmapset.setId}.mp3`;
-    playAudio(beatmapset.setId, audioUrl);
+    playAudio(beatmapset.setId, audioUrl, {
+      artist: beatmapset.artist,
+      title: beatmapset.title,
+    });
   };
 
   const handleDownloadClick = (e: React.MouseEvent) => {
@@ -141,22 +204,38 @@ export const BeatmapsetCard = ({ beatmapset }: BeatmapsetCardProps) => {
 
         <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
           {sortedDifficulties.slice(0, 6).map((difficulty) => (
-            <img
+            <Tooltip
               key={difficulty.id}
-              src={getDifficultyImage(difficulty.stars)}
-              title={`${difficulty.name} - ${difficulty.stars}★`}
-              alt={difficulty.name}
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 2,
-              }}
-            />
+              title={`${difficulty.name} - ${difficulty.stars.toFixed(2)}★`}
+              arrow
+            >
+              <Box
+                sx={{
+                  width: 20,
+                  height: 20,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                <Box
+                  sx={{
+                    color: getDifficultyColor(difficulty.stars),
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {getGameModeIcon(difficulty.gameMode)}
+                </Box>
+              </Box>
+            </Tooltip>
           ))}
           {sortedDifficulties.length > 6 && (
             <Typography
               variant="caption"
-              sx={{ color: '#FFFFFF80', alignSelf: 'center' }}
+              sx={{ color: '#FFFFFF80', alignSelf: 'center', fontSize: '10px' }}
             >
               +{sortedDifficulties.length - 6}
             </Typography>
