@@ -1,6 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search';
 import {
   Box,
+  Button,
   CircularProgress,
   Container,
   Divider,
@@ -60,7 +61,7 @@ const SearchHeader = () => {
           justifyContent={{ xs: 'space-around', sm: 'space-between' }}
           alignItems="center"
         >
-          <Stack direction="row" alignItems="center" gap={3}>
+          <Stack direction="row" alignItems="center, gap={3}">
             <Box width={70} height={70}>
               <img
                 alt="Beatmapset Icon"
@@ -92,6 +93,7 @@ const SearchFilters = ({
   onStatusChange,
   onServerChange,
   onGameModeChange,
+  onSearchClick,
   isLoading,
   hasPrivileges,
 }: {
@@ -103,10 +105,17 @@ const SearchFilters = ({
   onStatusChange: (event: any) => void;
   onServerChange: (event: any) => void;
   onGameModeChange: (mode: GameMode | typeof ALL_GAME_MODES) => void;
+  onSearchClick: () => void;
   isLoading: boolean;
   hasPrivileges: boolean;
 }) => {
   const { t } = useTranslation();
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !isLoading && hasPrivileges) {
+      onSearchClick();
+    }
+  };
 
   return (
     <Box sx={{ p: 1, bgcolor: '#211D35', position: 'relative' }}>
@@ -146,41 +155,72 @@ const SearchFilters = ({
         }}
       >
         <Stack spacing={2}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder={
-              hasPrivileges
-                ? t('beatmapset.search_placeholder')
-                : 'Inicia sesión para buscar'
-            }
-            value={searchQuery}
-            onChange={onSearchChange}
-            disabled={isLoading || !hasPrivileges}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: '#FFFFFF80' }} />
-                </InputAdornment>
-              ),
-              sx: {
-                backgroundColor: '#2A2438',
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            alignItems="stretch"
+          >
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder={
+                hasPrivileges
+                  ? t('beatmapset.search_placeholder')
+                  : 'Inicia sesión para buscar'
+              }
+              value={searchQuery}
+              onChange={onSearchChange}
+              onKeyPress={handleKeyPress}
+              disabled={isLoading || !hasPrivileges}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: '#FFFFFF80' }} />
+                  </InputAdornment>
+                ),
+                sx: {
+                  backgroundColor: '#2A2438',
+                  color: 'white',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#FFFFFF40',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#FFFFFF60',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#FFBD3B',
+                  },
+                  '&.Mui-disabled': {
+                    opacity: 0.7,
+                  },
+                },
+              }}
+            />
+            <Button
+              variant="contained"
+              onClick={onSearchClick}
+              disabled={isLoading || !hasPrivileges}
+              sx={{
+                minWidth: '120px',
+                height: '56px',
+                backgroundColor: 'rgba(60, 53, 85, 1)',
                 color: 'white',
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: '#FFFFFF40',
+                textTransform: 'none',
+                borderRadius: 2,
+                fontSize: '16px',
+                fontWeight: 'bold',
+                '&:hover': {
+                  opacity: 0.9,
                 },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: '#FFFFFF60',
+                '&:disabled': {
+                  background: '#666666',
+                  color: '#999999',
                 },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: '#FFBD3B',
-                },
-                '&.Mui-disabled': {
-                  opacity: 0.7,
-                },
-              },
-            }}
-          />
+              }}
+            >
+              {t('beatmapset.search_button') || 'Buscar'}
+            </Button>
+          </Stack>
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <FormControl
@@ -560,75 +600,85 @@ const useBeatmapSearch = (
   const [hasMore, setHasMore] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
 
-  const loadBeatmaps = async (page: number = 1, append: boolean = false) => {
-    // Verificar privilegios antes de realizar cualquier búsqueda
-    if (!hasPrivileges) {
-      if (!append) {
-        setSearchResults([]);
-        setShowResults(false);
-      }
-      return;
-    }
-
-    if (beatmapId === 0) {
-      if (!append) {
-        setSearchResults([]);
-        setShowResults(false);
-      }
-
-      const loading = page > 1 ? setLoadingMore : setIsSearching;
-      loading(true);
-
-      try {
-        const hasQuery = searchQuery.trim().length > 0;
-        const hasStatusFilter = selectedStatus !== MapStatus.ALL;
-        const hasServerFilter = selectedServer !== 'private';
-
-        const shouldSearch = hasQuery || hasStatusFilter || hasServerFilter;
-
-        let result: SearchResult;
-
-        if (shouldSearch) {
-          result = await searchBeatmapsets(
-            searchQuery,
-            gameMode,
-            selectedStatus === MapStatus.ALL ? undefined : selectedStatus,
-            selectedServer,
-            page,
-            BEATMAPS_PER_PAGE,
-          );
-        } else {
-          result = await getLocalBeatmapsets(
-            gameMode,
-            page,
-            BEATMAPS_PER_PAGE,
-            undefined,
-            'private',
-          );
-        }
-
-        if (append) {
-          setSearchResults((prev) => [...prev, ...result.results]);
-        } else {
-          setSearchResults(result.results);
-        }
-
-        setCurrentUrls(result.usedUrls);
-        setShowResults(true);
-        setHasMore(result.hasMore);
-        setTotalResults(result.total);
-        setCurrentPage(page);
-      } catch (error) {
-        console.error('Error loading beatmaps:', error);
+  const loadBeatmaps = useCallback(
+    async (page: number = 1, append: boolean = false) => {
+      // Verificar privilegios antes de realizar cualquier búsqueda
+      if (!hasPrivileges) {
         if (!append) {
           setSearchResults([]);
-          setCurrentUrls([]);
+          setShowResults(false);
         }
-      } finally {
-        loading(false);
+        return;
       }
-    }
-  };
+
+      if (beatmapId === 0) {
+        if (!append) {
+          setSearchResults([]);
+          setShowResults(false);
+        }
+
+        const loading = page > 1 ? setLoadingMore : setIsSearching;
+        loading(true);
+
+        try {
+          const hasQuery = searchQuery.trim().length > 0;
+          const hasStatusFilter = selectedStatus !== MapStatus.ALL;
+          const hasServerFilter = selectedServer !== 'private';
+
+          const shouldSearch = hasQuery || hasStatusFilter || hasServerFilter;
+
+          let result: SearchResult;
+
+          if (shouldSearch) {
+            result = await searchBeatmapsets(
+              searchQuery,
+              gameMode,
+              selectedStatus === MapStatus.ALL ? undefined : selectedStatus,
+              selectedServer,
+              page,
+              BEATMAPS_PER_PAGE,
+            );
+          } else {
+            result = await getLocalBeatmapsets(
+              gameMode,
+              page,
+              BEATMAPS_PER_PAGE,
+              undefined,
+              'private',
+            );
+          }
+
+          if (append) {
+            setSearchResults((prev) => [...prev, ...result.results]);
+          } else {
+            setSearchResults(result.results);
+          }
+
+          setCurrentUrls(result.usedUrls);
+          setShowResults(true);
+          setHasMore(result.hasMore);
+          setTotalResults(result.total);
+          setCurrentPage(page);
+        } catch (error) {
+          console.error('Error loading beatmaps:', error);
+          if (!append) {
+            setSearchResults([]);
+            setCurrentUrls([]);
+          }
+        } finally {
+          loading(false);
+        }
+      }
+    },
+    [
+      hasPrivileges,
+      beatmapId,
+      searchQuery,
+      gameMode,
+      selectedStatus,
+      selectedServer,
+    ],
+  );
 
   const loadMore = useCallback(() => {
     if (hasMore && !isSearching && !loadingMore && hasPrivileges) {
@@ -662,6 +712,12 @@ const useBeatmapSearch = (
     setTotalResults(0);
   };
 
+  const performSearch = () => {
+    if (!hasPrivileges) return;
+    resetSearch();
+    loadBeatmaps(1, false);
+  };
+
   return {
     searchQuery,
     setSearchQuery,
@@ -681,6 +737,7 @@ const useBeatmapSearch = (
     loadMore,
     resetSearch,
     clearResults,
+    performSearch,
   };
 };
 
@@ -696,23 +753,25 @@ const useBeatmapData = (
     Difficulty[]
   >([]);
 
-  const filterDifficultiesByGameMode = (
-    difficulties: Difficulty[],
-    mode: GameMode,
-  ): Difficulty[] => {
-    if (mode === GameMode.Standard) {
-      return difficulties.filter((diff) => diff.gameMode === GameMode.Standard);
-    }
+  const filterDifficultiesByGameMode = useCallback(
+    (difficulties: Difficulty[], mode: GameMode): Difficulty[] => {
+      if (mode === GameMode.Standard) {
+        return difficulties.filter(
+          (diff) => diff.gameMode === GameMode.Standard,
+        );
+      }
 
-    const nativeDifficulties = difficulties.filter(
-      (diff) => diff.gameMode === mode,
-    );
-    const convertedDifficulties = difficulties.filter(
-      (diff) => diff.gameMode === GameMode.Standard,
-    );
+      const nativeDifficulties = difficulties.filter(
+        (diff) => diff.gameMode === mode,
+      );
+      const convertedDifficulties = difficulties.filter(
+        (diff) => diff.gameMode === GameMode.Standard,
+      );
 
-    return [...nativeDifficulties, ...convertedDifficulties];
-  };
+      return [...nativeDifficulties, ...convertedDifficulties];
+    },
+    [],
+  );
 
   useEffect(() => {
     const fetchBeatmap = async () => {
@@ -792,31 +851,9 @@ export const BeatmapsetsPage = () => {
     hasPrivileges,
   );
 
-  // Efecto para búsqueda con debounce - solo si tiene privilegios
-  useEffect(() => {
-    if (!hasPrivileges) return;
-
-    const timeoutId = setTimeout(() => {
-      search.resetSearch();
-      search.loadBeatmaps(1, false);
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [search.searchQuery, hasPrivileges]);
-
-  useEffect(() => {
-    if (!hasPrivileges) return;
-
-    search.clearResults();
-    search.loadBeatmaps(1, false);
-  }, [search.selectedStatus, search.selectedServer, hasPrivileges]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: search methods are stable
-  useEffect(() => {
-    if (!hasPrivileges) return;
-
-    search.clearResults();
-    search.loadBeatmaps(1, false);
-  }, [gameMode, hasPrivileges]);
+  const handleSearchClick = () => {
+    search.performSearch();
+  };
 
   const handleBeatmapsetSelect = (beatmapset: BeatmapDetails) => {
     if (!hasPrivileges) return;
@@ -851,6 +888,11 @@ export const BeatmapsetsPage = () => {
     search.setSelectedServer(newServer);
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!hasPrivileges) return;
+    search.setSearchQuery(e.target.value);
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#151223' }}>
       <PageTitle
@@ -864,10 +906,11 @@ export const BeatmapsetsPage = () => {
         selectedStatus={search.selectedStatus}
         selectedServer={search.selectedServer}
         gameMode={gameMode}
-        onSearchChange={(e) => search.setSearchQuery(e.target.value)}
+        onSearchChange={handleSearchChange}
         onStatusChange={(e) => handleStatusChange(Number(e.target.value))}
         onServerChange={(e) => handleServerChange(e.target.value)}
         onGameModeChange={handleGameModeChange}
+        onSearchClick={handleSearchClick}
         isLoading={search.isSearching}
         hasPrivileges={hasPrivileges}
       />

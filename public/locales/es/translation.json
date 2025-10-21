@@ -60,7 +60,8 @@
     "loading_beatmapsets": "Cargando mapas...",
     "no_beatmapsets_found": "No se encontraron mapas",
     "try_adjusting_search": "Intenta ajustar tu búsqueda o filtros para encontrar lo que buscas.",
-    "login_required": "Debes iniciar sesión para ver esta sección."
+    "login_required": "Debes iniciar sesión para ver esta sección.",
+    "search_button": "Buscar"
   },
   "leaderboard": {
     "title": "Tabla de Clasificación",

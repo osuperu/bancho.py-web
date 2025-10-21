@@ -60,7 +60,8 @@
     "mapped_by": "Mapped by",
     "loading_beatmapsets": "Loading beatmapsets...",
     "no_beatmapsets_found": "No beatmapsets found",
-    "try_adjusting_search": "Try adjusting your search or filters to find what you're looking for."
+    "try_adjusting_search": "Try adjusting your search or filters to find what you're looking for.",
+    "search_button": "Buscar"
   },
   "leaderboard": {
     "title": "Leaderboard",
