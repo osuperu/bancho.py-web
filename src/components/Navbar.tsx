@@ -581,6 +581,13 @@ export default function Navbar() {
                 <Typography variant="body1">{t('navbar.home')}</Typography>
               </Button>
             </Link>
+            <Link to="/beatmapsets">
+              <Button sx={{ color: 'white', textTransform: 'none' }}>
+                <Typography variant="body1">
+                  {t('navbar.beatmapsets')}
+                </Typography>
+              </Button>
+            </Link>
             <Link to="/leaderboard">
               <Button sx={{ color: 'white', textTransform: 'none' }}>
                 <Typography variant="body1">
