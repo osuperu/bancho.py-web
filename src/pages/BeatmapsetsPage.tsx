@@ -775,7 +775,6 @@ const useBeatmapData = (
 
   useEffect(() => {
     const fetchBeatmap = async () => {
-      // No cargar beatmaps si no hay privilegios
       if (!hasPrivileges) {
         setBeatmap(null);
         setSelectedDifficulty(null);
