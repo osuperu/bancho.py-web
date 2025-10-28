@@ -47,14 +47,13 @@ const AppLayout = () => {
         direction="column"
         justifyContent="space-between"
         minHeight="100vh"
-        position="relative" // ✅ Añadir esto
+        position="relative"
       >
         <Navbar />
         <Box flexGrow={1}>
           <Outlet />
         </Box>
         <Footer />
-        {/* ✅ El reproductor se renderiza aquí pero con position fixed */}
         <GlobalAudioPlayer />
       </Stack>
     </AudioProvider>
