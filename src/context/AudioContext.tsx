@@ -3,12 +3,12 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 interface AudioContextType {
   currentPlaying: number | null;
-  currentBeatmapInfo: { artist: string; title: string } | null; // ✅ Nueva propiedad
+  currentBeatmapInfo: { artist: string; title: string } | null;
   playAudio: (
     setId: number,
     audioUrl: string,
     beatmapInfo?: { artist: string; title: string },
-  ) => void; // ✅ Actualizada
+  ) => void;
   pauseAudio: () => void;
   stopAudio: () => void;
   closePlayer: () => void;
@@ -32,7 +32,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentBeatmapInfo, setCurrentBeatmapInfo] = useState<{
     artist: string;
     title: string;
-  } | null>(null); // ✅ Nuevo estado
+  } | null>(null);
   const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
   const [volume, setVolumeState] = useState<number>(0.5);
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -81,6 +81,12 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, [playbackState, volume]);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
   const setVolume = (newVolume: number) => {
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
     setVolumeState(clampedVolume);
@@ -91,7 +97,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
     audioUrl: string,
     beatmapInfo?: { artist: string; title: string },
   ) => {
-    // ✅ Actualizada
     if (!audioRef.current) return;
 
     if (currentPlaying === setId && currentAudioUrl === audioUrl) {
@@ -189,7 +194,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
       }}
     >
       {children}
-      <audio ref={audioRef} style={{ display: 'none' }} muted />
+      {/** biome-ignore lint/a11y/useMediaCaption: <No caption needed> */}
+      <audio ref={audioRef} style={{ display: 'none' }} />
     </AudioContext.Provider>
   );
 };

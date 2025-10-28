@@ -5,7 +5,6 @@ import {
   CircularProgress,
   Container,
   Divider,
-  Fade,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -30,13 +29,12 @@ import {
   type SearchResult,
   searchBeatmapsets,
 } from '../adapters/bpy-api/beatmaps';
-import { BeatmapHeader } from '../components/beatmap/BeatmapHeader';
 import { BeatmapsetCard } from '../components/beatmap/BeatmapsetCard';
 import LeaderboardBanner from '../components/images/banners/leaderboard_banner.svg';
+import { BeatmapsetIcon } from '../components/images/logos/icons/BeatmapsetIcon';
 import { PageTitle } from '../components/PageTitle';
 import { useIdentityContext } from '../context/Identity';
 import { GameMode, gameModeType, getGameModeString } from '../GameModes';
-import { BeatmapPage } from '../pages/BeatmapPage';
 
 const SearchHeader = () => {
   const { t } = useTranslation();
@@ -61,12 +59,9 @@ const SearchHeader = () => {
           justifyContent={{ xs: 'space-around', sm: 'space-between' }}
           alignItems="center"
         >
-          <Stack direction="row" alignItems="center, gap={3}">
+          <Stack direction="row" alignItems="center" gap={3}>
             <Box width={70} height={70}>
-              <img
-                alt="Beatmapset Icon"
-                style={{ width: '100%', height: '100%' }}
-              />
+              <BeatmapsetIcon />
             </Box>
             <Divider
               flexItem
@@ -118,229 +113,193 @@ const SearchFilters = ({
   };
 
   return (
-    <Box sx={{ p: 1, bgcolor: '#211D35', position: 'relative' }}>
-      {/* Overlay de carga */}
-      {isLoading && (
-        <Fade in={isLoading}>
-          <Box
+    <Container sx={{ backgroundColor: '#191527', py: 3 }}>
+      <Stack spacing={2}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
+          alignItems="stretch"
+        >
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder={
+              hasPrivileges
+                ? t('beatmapset.search_placeholder')
+                : 'Inicia sesión para buscar'
+            }
+            value={searchQuery}
+            onChange={onSearchChange}
+            onKeyPress={handleKeyPress}
+            disabled={isLoading || !hasPrivileges}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: '#FFFFFF80' }} />
+                </InputAdornment>
+              ),
+              sx: {
+                backgroundColor: '#2A2438',
+                color: 'white',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF40',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF60',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFBD3B',
+                },
+                '&.Mui-disabled': {
+                  opacity: 0.7,
+                },
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={onSearchClick}
+            disabled={isLoading || !hasPrivileges}
             sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(33, 29, 53, 0.8)',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 10,
-              borderRadius: 1,
+              minWidth: '120px',
+              height: '56px',
+              backgroundColor: 'rgba(60, 53, 85, 1)',
+              color: 'white',
+              textTransform: 'none',
+              borderRadius: 2,
+              fontSize: '16px',
+              fontWeight: 'bold',
+              '&:hover': {
+                opacity: 0.9,
+              },
+              '&:disabled': {
+                background: '#666666',
+                color: '#999999',
+              },
             }}
           >
-            <Stack alignItems="center" spacing={2}>
-              <CircularProgress sx={{ color: '#FFBD3B' }} size={40} />
-              <Typography color="#FFFFFF" variant="body2">
-                {t('beatmapset.loading_beatmapsets')}
-              </Typography>
-            </Stack>
-          </Box>
-        </Fade>
-      )}
-
-      <Container
-        sx={{
-          width: '70%',
-          maxWidth: 'none !important',
-          opacity: isLoading || !hasPrivileges ? 0.6 : 1,
-        }}
-      >
-        <Stack spacing={2}>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-            alignItems="stretch"
-          >
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder={
-                hasPrivileges
-                  ? t('beatmapset.search_placeholder')
-                  : 'Inicia sesión para buscar'
-              }
-              value={searchQuery}
-              onChange={onSearchChange}
-              onKeyPress={handleKeyPress}
-              disabled={isLoading || !hasPrivileges}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: '#FFFFFF80' }} />
-                  </InputAdornment>
-                ),
-                sx: {
-                  backgroundColor: '#2A2438',
-                  color: 'white',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF40',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF60',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFBD3B',
-                  },
-                  '&.Mui-disabled': {
-                    opacity: 0.7,
-                  },
-                },
-              }}
-            />
-            <Button
-              variant="contained"
-              onClick={onSearchClick}
-              disabled={isLoading || !hasPrivileges}
-              sx={{
-                minWidth: '120px',
-                height: '56px',
-                backgroundColor: 'rgba(60, 53, 85, 1)',
-                color: 'white',
-                textTransform: 'none',
-                borderRadius: 2,
-                fontSize: '16px',
-                fontWeight: 'bold',
-                '&:hover': {
-                  opacity: 0.9,
-                },
-                '&:disabled': {
-                  background: '#666666',
-                  color: '#999999',
-                },
-              }}
-            >
-              {t('beatmapset.search_button') || 'Buscar'}
-            </Button>
-          </Stack>
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <FormControl
-              sx={{ minWidth: 120 }}
-              size="small"
-              disabled={isLoading || !hasPrivileges}
-            >
-              <InputLabel sx={{ color: '#FFFFFF80' }}>Game Mode</InputLabel>
-              <Select
-                value={gameMode}
-                label="Game Mode"
-                onChange={(e) => onGameModeChange(Number(e.target.value))}
-                sx={{
-                  color: 'white',
-                  backgroundColor: '#2A2438',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF40',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF60',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFBD3B',
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: '#FFFFFF80',
-                  },
-                  '&.Mui-disabled': {
-                    opacity: 0.7,
-                  },
-                }}
-              >
-                <MenuItem value={ALL_GAME_MODES}>All Modes</MenuItem>
-                <MenuItem value={GameMode.Standard}>osu!</MenuItem>
-                <MenuItem value={GameMode.Taiko}>Taiko</MenuItem>
-                <MenuItem value={GameMode.Catch}>Catch</MenuItem>
-                <MenuItem value={GameMode.Mania}>Mania</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl
-              sx={{ minWidth: 120 }}
-              size="small"
-              disabled={isLoading || !hasPrivileges}
-            >
-              <InputLabel sx={{ color: '#FFFFFF80' }}>Status</InputLabel>
-              <Select
-                value={selectedStatus}
-                label="Status"
-                onChange={onStatusChange}
-                sx={{
-                  color: 'white',
-                  backgroundColor: '#2A2438',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF40',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF60',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFBD3B',
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: '#FFFFFF80',
-                  },
-                  '&.Mui-disabled': {
-                    opacity: 0.7,
-                  },
-                }}
-              >
-                <MenuItem value={MapStatus.ALL}>All Status</MenuItem>
-                <MenuItem value={MapStatus.RANKED}>Ranked</MenuItem>
-                <MenuItem value={MapStatus.QUALIFIED}>Qualified</MenuItem>
-                <MenuItem value={MapStatus.LOVED}>Loved</MenuItem>
-                <MenuItem value={MapStatus.PENDING}>Pending</MenuItem>
-                <MenuItem value={MapStatus.APPROVED}>Approved</MenuItem>
-                <MenuItem value={MapStatus.WIP}>WIP</MenuItem>
-                <MenuItem value={MapStatus.GRAVEYARD}>Graveyard</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl
-              sx={{ minWidth: 120 }}
-              size="small"
-              disabled={isLoading || !hasPrivileges}
-            >
-              <InputLabel sx={{ color: '#FFFFFF80' }}>Server</InputLabel>
-              <Select
-                value={selectedServer}
-                label="Server"
-                onChange={onServerChange}
-                sx={{
-                  color: 'white',
-                  backgroundColor: '#2A2438',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF40',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFFFFF60',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#FFBD3B',
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: '#FFFFFF80',
-                  },
-                  '&.Mui-disabled': {
-                    opacity: 0.7,
-                  },
-                }}
-              >
-                <MenuItem value="private">Private</MenuItem>
-                <MenuItem value="osu!">osu!</MenuItem>
-                <MenuItem value="all">All Servers</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
+            {t('beatmapset.search_button') || 'Buscar'}
+          </Button>
         </Stack>
-      </Container>
-    </Box>
+
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <FormControl
+            sx={{ minWidth: 120 }}
+            size="small"
+            disabled={isLoading || !hasPrivileges}
+          >
+            <InputLabel sx={{ color: '#FFFFFF80' }}>Game Mode</InputLabel>
+            <Select
+              value={gameMode}
+              label="Game Mode"
+              onChange={(e) => onGameModeChange(Number(e.target.value))}
+              sx={{
+                color: 'white',
+                backgroundColor: '#2A2438',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF40',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF60',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFBD3B',
+                },
+                '& .MuiSvgIcon-root': {
+                  color: '#FFFFFF80',
+                },
+                '&.Mui-disabled': {
+                  opacity: 0.7,
+                },
+              }}
+            >
+              <MenuItem value={ALL_GAME_MODES}>All Modes</MenuItem>
+              <MenuItem value={GameMode.Standard}>osu!</MenuItem>
+              <MenuItem value={GameMode.Taiko}>Taiko</MenuItem>
+              <MenuItem value={GameMode.Catch}>Catch</MenuItem>
+              <MenuItem value={GameMode.Mania}>Mania</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl
+            sx={{ minWidth: 120 }}
+            size="small"
+            disabled={isLoading || !hasPrivileges}
+          >
+            <InputLabel sx={{ color: '#FFFFFF80' }}>Status</InputLabel>
+            <Select
+              value={selectedStatus}
+              label="Status"
+              onChange={onStatusChange}
+              sx={{
+                color: 'white',
+                backgroundColor: '#2A2438',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF40',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF60',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFBD3B',
+                },
+                '& .MuiSvgIcon-root': {
+                  color: '#FFFFFF80',
+                },
+                '&.Mui-disabled': {
+                  opacity: 0.7,
+                },
+              }}
+            >
+              <MenuItem value={MapStatus.ALL}>All Status</MenuItem>
+              <MenuItem value={MapStatus.RANKED}>Ranked</MenuItem>
+              <MenuItem value={MapStatus.QUALIFIED}>Qualified</MenuItem>
+              <MenuItem value={MapStatus.LOVED}>Loved</MenuItem>
+              <MenuItem value={MapStatus.PENDING}>Pending</MenuItem>
+              <MenuItem value={MapStatus.APPROVED}>Approved</MenuItem>
+              <MenuItem value={MapStatus.WIP}>WIP</MenuItem>
+              <MenuItem value={MapStatus.GRAVEYARD}>Graveyard</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl
+            sx={{ minWidth: 120 }}
+            size="small"
+            disabled={isLoading || !hasPrivileges}
+          >
+            <InputLabel sx={{ color: '#FFFFFF80' }}>Server</InputLabel>
+            <Select
+              value={selectedServer}
+              label="Server"
+              onChange={onServerChange}
+              sx={{
+                color: 'white',
+                backgroundColor: '#2A2438',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF40',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFFFFF60',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#FFBD3B',
+                },
+                '& .MuiSvgIcon-root': {
+                  color: '#FFFFFF80',
+                },
+                '&.Mui-disabled': {
+                  opacity: 0.7,
+                },
+              }}
+            >
+              <MenuItem value="private">Private</MenuItem>
+              <MenuItem value="osu!">osu!</MenuItem>
+              <MenuItem value="all">All Servers</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
+      </Stack>
+    </Container>
   );
 };
 
@@ -488,96 +447,26 @@ const ResultsSection = ({
   if (!showResults) return null;
 
   return (
-    <Paper
-      sx={{
-        mt: 1,
-        width: '70%',
-        maxWidth: 'none !important',
-        mx: 'auto',
-        mb: 3,
-        overflow: 'auto',
-        backgroundColor: 'transparent',
-        color: 'white',
-        boxShadow: 'none',
-      }}
-    >
-      <ResultsGrid
-        results={results}
-        isLoading={isLoading}
-        onSelect={onSelect}
-        hasMore={hasMore}
-        onLoadMore={onLoadMore}
-        loadingMore={loadingMore}
-        hasPrivileges={hasPrivileges}
-      />
-    </Paper>
-  );
-};
-
-const BeatmapDetailView = ({
-  beatmap,
-  gameMode,
-  filteredDifficulties,
-  selectedDifficulty,
-  onDifficultySelect,
-  hasPrivileges,
-}: {
-  beatmap: BeatmapDetails | null;
-  gameMode: GameMode;
-  filteredDifficulties: Difficulty[];
-  selectedDifficulty: Difficulty | null;
-  onGameModeChange: (mode: GameMode) => void;
-  onDifficultySelect: (difficulty: Difficulty) => void;
-  hasPrivileges: boolean;
-}) => {
-  if (!beatmap) return null;
-
-  if (!hasPrivileges) {
-    return (
-      <Container sx={{ pt: 4, textAlign: 'center', color: 'white' }}>
-        <Typography variant="h6">
-          Debes iniciar sesión para ver los detalles del beatmap
-        </Typography>
-      </Container>
-    );
-  }
-
-  return (
-    <>
-      <BeatmapHeader
-        beatmap={beatmap}
-        filteredDifficulties={filteredDifficulties}
-        selectedDifficulty={selectedDifficulty}
-        setSelectedDifficulty={onDifficultySelect}
-        gameMode={gameMode}
-      />
-
-      <Container
-        disableGutters
-        maxWidth={false}
-        sx={{ px: { xs: 2, sm: 3, md: 4 }, maxWidth: '1200px', mx: 'auto' }}
+    <Container sx={{ backgroundColor: '#191527', mt: 1, mb: 3 }}>
+      <Paper
+        sx={{
+          overflow: 'auto',
+          backgroundColor: 'transparent',
+          color: 'white',
+          boxShadow: 'none',
+        }}
       >
-        <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          spacing={3}
-          sx={{ width: '100%', mt: 3 }}
-        >
-          <Box sx={{ width: { xs: '100%', md: '66.67%' } }}>
-            <Box sx={{ p: 3, textAlign: 'center' }}>
-              <Typography variant="h6" color="#FFFFFF80">
-                Beatmap Details
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box sx={{ width: { xs: '100%', md: '33.33%' } }}>
-            <Stack spacing={3}>
-              <BeatmapPage beatmap={beatmap} />
-            </Stack>
-          </Box>
-        </Stack>
-      </Container>
-    </>
+        <ResultsGrid
+          results={results}
+          isLoading={isLoading}
+          onSelect={onSelect}
+          hasMore={hasMore}
+          onLoadMore={onLoadMore}
+          loadingMore={loadingMore}
+          hasPrivileges={hasPrivileges}
+        />
+      </Paper>
+    </Container>
   );
 };
 
@@ -595,14 +484,13 @@ const useBeatmapSearch = (
   const [selectedStatus, setSelectedStatus] = useState<MapStatus>(
     MapStatus.ALL,
   );
-  const [selectedServer, setSelectedServer] = useState<string>('private');
+  const [selectedServer, setSelectedServer] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
 
   const loadBeatmaps = useCallback(
     async (page: number = 1, append: boolean = false) => {
-      // Verificar privilegios antes de realizar cualquier búsqueda
       if (!hasPrivileges) {
         if (!append) {
           setSearchResults([]);
@@ -724,6 +612,7 @@ const useBeatmapSearch = (
     searchResults,
     isSearching,
     loadingMore,
+    setShowResults,
     showResults,
     currentUrls,
     selectedStatus,
@@ -850,6 +739,13 @@ export const BeatmapsetsPage = () => {
     hasPrivileges,
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <Not needed>
+  useEffect(() => {
+    if (hasPrivileges) {
+      search.performSearch();
+    }
+  }, [hasPrivileges]);
+
   const handleSearchClick = () => {
     search.performSearch();
   };
@@ -914,32 +810,27 @@ export const BeatmapsetsPage = () => {
         hasPrivileges={hasPrivileges}
       />
       {!hasPrivileges ? (
-        <Container sx={{ pt: 10, textAlign: 'center', color: 'white' }}>
+        <Container
+          sx={{
+            pt: 10,
+            textAlign: 'center',
+            color: 'white',
+            backgroundColor: '#191527',
+          }}
+        >
           <Typography variant="h6">{t('beatmapset.login_required')}</Typography>
         </Container>
       ) : (
-        <>
-          <ResultsSection
-            showResults={search.showResults}
-            results={search.searchResults}
-            isLoading={search.isSearching}
-            onSelect={handleBeatmapsetSelect}
-            hasMore={search.hasMore}
-            onLoadMore={search.loadMore}
-            loadingMore={search.loadingMore}
-            hasPrivileges={hasPrivileges}
-          />
-
-          <BeatmapDetailView
-            beatmap={beatmapData.beatmap}
-            gameMode={gameMode as GameMode}
-            filteredDifficulties={beatmapData.filteredDifficulties}
-            selectedDifficulty={beatmapData.selectedDifficulty}
-            onGameModeChange={(mode: GameMode) => handleGameModeChange(mode)}
-            onDifficultySelect={beatmapData.setSelectedDifficulty}
-            hasPrivileges={hasPrivileges}
-          />
-        </>
+        <ResultsSection
+          showResults={search.showResults}
+          results={search.searchResults}
+          isLoading={search.isSearching}
+          onSelect={handleBeatmapsetSelect}
+          hasMore={search.hasMore}
+          onLoadMore={search.loadMore}
+          loadingMore={search.loadingMore}
+          hasPrivileges={hasPrivileges}
+        />
       )}
     </Box>
   );

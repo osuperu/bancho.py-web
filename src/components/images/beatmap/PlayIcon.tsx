@@ -1,8 +1,8 @@
 export const PlayIcon = () => {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <title>Play</title>
-      <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" />
+      <title>Stop</title>
+      <polygon points="8,5 19,12 8,19" fill="currentColor" />
     </svg>
   );
 };
