@@ -19,12 +19,15 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import Footer from './components/Footer';
+import { GlobalAudioPlayer } from './components/GlobalAudioPlayer';
 import Navbar from './components/Navbar';
+import { AudioProvider } from './context/AudioContext';
 import { IdentityContextProvider } from './context/Identity';
 import { _i18n } from './i18n';
 import { AboutPage } from './pages/AboutPage';
 import { AdminPanelPage } from './pages/AdminPanelPage';
 import { BeatmapPage } from './pages/BeatmapPage';
+import { BeatmapsetsPage } from './pages/BeatmapsetsPage';
 import { HomePage } from './pages/HomePage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
@@ -39,13 +42,21 @@ import { UserSettingsPage } from './pages/UserSettingsPage';
 
 const AppLayout = () => {
   return (
-    <Stack direction="column" justifyContent="space-between" minHeight="100vh">
-      <Navbar />
-      <Box flexGrow={1}>
-        <Outlet />
-      </Box>
-      <Footer />
-    </Stack>
+    <AudioProvider>
+      <Stack
+        direction="column"
+        justifyContent="space-between"
+        minHeight="100vh"
+        position="relative"
+      >
+        <Navbar />
+        <Box flexGrow={1}>
+          <Outlet />
+        </Box>
+        <Footer />
+        <GlobalAudioPlayer />
+      </Stack>
+    </AudioProvider>
   );
 };
 
@@ -67,6 +78,7 @@ const router = createBrowserRouter(
       <Route path="/terms-of-service" element={<TermsOfServicePage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/beatmapsets" element={<BeatmapsetsPage />} />
     </Route>,
   ),
 );

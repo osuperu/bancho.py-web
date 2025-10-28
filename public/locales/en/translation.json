@@ -16,6 +16,7 @@
   },
   "navbar": {
     "home": "Home",
+    "beatmapsets": "Beatmaps",
     "leaderboards": "Leaderboards",
     "about": "About",
     "search": "Looking for someone?",
@@ -27,7 +28,8 @@
     "username": "Username",
     "password": "Password",
     "email": "Email",
-    "password_reset_email_sended": "A password reset email has been sent."
+    "password_reset_email_sended": "A password reset email has been sent.",
+    "login_required": "You must be logged in to view this section."
   },
   "reset_password": {
     "password_reset": "Password Reset",
@@ -51,6 +53,15 @@
     "logout": "Logout",
     "sign_in_required": "Please sign into your account first!",
     "not_authorized": "You are not authorized to access this page."
+  },
+  "beatmapset": {
+    "title": "Beatmapsets",
+    "search_placeholder": "Search beatmapsets by artist, title, or creator...",
+    "mapped_by": "Mapped by",
+    "loading_beatmapsets": "Loading beatmapsets...",
+    "no_beatmapsets_found": "No beatmapsets found",
+    "try_adjusting_search": "Try adjusting your search or filters to find what you're looking for.",
+    "search_button": "Buscar"
   },
   "leaderboard": {
     "title": "Leaderboard",
